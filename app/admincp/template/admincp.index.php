@@ -172,13 +172,14 @@ admincp::head();
               <td style="width:60px">版权所有</td>
               <td>
                 <a class="btn btn-inverse" href="https://www.icmsdev.com" target="_blank"><i class="fa fa-copyright"></i> iCMS（iCMSdev.com）</a>
+                <a class="btn btn-inverse" href="https://www.wxAppCMS.com" target="_blank"><i class="fa fa-copyright"></i> wxAppCMS（wxAppCMS.com）</a>
               </td>
             </tr>
             <tr>
               <td>开 发 者</td>
               <td>
-                <a class="btn" href="https://github.com/idreamsoft/iCMS" target="_blank"><i class="fa fa-github"></i> GitHub</a>
-                <a class="btn" href="http://git.oschina.net/php/icms" target="_blank"><i class="fa fa-github"></i> Git@OSC</a>
+                <a class="btn" href="https://github.com/idreamsoft/wxAppCMS" target="_blank"><i class="fa fa-github"></i> GitHub</a>
+                <a class="btn" href="http://git.oschina.net/php/wxAppCMS" target="_blank"><i class="fa fa-github"></i> Git@OSC</a>
               </td>
             </tr>
             <tr>
@@ -229,7 +230,7 @@ admincp::head();
   出问题的URL:
   问题描述:
   -----------------------------------------------------------
-  iCMS 版本号:iCMS <?php echo iCMS_VERSION ; ?>[<?php echo iCMS_RELEASE ; ?>]
+  iCMS 版本号:wxAppCMS <?php echo iCMS_VERSION ; ?>[<?php echo iCMS_RELEASE ; ?>]
   开发版本信息:<?php echo GIT_COMMIT ; ?> [<?php echo GIT_TIME ; ?>]
   服务器操作系统:<?php echo PHP_OS ; ?>;
   WEB服务器版本:<?php echo $_SERVER['SERVER_SOFTWARE'] ; ?>;
