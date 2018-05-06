@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>账号设置 ｜ <!--{$site.title}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->" />
+    <!--{iCMS:public:ui}-->
+    <link href="<!--{$site.urls.tpl}-->/static/css/user.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="userApp">
+    <!--{include file="iCMS://header.htm"}-->
+    <div class="clearfix"></div>
+    <div class="userApp-wrap">
+        <!--{include file="./profile/sidebar.htm" import="true"}-->
+        <div class="contents profile_<!--{$pg}-->">
+            <div class="profile_wrapper">
+                <!--{switch from=$pg}-->
+                <!--{case value="base"}-->
+                <!--{include file="./profile/base.htm" import="true"}-->
+                <!--{case value="avatar"}-->
+                <!--{include file="./profile/avatar.htm" import="true"}-->
+                <!--{case value="setpassword"}-->
+                <!--{include file="./profile/setpassword.htm" import="true"}-->
+                <!--{case value="bind"}-->
+                <!--{include file="./profile/bind.htm" import="true"}-->
+                <!--{case value="custom"}-->
+                <!--{include file="./profile/custom.htm" import="true"}-->
+                <!--{/switch}-->
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <iframe class="hide" id="iCMS_FRAME" name="iCMS_FRAME"></iframe>
+    <!--{include file="iCMS://footer.htm"}-->
+</body>
+
+</html>

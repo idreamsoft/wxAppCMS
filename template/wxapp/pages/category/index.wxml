@@ -1,0 +1,68 @@
+<import src="../../iCMS/wxml/tag.wxml" />
+<import src="../../iCMS/wxml/article.wxml" />
+
+<view class="page" hidden="{{page_hidden}}">
+        <view class="weui-tab">
+            <view class="weui-navbar">
+                <view class="weui-item-wrap">
+                    <block wx:for="{{category_list}}" wx:key="{{item.cid}}">
+                        <view id="{{item.cid}}" class="weui-navbar__item {{cid == item.cid ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+                            <view class="weui-navbar__title">{{item.name}}</view>
+                            <view class="weui-navbar__child">
+                                <block wx:for="{{item.child}}" wx:key="{{item.cid}}">
+                                    <view id="{{item.cid}}" class="weui-navbar__citem {{cid == item.cid ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+                                        <view class="weui-navbar__ctitle">{{item.name}}</view>
+                                    </view>
+                                </block>
+                            </view>
+                        </view>
+                    </block>
+                </view>
+                <navigator class="weui-navbar__search" url="../search/index" hover-class="navigator-hover000">
+                    <icon type="search" size="16" color="#333"></icon>
+                </navigator>
+            </view>
+            <view class="weui-tab__panel" hidden="{{article_list_loading}}">
+                <view class="weui-loadmore">
+                    <view class="weui-loading"></view>
+                    <view class="weui-loadmore__tips">数据加载中...</view>
+                </view>
+            </view>
+            <view class="weui-tab__panel" hidden="{{!article_list_loading}}">
+                <block wx:for="{{category_list}}" wx:key="{{citem.cid}}">
+                    <view hidden="{{!item.ischild}}" class="category_child {{cid == item.cid ? 'category_child_on' : ''}}">
+                        <block wx:for="{{item.child}}" wx:key="{{citem.cid}}" wx:for-item="citem">
+                            <view
+                            bindtap="dataTap"
+                            data-uri="category/category"
+                            data-cid="{{citem.cid}}"
+                            class="category_child_item" >
+                                <view class="category_child_title">{{citem.name}}</view>
+                            </view>
+                        </block>
+                    </view>
+                </block>
+                <block class="weui-tab__content">
+                    <template is="article_list" data="{{article_list}}"/>
+                </block>
+                <view class="weui-cell weui-cell_access weui-cell_link"
+                bindtap="dataTap"
+                data-uri="category/category"
+                data-cid="{{cid}}">
+                    <view class="weui-cell__bd">查看更多</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                </view>
+            </view>
+        </view>
+    <view class="sub-title">
+        <text>热门标签</text>
+    </view>
+    <view class="weui-cells tags">
+        <template is="tag_list" data="{{tag_list}}"/>
+    </view>
+    <view class="weui-loadmore" hidden="{{data_loading}}">
+        <view class="weui-loading"></view>
+        <view class="weui-loadmore__tips">数据加载中...</view>
+    </view>
+</view>
+<loading class="loading" hidden="{{page_loading}}">加载中...</loading>

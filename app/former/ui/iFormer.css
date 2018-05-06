@@ -1,0 +1,60 @@
+@font-face { font-family: 'iFormer'; src: url('img/iFormer.eot'); src: url('img/iFormer.eot?#iefix') format('embedded-opentype'), url('img/iFormer.ttf') format('truetype'), url('img/iFormer.woff') format('woff'), url('img/iFormer.svg') format('svg'); font-weight: normal; font-style: normal; }
+.fb-icon { font-family: 'iFormer' !important; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 24px; }
+.fb-icon-multiselect:before { content: "\e913"; }
+.fb-icon-autonumber:before { content: "\e900"; }
+.fb-icon-number:before { content: "\e904"; }
+.fb-icon-addnotes:before { content: "\e907"; }
+.fb-icon-currency2:before { content: "\e909"; }
+.fb-icon-datetime:before { content: "\e90c"; }
+.fb-icon-decimal:before { content: "\e915"; }
+.fb-icon-dropdown:before { content: "\e916"; }
+.fb-icon-percentage:before { content: "\e91a"; }
+.fb-icon-signature:before { content: "\e91c"; }
+.fb-icon-subform:before { content: "\e91d"; }
+.fb-icon-crm:before { content: "\e920"; }
+.fb-icon-phonenumber:before { content: "\e921"; }
+.fb-icon-address:before { content: "\e901"; }
+.fb-icon-admin:before { content: "\e902"; }
+.fb-icon-audio:before { content: "\e903"; }
+.fb-icon-checkbox:before { content: "\e905"; }
+.fb-icon-currency:before { content: "\e906"; }
+.fb-icon-date:before { content: "\e908"; }
+.fb-icon-decisionbox:before { content: "\e90a"; }
+.fb-icon-deciton:before { content: "\e90b"; }
+.fb-icon-fileupload:before { content: "\e90d"; }
+.fb-icon-formula:before { content: "\e90e"; }
+.fb-icon-image:before { content: "\e90f"; }
+.fb-icon-lookup:before { content: "\e910"; }
+.fb-icon-mail:before { content: "\e911"; }
+.fb-icon-textarea:before { content: "\e912"; }
+.fb-icon-name:before { content: "\e914"; }
+.fb-icon-radio:before { content: "\e917"; }
+.fb-icon-richtext:before { content: "\e918"; }
+.fb-icon-section:before { content: "\e919"; }
+.fb-icon-input:before { content: "\e91b"; }
+.fb-icon-url:before { content: "\e91e"; }
+
+/*.widget-content .tab-content{padding:0px;}*/
+.ui-draggable { float: left; padding: 5px 5px 5px 8px; color: #2f3439; cursor: move; line-height: 24px; min-height: 24px; width: 120px; height: 35px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #ececec; background: #fff; margin: 4px; }
+.ui-draggable p { display: inline-block; font-size: 12px; vertical-align: top; }
+
+/*.ui-state-highlight{border:1px dotted black;display: block;width: 100%;}*/
+.ui-state-highlight { background-color: #fcf8e3; border: 1px solid #fbeed5; display: inline-block; float: left; width: 360px; height: 30px; }
+.iFormer-design { margin-top: 10px; position: absolute; top: 150px; left: 50%; width: 400px; height: 350px; border: 1px solid #ddd; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.26); background-color: white; border-radius: 5px; padding: 0px; }
+.iFormer-design .fa { speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 20px; }
+.iFormer-design .br { line-height: 14px !important; }
+.iFormer-design .tab-content { padding: 0px; }
+.iFormer-ui { display: inline-block; float: left; margin-right: 10px; :10px; }
+.iFormer-ui .action { display: inline-block; margin-left: 5px; vertical-align: middle; }
+.iFormer-ui .action a { font-size: 16px; margin-right: 5px; color: #999; }
+.iFormer-ui .seccode-img { height: 24px; margin-top: -2px; margin-right: 5px; }
+.iFormer-base-field { opacity: 0.5; }
+.iFormer-layout { margin: 10px; padding-bottom: 60px; }
+.iFormer-layout .row-fluid { height: 35px; }
+.iFormer-layout .row-fluid div { background-color: #efefef; }
+.iFormer-layout .clearfloat { visibility: hidden; height: 0px; border-left: 0px; border-right: 0px; }
+.iFormer-layout .pagebreak { cursor: move; background-position: 30% center; background-image: url(../.../../../../app/admincp/ui/ueditor/themes/default/images/pagebreak.gif); background-repeat: no-repeat; clear: both; display: block; width: 100%; border-top: #999999 1px dotted; border-bottom: #999999 1px dotted; border-right: 0px; margin: 5px 0px; border-left: 0px; padding: 0px; height: 5px; _height: 2px; -webkit-user-select: none; }
+.iFormer-layout .pagebreak .action { margin-top: 5px; }
+.iFormer-layout div { cursor: move; }
+.iFormer-layout .add-on .label { margin-right: 5px; }
+.label-tip{opacity: 0.5;float: left;}

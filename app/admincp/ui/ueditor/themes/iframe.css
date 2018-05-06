@@ -1,0 +1,5 @@
+body { background-color: #ffffff; padding: 5px margin:0px; }
+body, td { font: 14px/20px Tahoma, Arial, sans-serif; }
+p { font-size: 14px; margin-top: 10px auto 0px auto; line-height: 25px; text-indent: 2em; padding: 0px; }
+.pagebreak { background-position: center center; background-image: url('./default/images/pagebreak.gif'); background-repeat: no-repeat; clear: both; display: block; width: 99%; border-top: #999999 1px dotted; border-bottom: #999999 1px dotted; border-right: 0px; margin: 5px; border-left: 0px; padding: 0px; height: 5px; _height: 2px; -webkit-user-select: none; }
+.attachment { padding: 2px 4px; outline: none; border-radius: 5px;    /*width: 360px;*/ min-width: 120px; height: 64px; border: 1px solid #EDEDED; padding-left: 74px; color: #999; margin-right: 0;line-height: 64px;text-decoration: none; background: url('./default/images/attachment.png') no-repeat scroll 10px center transparent; cursor: auto; display: inline-block; }

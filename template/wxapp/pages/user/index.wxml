@@ -1,0 +1,57 @@
+<import src="../../iCMS/wxml/foot.wxml" />
+<view class="page" hidden="{{page_hidden}}">
+    <view class="userinfo">
+        <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </view>
+    <view class="weui-panel">
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell" hover-class="none"
+            bindtap="dataTap"
+            data-path="user/publish/index">
+                <view class="weui-cell__bd">
+                    <text>撰写文章</text>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </view>
+            <view class="weui-cell" hover-class="none"
+            bindtap="dataTap"
+            data-path="user/article/index">
+                <view class="weui-cell__bd">
+                    <text>我的文章</text>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </view>
+            <view class="weui-cell" hover-class="none"
+            bindtap="dataTap"
+            data-path="user/donate/index">
+                <view class="weui-cell__bd">
+                    <text>我的赞赏</text>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </view>
+        </view>
+    </view>
+    <view class="clearfix mt10"></view>
+    <view class="weui-panel">
+        <view class="weui-cells  weui-cells_after-title">
+            <view class="weui-cell" hover-class="none">
+                <view class="weui-cell__bd  contact">
+                    <button class="contact" open-type="contact">在线客服</button>
+                </view>
+            </view>
+            <view class="weui-cell" hover-class="none" bindtap="dataTap"
+            data-msg="{{APP.description}}"
+            data-title="关于{{APP.name}}"
+            >
+                <view class="weui-cell__bd">
+                    <text>关于我们</text>
+                </view>
+                <view class="weui-cell__ft"></view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="clearfix"></view>
+<template is="foot" data="{{APP}}"/>
+<loading class="loading" hidden="{{page_loading}}">加载中...</loading>

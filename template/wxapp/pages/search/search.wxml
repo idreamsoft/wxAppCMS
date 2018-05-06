@@ -1,0 +1,15 @@
+<import src="../../iCMS/wxml/common.wxml" />
+<import src="../../iCMS/wxml/article.wxml" />
+
+<view class="page" hidden="{{page_hidden}}">
+    <scroll-view scroll-y="true" style="height:{{scrollHeight}}px" bindscrolltoupper="refresh" bindscrolltolower="loadMore">
+        <template is="banner" data="{{banner}}"/>
+        <view class="sub-title">{{subTitle}}相关文章</view>
+        <template is="article_list" data="{{article_list}}"/>
+    </scroll-view>
+    <view class="weui-loadmore" hidden="{{data_loading}}">
+        <view class="weui-loading"></view>
+        <view class="weui-loadmore__tips">数据加载中...</view>
+    </view>
+</view>
+<loading class="loading" hidden="{{page_loading}}">加载中...</loading>

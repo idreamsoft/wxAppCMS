@@ -1,0 +1,96 @@
+<h4 class="manage-title">设置主页封面</h4>
+<div id="coverpic_box">
+    <img id="coverpic" src="<!--{$user.coverpic.pc}-->?<!--{$iCMS.TIME}-->" alt="个人封面" onerror="iUSER.NOCOVER(this);">
+</div>
+<div class="clearfix mt10"></div>
+<span class="label label-success hide" id="coverpic_size"></span>
+<span class="label label-info">封面图片建议尺寸：1200px * 375px，如果超过可使用美图秀秀编辑裁剪封面</span>
+<div class="clearfix mt10"></div>
+<form id="coverpic_upload" action="<!--{iCMS:router url='user'}-->" method="post" enctype="multipart/form-data" target="iCMS_FRAME">
+    <input name="action" type="hidden" value="profile" />
+    <input name="pg" type="hidden" value="custom" />
+    <input type="file" name="upfile" style="display:none;">
+    <div class="form-actions">
+        <button id="upload" class="btn btn-lg btn-primary" type="button">
+            <i class="fa fa-check"></i> 更换封面
+        </button>
+        <a class="btn btn-default" href="javascript:meituxx();"><i class="fa fa-edit"></i> 使用美图秀秀编辑封面</a>
+    </div>
+</form>
+<div class="coverpic_editor hide mt10">
+    <script src="<!--{$site.urls.public}-->/ui/lib/meitu/xiuxiu.js" type="text/javascript"></script>
+    <div id="coverpic_editor"></div>
+</div>
+<style>
+#coverpic_box {display: block; position: relative; margin: 0; overflow: hidden; _zoom: 1; border-radius: 5px 5px 0px 0px; }
+#coverpic { vertical-align: top; border-radius: 5px 5px 0px 0px; }
+</style>
+<script>
+$(function() {
+    $("#upload").click(function() {
+        $("input[name=upfile]").click();
+    });
+
+    $("input[name=upfile]").change(function() {
+        $("#coverpic_upload").submit();
+    });
+
+    // $("#coverpic_size").text("当前封面图片尺寸："+$("#coverpic").width()+"px * "+$("#coverpic").height()+"px").show();
+
+    var boxW = $("#coverpic_box").width();
+    var boxH = boxW*5/16;
+    $("#coverpic_box").height(boxH);
+    $("#coverpic").width(boxH*16/5);
+})
+
+function callback(obj) {
+    $("#coverpic").attr({
+        src: obj.url+'?'+ Math.random()
+    }).show();
+}
+function meituxx() {
+    $('.coverpic_editor').show();
+    $('#coverpic_editor').html('');
+    xiuxiu.setLaunchVars("customMenu", ["decorate", "puzzle"]);
+    xiuxiu.setLaunchVars("cropPresets", "1200x375");
+    xiuxiu.setLaunchVars("file_name", "<!--{$me.uid}-->");
+    xiuxiu.embedSWF("coverpic_editor", 3, "100%", "500");
+    xiuxiu.setUploadURL("<!--{iCMS:router url='user'}-->");
+    xiuxiu.onInit = function() {
+        var coverpic = $('#coverpic').attr('src');
+        xiuxiu.loadPhoto(coverpic);
+        xiuxiu.setUploadArgs({
+            'action': 'profile',
+            'pg': 'custom',
+            'format': 'json'
+        });
+        xiuxiu.setUploadDataFieldName('upfile');
+        xiuxiu.setUploadType(2);
+    }
+    xiuxiu.onBeforeUpload = function(data, id) {
+        var size = data.size;
+        if (size > 2 * 1024 * 1024) {
+            alert("图片不能超过2M");
+            return false;
+        }
+        if(data.width/data.height != 3.2){
+            alert("封面图片建议尺寸：1200px * 375px,或者裁剪成16:5等比例图片");
+            return false;
+        }
+        // if (data.width != 1200 || data.height != 375) {
+        //     alert("封面图片建议尺寸：1200px * 375px,或者裁剪成16:5等比例图片");
+        //     return false;
+        // }
+        return true;
+    }
+    xiuxiu.onUploadResponse = function(data) {
+        var a = $.parseJSON(data);
+        iCMS.UI.alert(a.msg, a.code);
+        if (a.code) {
+            window.setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+        }
+    }
+}
+</script>

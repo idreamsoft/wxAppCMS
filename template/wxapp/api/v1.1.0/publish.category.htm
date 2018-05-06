@@ -1,0 +1,19 @@
+{
+    <!--{iCMS:category:list keys="cid,name,child" stype='top' row="100"}-->
+    "topCategory":<!--{$category_list|json_encode}-->,
+    "subCategory":[
+    <!--{iCMS:category:list keys="cid,name,child" loop="true" stype='top' row="100"}-->
+        {
+            "rootid":"<!--{$category_list.cid}-->",
+            <!--{if $category_list.child}-->
+            <!--{iCMS:category:list keys="cid,name" as="subcate" stype='sub' row="50" cid="$category_list.cid"}-->
+            "child":<!--{$subcate|json_encode}-->
+            <!--{else}-->
+            "child":[<!--{$category_list|json_encode}-->]
+            <!--{/if}-->
+        }<!--{if !$category_list.last }-->,<!--{/if}-->
+    <!--{/iCMS}-->
+    ]
+}
+
+<!--{clean}-->

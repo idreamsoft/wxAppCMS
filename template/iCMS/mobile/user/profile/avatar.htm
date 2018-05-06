@@ -1,0 +1,54 @@
+<link rel="stylesheet" type="text/css" href="<!--{$site.urls.public}-->/ui/lib/webuploader/webuploader.css" />
+<link rel="stylesheet" type="text/css" href="<!--{$site.urls.public}-->/ui/lib/cropper/cropper.min.css" />
+<script src="<!--{$site.urls.public}-->/ui/lib/webuploader/webuploader.min.js" type="text/javascript"></script>
+<script src="<!--{$site.urls.public}-->/ui/lib/cropper/cropper.min.js" type="text/javascript"></script>
+<script>
+var SERVER_UPLOADER_URL = "<!--{iCMS:router url='user'}-->";
+var SERVER_PREVIEW_URL  = "<!--{iCMS:router url='user' query='action=preview'}-->";
+var _options ={
+  'pg':'avatar',
+  'preview':'.img-preview',
+  'width':'300',
+  'height':'300',
+  'aspectRatio':1/1
+}
+//custom
+</script>
+<script src="<!--{$site.urls.public}-->/ui/lib/cropper.js?<!--{$iCMS.NOW}-->" type="text/javascript"></script>
+
+<style>
+.img-container {display: block; position: relative; margin: 0px;padding: 0px;width: 300px;}
+.img-container #avatar { max-width: 100%; vertical-align: top; border-radius: 5px 5px 0px 0px; }
+.cropper-info { position: absolute; display: none; color: #bbb; font-size: 12px; z-index: 9; top: 5px; left: 5px; }
+.cropper-info span { display: block; }
+.cropper-preview { }
+.img-preview { float: left; overflow: hidden; margin-right: 8px; margin-bottom: 8px; }
+.img-preview > img { max-width: 100%; }
+.preview-lg { width: 150px; height: 150px; }
+.preview-md { width: 90px; height: 90px; }
+.preview-sm { width: 60px; height: 60px; }
+.preview-xs { width: 30px; height: 30px; margin-right: 0; }
+</style>
+<h4 class="profile-title">设置头像</h4>
+<div class="cropper-wraper">
+  <div class="img-container">
+    <img id="avatar" src="<!--{$me.avatar}-->?<!--{$iCMS.TIME}-->" alt="个人封面" onerror="iUSER.NOAVATAR(this);">
+    <div class="cropper-info">
+      <span id="oimg-size"></span>
+      <span id="img-size"></span>
+      <span id="ocrop-size"></span>
+      <span id="crop-size"></span>
+    </div>
+  </div>
+</div>
+<div class="cropper-preview clearfix mt10">
+  <div class="img-preview preview-lg"></div>
+  <div class="img-preview preview-md"></div>
+  <div class="img-preview preview-sm"></div>
+  <div class="img-preview preview-xs"></div>
+</div>
+<div class="upload-btn btn btn-primary hide">上传所选区域</div>
+<div class="clearfix mt10"></div>
+<span class="label label-danger">头像建议尺寸：300像素 * 300像素</span>
+<div class="clearfix mt10"></div>
+<div id="filePicker"><i class="fa fa-upload"></i> 上传头像</div>

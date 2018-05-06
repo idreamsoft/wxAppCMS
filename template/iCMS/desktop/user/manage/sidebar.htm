@@ -1,0 +1,24 @@
+<div class="sidebar">
+    <ul class="manage_navbar">
+        <li class="f16"><a href="<!--{iCMS:router url='user:home'}-->"><i class="fa fa-home"></i> 我的首页</a></li>
+        <li class="f16"><a href="<!--{iCMS:router url='user:profile'}-->">账号设置</a></li>
+        <li class="f18"><i class="fa fa-dashboard"></i> 我的内容</li>
+        <li>
+            <ul>
+                <li><a href="<!--{iCMS:router url='user:publish'}-->" <!--{if $pg=="publish" }--> class="c"<!--{/if}-->><i class="fa fa-edit"></i> 发表文章</a></li>
+                <li><a href="<!--{iCMS:router url='user:article'}-->" <!--{if $pg=="article" }--> class="c"<!--{/if}-->><i class="fa fa-dashboard"></i> 我的文章</a></li>
+                <li><a href="<!--{iCMS:router url='user:category'}-->" <!--{if $pg=="category" }--> class="c"<!--{/if}-->><i class="fa fa-list-alt"></i> 我的分类</a></li>
+                <li><a href="<!--{iCMS:router url='user:comment'}-->" <!--{if $pg=="comment" }--> class="c"<!--{/if}-->><i class="fa fa-comments"></i> 我的评论</a></li>
+                <li><a href="<!--{iCMS:router url='user:inbox'}-->" <!--{if $pg=="inbox" }--> class="c"<!--{/if}-->><i class="fa fa-envelope-o"></i> 我的私信</a></li>
+                <li><a href="<!--{iCMS:router url='user:manage:favorite'}-->" <!--{if $pg=="favorite" }--> class="c"<!--{/if}-->><i class="fa fa-bookmark"></i> 我的收藏</a></li>
+                <!-- <li><a href="<!--{iCMS:router url='user:manage:share'}-->"
+                <!--{if $pg=="share"}-->class="c"
+                <!--{/if}-->><i class="fa fa-share-alt"></i> 我的分享</a>
+                </li> -->
+                <li><a href="<!--{iCMS:router url='user:manage:follow'}-->" <!--{if $pg=="follow" }--> class="c"<!--{/if}-->><i class="fa fa-heart-o"></i> 我的关注</a></li>
+                <li><a href="<!--{iCMS:router url='user:manage:fans'}-->" <!--{if $pg=="fans" }--> class="c"<!--{/if}-->><i class="fa fa-group"></i> 我的粉丝</a></li>
+            </ul>
+        </li>
+        <li class="last"></li>
+    </ul>
+</div>

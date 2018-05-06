@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <!--{if $user}-->绑定已有用户
+        <!--{else}-->用户登录
+        <!--{/if}-->
+        <!--{$site.title}-->
+    </title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->" />
+    <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->" />
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.tpl}-->/static/css/user.css" type="text/css" />
+    <script>
+    //初始化登录接口
+    $(function() {
+        var login = $("#login-box");
+        $("#login-submit").click(function(event) {
+            event.preventDefault();
+            $(".tip-error").hide();
+            var param = {
+                uname: $("#uname", login).val(),
+                pass: $("#pass", login).val(),
+                seccode: $("#seccode", login).val(),
+                remember: $('input[name="remember"]', login).val()
+            }
+            if (param.uname == "") {
+                tip({
+                    forward: 'uname',
+                    msg: '请输入用户名'
+                });
+                return false
+            }
+            if (param.pass == "") {
+                tip({
+                    forward: 'pass',
+                    msg: '请输入密码'
+                });
+                return false
+            }
+            <!--{if $iCMS.CONFIG.user.login.seccode }-->
+            //检查验证码
+            param.login_seccode = true;
+            if (param.login_seccode) {
+                if (param.seccode == "") {
+                    tip({
+                        forward: 'seccode',
+                        msg: '请输入验证码'
+                    });
+                    return false
+                }
+            }
+            <!--{/if}-->
+
+            <!--{if $user.openid}-->
+            //绑定账号
+            param.openid = "<!--{$user.openid}-->";
+            <!--{/if}-->
+            //登录接口
+            iCMS.run('passport', function($PASSPORT) {
+                //登录成功 事件绑定
+                $PASSPORT.SUCCESS = function(s) {
+                    window.top.location.href = "<!--{$forward}-->";
+                }
+                //登录失败 事件绑定
+                $PASSPORT.FAIL = function(f) {
+                    tip(f);
+                }
+                //提交参数
+                $PASSPORT.LOGIN(param);
+            });
+            //提示
+            function tip(ret) {
+                iCMS.UI.seccode(".seccode-img", login);
+                var tip = $('.tip-' + ret.forward);
+                tip.text(ret.msg).show();
+            }
+        });
+    })
+    </script>
+</head>
+
+<body class="userApp passport">
+    <div class="login-wrap">
+        <!--{include file="./user.header.htm" import="true"}-->
+        <div class="passport-wrap">
+            <div class="passport-main">
+                <h1>
+                <!--{if $user}-->绑定已有用户
+                <!--{else}-->用户登录
+                <!--{/if}-->
+                </h1>
+                <div id="login-box" class="passport-form form-horizontal">
+                    <div class="form-group">
+                        <label for="uname" class="control-label">用户名：</label>
+                        <input type="text" name="uname" class="form-control" id="uname" placeholder="邮箱 或 昵称">
+                        <p class="help-block tip-error tip-uname">请输入登录名</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass" class="control-label">密码：</label>
+                        <input type="password" name="pass" class="form-control" id="pass" placeholder="请输入密码">
+                        <p class="help-block tip-error tip-pass">请输入密码</p>
+                    </div>
+                    <!--{if $iCMS.CONFIG.user.login.seccode }-->
+                    <div class="form-group">
+                        <label for="seccode" class="control-label">验证码：</label>
+                        <input type="text" maxlength="4" name="seccode" class="seccode form-control" id="seccode" placeholder="请输入验证码">
+                        <!--{iCMS:public:seccode}-->
+                        <p class="help-block tip-error tip-seccode">请输入验证码</p>
+                    </div>
+                    <!--{/if}-->
+                    <div class="form-group opt">
+                        <label for="remember">
+                            <input type="checkbox" value="1" name="remember" class="check" checked="checked"> 记住我（两周免登录） </label>
+                            <a class="findpwd" href="<!--{iCMS:router url='user:findpwd'}-->">忘记密码？</a>
+                        </div>
+                        <div class="form-group submit">
+                            <a href="javascript:;" id="login-submit" class="btn btn-success btn-lg">登 录</a>
+                        </div>
+                        <div class="platform">
+                            <span>您也可以用以下方式登录：</span>
+                            <div class="platform-btn">
+                                <!--{if $iCMS.CONFIG.user.open.QQ.enable }-->
+                                <a href="<!--{iCMS:router url='user:login:qq'}-->" class="login_qq"></a>
+                                <!--{/if}-->
+                                <!--{if $iCMS.CONFIG.user.open.WB.enable }-->
+                                <a href="<!--{iCMS:router url='user:login:wb'}-->" class="login_wb"></a>
+                                <!--{/if}-->
+                                <!--{if $iCMS.CONFIG.user.open.WX.enable }-->
+                                <a href="<!--{iCMS:router url='user:login:wx'}-->" class="login_wx"></a>
+                                <!--{/if}-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="passport-right">
+                    <div class="right-wrap">
+                        <h2>注 册</h2>
+                        <p>还没有账号？</p>
+                        <a class="btn btn-primary" href="<!--{iCMS:router url='user:register'}-->">快速注册</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <!--{include file="iCMS://footer.htm"}-->
+    </body>
+</html>

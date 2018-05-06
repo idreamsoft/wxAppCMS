@@ -1,0 +1,20 @@
+<import src="../../iCMS/wxml/common.wxml" />
+<import src="../../iCMS/wxml/article.wxml" />
+<view class="page" hidden="{{page_hidden}}">
+    <scroll-view scroll-y="true" style="height:{{scrollHeight}}px" bindscrolltoupper="refresh" bindscrolltolower="loadMore">
+        <navigator class="search-bar" url="../search/index" hover-class="navigator-hover000">
+            <view class="weui-search-bar__box">
+                <icon class="weui-icon-search_in-box" type="search" size="14" color="rgb(255,255,255)"></icon>
+                <text class="weui-search-bar__input">搜索您的内容</text>
+            </view>
+        </navigator>
+        <template is="banner" data="{{banner}}"/>
+        <view class="sub-title">{{subTitle}}</view>
+        <template is="article_list" data="{{article_list}}"/>
+    </scroll-view>
+    <view class="weui-loadmore" hidden="{{data_loading}}">
+        <view class="weui-loading"></view>
+        <view class="weui-loadmore__tips">数据加载中...</view>
+    </view>
+</view>
+<loading class="loading" hidden="{{page_loading}}">加载中...</loading>

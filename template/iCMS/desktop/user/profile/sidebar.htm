@@ -1,0 +1,21 @@
+<div class="sidebar">
+    <ul class="profile_navbar">
+        <li class="f16"><a href="<!--{iCMS:router url='user:home'}-->"><i class="fa fa-home"></i> 我的首页</a></li>
+        <li class="f16"><a href="<!--{iCMS:router url='user:manage'}-->">我的内容</a></li>
+        <li class="f18"><i class="fa fa-cogs"></i> 账号设置</li>
+        <li>
+            <ul>
+                <li><a href="<!--{iCMS:router url='user:profile:base'}-->" <!--{if $pg=="base" }--> class="c"<!--{/if}-->><i class="fa fa-info-circle"></i> 基本信息</a></li>
+                <li><a href="<!--{iCMS:router url='user:profile:setpassword'}-->" <!--{if $pg=="setpassword" }--> class="c"<!--{/if}-->><i class="fa fa-cog"></i> 修改密码</a></li>
+                <!--{*
+                        <a href="<!--{iCMS:router url='user:profile:bind'}-->"
+                <!--{if $pg=="bind"}-->class="c"
+                <!--{/if}-->><i class="fa fa-life-ring"></i> 帐号绑定</a>
+                <br> *}-->
+                <li><a href="<!--{iCMS:router url='user:profile:avatar'}-->" <!--{if $pg=="avatar" }--> class="c"<!--{/if}-->><i class="fa fa-meh-o"></i> 修改头像</a></li>
+                <li><a href="<!--{iCMS:router url='user:profile:custom'}-->" <!--{if $pg=="custom" }--> class="c"<!--{/if}-->><i class="fa fa-picture-o"></i> 个人封面</a></li>
+            </ul>
+        </li>
+        <li class="last"></li>
+    </ul>
+</div>

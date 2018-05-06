@@ -1,0 +1,222 @@
+<div class="profile-basic">
+    <form action="<!--{iCMS:router url='user'}-->" class="form-inline" method="post" target="iCMS_FRAME">
+        <input name="action" type="hidden" value="profile" />
+        <input name="pg" type="hidden" value="base" />
+        <h4 class="manage-title">基本资料</h4>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label class="control-label">昵称</label>
+            </div>
+            <div class="form-control">
+                <!--{$me.nickname}-->
+            </div>
+        </div>
+        <div class="mb10"></div>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label class="control-label">邮箱</label>
+            </div>
+            <div class="form-control">
+                <!--{$me.username}-->
+            </div>
+        </div>
+        <div class="mb10"></div>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label class="control-label">性别</label>
+            </div>
+            <div class="form-control">
+                <label class="radio-inline">
+                    <input type="radio" name="gender" id="female" value="0" checked> 女
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="gender" id="male" value="1"> 男
+                </label>
+            </div>
+        </div>
+        <div class="mb10"></div>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label for="weixin" class="control-label">微信</label>
+            </div>
+            <input class="form-control" id="weixin" name="meta[weixin]" type="text" value="<!--{$userdata.meta.weixin}-->">
+        </div>
+        <div class="mb10"></div>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label for="weibo" class="control-label">微博</label>
+            </div>
+            <input class="form-control" id="weibo" name="meta[weibo]" type="text" value="<!--{$userdata.meta.weibo}-->">
+        </div>
+        <div class="mb10"></div>
+        <div class="input-group location">
+            <div class="input-group-addon">
+                <label class="control-label">所在地</label>
+            </div>
+            <select id="province" name="province" class="form-control">
+            </select>
+            <select id="city" name="city" class="form-control">
+            </select>
+        </div>
+        <div class="mb10"></div>
+        <div class="input-group birthday">
+            <div class="input-group-addon">
+                <label class="control-label">生日</label>
+            </div>
+            <select name="year" id="year" class="form-control">
+                <option selected value=""></option>
+                <!--{for start=1970 stop=2004 value=i}-->
+                <option value="<!--{$i}-->">
+                    <!--{$i}-->年
+                </option>
+                <!--{/for}-->
+            </select>
+            <select name="month" id="month" class="form-control">
+                <option selected></option>
+                <!--{for start=1 stop=12 value=i}-->
+                <option value="<!--{$i}-->">
+                    <!--{$i}-->月
+                </option>
+                <!--{/for}-->
+            </select>
+            <select name="day" id="day" class="form-control">
+                <option selected></option>
+                <!--{for start=1 stop=31 value=i}-->
+                <option value="<!--{$i}-->">
+                    <!--{$i}-->日
+                </option>
+                <!--{/for}-->
+            </select>
+        </div>
+        <div class="mb10"></div>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label class="control-label">星座</label>
+            </div>
+            <select id="constellation" name="constellation" class="form-control">
+                <option selected id="xingzuo_name"></option>
+                <option value="水瓶座">水瓶座</option>
+                <option value="双鱼座">双鱼座</option>
+                <option value="白羊座">白羊座</option>
+                <option value="金牛座">金牛座</option>
+                <option value="双子座">双子座</option>
+                <option value="巨蟹座">巨蟹座</option>
+                <option value="狮子座">狮子座</option>
+                <option value="处女座">处女座</option>
+                <option value="天秤座">天秤座</option>
+                <option value="天蝎座">天蝎座</option>
+                <option value="射手座">射手座</option>
+                <option value="摩羯座">摩羯座</option>
+            </select>
+        </div>
+        <div class="mb10"></div>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label class="control-label">职业</label>
+            </div>
+            <select id="profession" name="profession" class="form-control">
+                <option selected></option>
+                <option value="白领">白领</option>
+                <option value="学生">学生</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+        <div class="mb20"></div>
+        <h4 class="manage-title">其他信息</h4>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label for="personstyle" class="control-label">个人标签</label>
+            </div>
+            <input class="form-control" id="personstyle" name="personstyle" type="text" value="<!--{$userdata.personstyle}-->">
+        </div>
+        <div class="mb10"></div>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label for="slogan" class="control-label">自我介绍</label>
+            </div>
+            <textarea id="slogan" name="slogan" rows="5" class="form-control" placeholder="随便写点什么，让大家了解你吧。"><!--{$userdata.slogan}--></textarea>
+        </div>
+        <div class="mb20"></div>
+        <h4 class="manage-title">隐私/安全</h4>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <label class="control-label">有人给我发了私信</label>
+            </div>
+            <div class="form-control">
+                <label class="radio-inline">
+                    <input type="radio" class="inbox-receive" name="setting[inbox][receive]"  value="all" checked> 允许所有人给我发私信
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" class="inbox-receive" name="setting[inbox][receive]" value="follow"> 只允许我关注的人给我发私信
+                </label>
+            </div>
+        </div>
+        <div class="mb10"></div>
+        <div class="form-actions">
+            <button class="btn btn-lg btn-primary" type="submit">
+            <i class="fa fa-check"></i> 提 交
+            </button>
+        </div>
+    </form>
+</div>
+<style>
+.input-group-addon {padding: 5px 12px;width: 70px !important;}
+.input-group-addon label{float: right;}
+
+.input-group input.form-control,
+.input-group textarea.form-control{width: 500px !important;}
+.input-group select.form-control{width: 100px !important;}
+</style>
+<script type="text/javascript" src="<!--{$site.urls.public}-->/ui/city_utf8.js"></script>
+<script type="text/javascript">
+$(function() {
+    initPlace('<!--{$userdata.city}-->', '<!--{$userdata.province}-->');
+    <!--{if $me.gender}-->
+    $("#<!--{$me.gender}-->[name=gender]").attr("checked", true);
+    <!--{/if}-->
+    <!--{if $me.setting.inbox.receive}-->
+    $(".inbox-receive[value=<!--{$me.setting.inbox.receive}-->]").attr("checked", true);
+    <!--{/if}-->
+    <!--{if $userdata.isSeeFigure}-->
+    $("#isSeeFigure").val("<!--{$userdata.isSeeFigure}-->");
+    <!--{/if}-->
+    <!--{if $userdata.province=="" && $userdata.city==""}-->
+    $.getScript("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js", function() {
+        initPlace(remote_ip_info.city, remote_ip_info.province);
+    });
+    <!--{/if}-->
+    <!--{if $userdata.year}-->
+    $("#year").val("<!--{$userdata.year}-->");
+    <!--{/if}-->
+    <!--{if $userdata.month}-->
+    $("#month").val("<!--{$userdata.month}-->");
+    <!--{/if}-->
+    <!--{if $userdata.day}-->
+    $("#day").val("<!--{$userdata.day}-->");
+    <!--{/if}-->
+    <!--{if $userdata.constellation}-->
+    $("#constellation").val("<!--{$userdata.constellation}-->");
+    <!--{/if}-->
+    <!--{if $userdata.profession}-->
+    $("#profession").val("<!--{$userdata.profession}-->");
+    <!--{/if}-->
+    <!--{if $userdata.pskin}-->
+    $("#pskin").val("<!--{$userdata.pskin}-->");
+    <!--{/if}-->
+    <!--{if $userdata.phair}-->
+    $("#phair").val("<!--{$userdata.phair}-->");
+    <!--{/if}-->
+    $("#month, #day").change(function() {
+        var c = $("#constellation")[0],
+            b = $("#month").val(),
+            d = $("#day").val();
+        c.selectedIndex = b == 1 && d >= 20 || b == 2 && d <= 18 ? 1 : b == 2 && d >= 19 || b == 3 && d <= 20 ? 2 : b == 3 && d >= 21 || b == 4 && d <= 19 ? 3 : b == 4 && d >= 20 || b == 5 &&
+            d <= 20 ? 4 : b == 5 && d >= 21 || b == 6 && d <= 21 ? 5 : b == 6 && d >= 22 || b == 7 && d <= 22 ? 6 : b == 7 && d >= 23 || b == 8 && d <= 22 ? 7 : b == 8 && d >= 23 || b == 9 && d <= 22 ? 8 : b == 9 && d >= 23 || b == 10 && d <= 22 ? 9 : b == 10 && d >= 23 || b == 11 && d <= 21 ? 10 : b == 11 && d >= 22 || b == 12 && d <= 21 ? 11 : b == 12 && d >= 22 || b == 1 && d <= 19 ? 12 : 0
+    });
+    $("#personstyle").keyup(function(event) {
+        this.value=this.value.replace(/，/ig,',');
+        this.value=this.value.replace(/\s/ig,',');
+        this.value=this.value.replace(/,{2,}/ig,',');
+    });
+})
+</script>

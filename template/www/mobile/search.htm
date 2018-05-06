@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+        <!--{$search.title}-->_
+        <!--{$site.title}-->_
+        <!--{$site.seotitle}-->
+    </title>
+    <meta name="keywords" content="<!--{$search.title}-->" />
+    <meta name="description" content="搜索<!--{$search.title}-->结果" />
+    <!--{iCMS:public:ui}-->
+  </head>
+  <body class="searchApp" i="<!--{$iCMS.APP.NAME}-->">
+    <!--{include file="./header.htm"}-->
+    <div class="clearfix mb10"></div>
+    <div class="body">
+      <section class="bg-white" id="article-list">
+        <div class="u-ttl">
+        <!--{if $search.keyword}-->
+        <h2><!--{$search.title}--></h2>
+        <!--{else}-->
+        <h2>您想查找什么呢?</h2>
+        <!--{/if}-->
+        </div>
+        <ul class="list-wrap">
+          <!--{iCMS:article:list loop="true" page="true" row="10" keywords="$search.keyword"}-->
+          <!--{include file="./article.item.htm" import="true"}-->
+          <!--{/iCMS}-->
+          <div id="pages_nav" class="hide">
+            <!--{$iCMS.PAGES|method:'show(10)'}-->
+          </div>
+        </ul>
+      </section>
+      <div class="pagenav pagination">
+        <!--{$iCMS.PAGES|method:'show(10)'}-->
+      </div>
+      <div class="clearfix mb10"></div>
+      <div id="pages_next" class="hide">
+        <!--{$iCMS.PAGE.NEXT}-->
+      </div>
+    </div>
+<script>
+scrollLoad("#article-list", ".list-wrap", "#pages_next", "<!--{$iCMS.PAGE.TOTAL}-->",
+  function(e){
+      var pages_nav = $("#pages_nav",e).html();
+      $("#pages_nav",e).remove();
+      $(".pagenav").html(pages_nav);
+  }
+);
+</script>
+    <!--{include file="./footer.htm"}-->
+  </body>
+</html>

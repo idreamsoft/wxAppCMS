@@ -1,0 +1,64 @@
+<div class="top clearfix">
+    <div class="top-wrap">
+        <div class="sitename fl">
+            <i class="iconfont icon-home"></i> <!--{$site.name}-->
+        </div>
+        <div i="login" class="user-login fr">
+            <ul class="ul">
+                <!--{if $iCMS.CONFIG.user.open.QQ.enable }-->
+                <li><a href="<!--{iCMS:router url='user:login:qq'}-->" class="login_qq">QQ登录</a></li>
+                <!--{/if}-->
+                <!--{if $iCMS.CONFIG.user.open.WB.enable }-->
+                <li><a href="<!--{iCMS:router url='user:login:wb'}-->" class="login_wb">微博登录</a></li>
+                <!--{/if}-->
+                <!--{if $iCMS.CONFIG.user.open.WX.enable }-->
+                <li><a href="<!--{iCMS:router url='user:login:wx'}-->" class="login_wx">微信登录</a></li>
+                <!--{/if}-->
+                <li><a id="user-login-btn" href="<!--{iCMS:router url='user:login'}-->" title="登录">登录</a></li>
+                <li class="last"><a href="<!--{iCMS:router url='user:register'}-->" target="_blank">注册</a></li>
+            </ul>
+        </div>
+        <div i="profile" class="user-profile fr hide">
+            <span class="profile">
+                <!--{include file="iCMS://user/profile.menu.htm"}-->
+            </span>
+        </div>
+    </div>
+</div>
+<nav id="header" class="navbar navbar-default" role="navigation" data-spy="affix" data-offset-top="90">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="<!--{$site.url}-->">
+                <img src="<!--{$site.urls.tpl}-->/static/img/iCMS.LOGO.fff.png"/>
+            </a>
+        </div>
+        <a href="javascript:void(0)" class="iconfont icon-search" id="JS_srarch"></a>
+    </div>
+    <div class="navbar-menu">
+        <a href="<!--{$site.url}-->" id="navbar_c0">首页</a>
+        <!--{iCMS:category:list loop="true" stype="top" row="100"}-->
+        <a href="<!--{$category_list.url}-->" id="navbar_c<!--{$category_list.cid}-->"><!--{$category_list.name}--></a>
+        <!--{/iCMS}-->
+    </div>
+    <!--搜索-->
+    <div class="search clearfix">
+        <form action="<!--{iCMS:router url='api'}-->" method="get" class="form-inline" role="form">
+            <input name="app" type="hidden" value="search" />
+            <input class="form-control" type="text" name="q" placeholder="请输入关键词" value="<!--{$search.title}-->">
+            <button type="submit"class="btn btn-primary">搜索</button>
+        </form>
+    </div>
+</nav>
+<script type="text/javascript">
+$("#navbar_c0").removeClass("active");
+<!--{if $category.rootid}-->
+var ncid = "#navbar_c<!--{$category.rootid}-->";
+<!--{elseif $category.cid}-->
+var ncid = "#navbar_c<!--{$category.cid}-->";
+<!--{else}-->
+var ncid = "#navbar_c0";
+<!--{/if}-->
+$(ncid).addClass("active");
+var offset = $(ncid).offset();
+$(".navbar-menu").scrollLeft(offset.left - 120);
+</script>

@@ -1,0 +1,8 @@
+@import "../../iCMS/wxss/common.wxss";
+.container{background-color:#eaeaea;}
+.tag-container{padding:20rpx;background-color:#fff;}
+.tag-title{font-size:20pt;}
+.tag-subtitle{font-size:14pt;}
+.tag-pic{height:240rpx;}
+.tag-desc{color:#00a2ea;font-size:11pt;margin-top:16rpx;}
+.article-list{background-color:#fff!important;}

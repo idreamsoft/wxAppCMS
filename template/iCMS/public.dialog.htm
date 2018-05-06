@@ -1,0 +1,99 @@
+<!-- 私信 -->
+<div id="iCMS-PM-DIALOG" style="display:none;">
+  <div class="iCMS_PM_DIALOG">
+    <dl>
+      <dt><label>发给：</label></dt>
+      <dd><a class="pm_inbox" href="javascript:;">私信记录»</a><p class="pm_uname"></p></dd>
+      <div class="clearfix mt10"></div>
+      <dt><label>内容</label></dt>
+      <dd><textarea class="pm_content form-control" name="content"></textarea></dd>
+      <div class="clearfix mt10"></div>
+      <dd class="pm_warnmsg">请填写私信内容。</dd>
+    </dl>
+    <div class="clearfix"></div>
+    <div class="buttons">
+      <a class="cancel">取消</a>
+      <button type="button" name="send" class="btn btn-primary">发送</button>
+    </div>
+  </div>
+</div>
+<!-- 举报 -->
+<div id="iCMS-REPORT-DIALOG" style="display:none;">
+  <div class="iCMS_REPORT_DIALOG">
+    <div class="report_header">请选择理由</div>
+    <div class="clearfix"></div>
+    <ul class="options">
+      <li>
+        <label><input value="1" name="reason" type="radio">不友善内容</label>
+      </li>
+      <li>
+        <label><input value="2" name="reason" type="radio">广告等垃圾信息</label>
+      </li>
+      <li>
+        <label><input value="3" name="reason" type="radio">违法违规内容</label>
+      </li>
+      <li>
+        <label><input value="4" name="reason" type="radio">不宜公开讨论的政治内容</label>
+      </li>
+      <li>
+        <label><input value="0" name="reason" type="radio">其他（可自行填写）</label>
+        <p class="input-container visible-if-checked">
+          <input placeholder="请填写原因" type="text" name="content" class="reason-text form-control">
+        </p>
+      </li>
+    </ul>
+    <div class="clearfix"></div>
+    <div class="buttons">
+      <a class="cancel">取消</a>
+      <button type="button" name="ok" class="btn btn-primary">确定</button>
+    </div>
+  </div>
+</div>
+<!-- 收藏 -->
+<div id="iCMS-FAVORITE-DIALOG" style="display:none;">
+  <div class="iCMS_FAVORITE_DIALOG">
+    <div class="favorite_list">
+      <div class="favorite_list_content">
+        <img data-src="<!--{$site.urls.ui}-->/loading.gif" /> 加载中,请稍侯......
+      </div>
+      <div class="clearfix mt15"></div>
+      <div class="buttons">
+        <a class="create fl" href="javascript:;">+ 创建收藏夹</a>
+        <button type="button" name="favorite" class="cancel btn btn-primary">关闭</button>
+      </div>
+    </div>
+    <div class="favorite_create hide">
+      <div class="favorite_create_content form-horizontal">
+        <div class="form-group">
+          <label for="f_title" class="col-sm-2 control-label">标题</label>
+          <div class="col-sm-10">
+            <input type="text" id="f_title" name="title" class="form-control" placeholder="最多输入20字">
+          </div>
+        </div>
+        <div class="favorite_create_error">请填写标题</div>
+        <div class="form-group">
+          <label for="f_title" class="col-sm-2 control-label">描述</label>
+          <div class="col-sm-10">
+            <textarea name="description" class="form-control" placeholder="可选,最多输入256字" style="height: 66px;"></textarea>
+          </div>
+        </div>
+        <div class="clearfix mt10"></div>
+        <div class="form-group">
+          <label class="radio col-sm-offset-3">
+            <input type="radio" name="mode" value="1" checked>
+            <b> 公开 </b><span class="gray">公开后不能设置为私密</span>
+          </label>
+          <label class="radio col-sm-offset-3">
+            <input type="radio" name="mode" value="0">
+            <b> 私密 </b><span class="gray">只有你可以查看这个收藏夹</span>
+          </label>
+        </div>
+      </div>
+      <div class="clearfix mt15"></div>
+      <div class="buttons">
+        <a class="cancel_create mr20" href="javascript:;">取消</a>
+        <button type="button" name="create" class="btn btn-primary">确认创建</button>
+      </div>
+    </div>
+  </div>
+</div>

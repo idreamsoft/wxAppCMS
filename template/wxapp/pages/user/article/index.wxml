@@ -1,0 +1,37 @@
+<view class="page" hidden="{{page_hidden}}">
+    <view class="page__bd">
+        <view class="weui-cells weui-cells_after-title">
+            <block wx:for="{{result}}" wx:key="id">
+                <view class="result_box">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd" bindtap="dataTap" data-url="{{item.url}}">
+                            <text class="title">{{item.title}}</text>
+                        </view>
+                    </view>
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd">
+                            <navigator class="inline mr10" url="{{item.category.url}}">
+                            {{item.category.name}}
+                            </navigator>
+                            <text class="time">{{item.pubdate}}</text>
+                        </view>
+                        <view class="weui-cell__ft">
+                                <button type="warn" size="mini"
+                                bindtap="delTap"
+                                data-id="{{item.id}}"
+                                > 删除 </button>
+                        </view>
+                    </view>
+                </view>
+                <view class="clearfix mt10"></view>
+            </block>
+            <block wx:if="{{!result[0]}}">
+                <view class="clearfix"></view>
+                <view class="weui-loadmore weui-loadmore_line">
+                    <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无数据</view>
+                </view>
+            </block>
+        </view>
+    </view>
+</view>
+<loading class="loading" hidden="{{page_loading}}">加载中...</loading>

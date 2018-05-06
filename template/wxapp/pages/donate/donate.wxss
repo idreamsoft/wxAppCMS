@@ -1,0 +1,18 @@
+page, .page, .page__bd { height: 100%; background-color: #D85940; }
+.head_top { background-color: #D85940; height: 500rpx; }
+.head { background-color: #D85940; height: 180rpx; border-radius: 0px 0px 50% 50%; }
+.donate_page { background-color: #F0F0F0; height: 100%; }
+.donate_wrap { position: relative; display: flex; flex-direction: column; width: 100%; text-align: center; margin-top: -80rpx; }
+.donate_wrap .avatar { width: 150rpx; height: 150rpx; border-radius: 50%; }
+.donate_wrap .nickname { color: #000000; }
+.donate_wrap .msg { color: #999999; padding: 0 40rpx; }
+.donate_wrap .money { font-size: 3.6rem; color: #000000; }
+.donate_wrap .line { border-top: 1px solid #E5E5E5; margin: 0px 10%; }
+.donate { text-align: center; display: flex; flex-wrap: wrap;justify-content: space-between;}
+.donate button {margin: 15rpx 10rpx;flex-grow:1;}
+.paybtn { width: 200rpx; background-color: #F0F0F0; color: #D85940; }
+.share-wrap .share { color: #5272B0; font-size: 0.8rem; text-align: center; }
+.share-wrap button { background-color: #F0F0F0; line-height: 1.5; margin-top: 0px; margin-bottom: 0px; text-align: left; padding-left: 0px; padding-right: 0px; }
+.share-wrap button::before { border: none; }
+.share-wrap button::after { border: none; }
+.weui-footer .weui-footer__link { color: #5272B0; }

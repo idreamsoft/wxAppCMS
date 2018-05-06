@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+    <!--{$tag.name}-->
+    <!--{if $tag.seotitle}-->_
+    <!--{$tag.seotitle}-->
+    <!--{/if}-->_
+    <!--{$site.title}-->
+    </title>
+    <meta name="keywords" content="<!--{$tag.keywords}-->" />
+    <meta name="description" content="<!--{$tag.description}-->" />
+    <!--{iCMS:public:ui}-->
+  </head>
+  <body class="tagApp" i="<!--{$iCMS.APP.NAME}-->">
+    <!--{include file="./header.htm"}-->
+    <div class="clearfix mb10"></div>
+    <div class="body">
+      <section class="bg-white" id="article-list">
+        <div class="u-ttl">
+          <h2><!--{$tag.name}--></h2>
+        </div>
+        <!--{if $tag.description}-->
+        <blockquote>
+          <!--{if $tag.subtitle}-->
+          <h2><!--{$tag.subtitle}--></h2>
+          <!--{/if}-->
+          <p>
+            <!--{$tag.description}-->
+          </p>
+        </blockquote>
+        <!--{/if}-->
+        <div class="kwLink">
+          <b>相关标签：</b>
+          <!--{iCMS:tag:list loop="true" row="5" orderby="hot" cid="$category.cid"}-->
+          <a href="<!--{$tag_list.url}-->" target="_blank">
+            <!--{$tag_list.name}-->
+          </a>
+          <!--{/iCMS}-->
+        </div>
+        <ul class="list-wrap">
+          <!--{iCMS:article:list loop="true" page="true" row="10" tids="$tag.id"}-->
+          <!--{include file="./article.item.htm" import="true"}-->
+          <!--{/iCMS}-->
+          <div id="pages_nav" class="hide">
+            <!--{$iCMS.PAGES|method:'show(10)'}-->
+          </div>
+        </ul>
+      </section>
+      <div class="pagenav pagination">
+        <!--{$iCMS.PAGES|method:'show(10)'}-->
+      </div>
+      <div class="clearfix mb10"></div>
+      <div id="pages_next" class="hide">
+        <!--{$iCMS.PAGE.NEXT}-->
+      </div>
+    </div>
+<script>
+scrollLoad("#article-list", ".list-wrap", "#pages_next", "<!--{$iCMS.PAGE.TOTAL}-->",
+  function(e){
+      var pages_nav = $("#pages_nav",e).html();
+      $("#pages_nav",e).remove();
+      $(".pagenav").html(pages_nav);
+  }
+);
+</script>
+    <!--{include file="./footer.htm"}-->
+  </body>
+</html>

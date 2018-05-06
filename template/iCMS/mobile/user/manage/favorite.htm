@@ -1,0 +1,67 @@
+<h4 class="manage-title">我的收藏</h4>
+<form action="<!--{iCMS:router url='user'}-->" method="post" target="iCMS_FRAME">
+    <input name="action" type="hidden" value="manage" />
+    <input name="pg" type="hidden" value="favorite" />
+    <div class="favorite">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th><span class="label label-success">收藏夹</span> 标题</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--{iCMS:favorite:list page="true" userid="$user.uid"}-->
+                <!--{iCMS:favorite:data loop="true" page="true" row="10" userid="$user.uid" fid="$favorite.fid" total_cache="G"}-->
+                <tr id="id-<!--{$favorite_data.id}-->">
+                    <td>
+                        <!--{$favorite_data.id}-->
+                    </td>
+                    <td>
+                        <a href="<!--{$favorite.manage}-->fid=<!--{$favorite_data.fid}-->">
+                            <span class="label label-success">
+                                <!--{$favorite_list[$favorite_data.fid].title}-->
+                            </span>
+                        </a>
+                        <a href="<!--{$favorite_data.url}-->" target="_blank">
+                            <!--{$favorite_data.title}-->
+                        </a>
+                    </td>
+                    <td class="action"><a href="javascript:;" class="tip ml10" data-id="<!--{$favorite_data.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-trash-o"></i></a></td>
+                </tr>
+                <!--{/iCMS}-->
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div class="pagination"><!--{$iCMS.PAGES|method:'current_page():bartext()'}--></div>
+                    <div class="pagination"><!--{$iCMS.PAGES|method:'show(9)'}--></div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+<script type="text/javascript">
+$(function() {
+    $("[data-action]").on('click', function(event) {
+        event.preventDefault();
+        var param = {
+            'id': $(this).attr("data-id"),
+            'act': $(this).attr("data-action"),
+            'pg': 'favorite',
+            'action': 'manage'
+        }
+        $.post("<!--{iCMS:router url='user'}-->", param, function(c) {
+            if (c.code) {
+                $("#id-" + param.id).hide('500', function() {
+                    $(this).remove();
+                });
+            } else {
+                iCMS.UI.alert(c.msg);
+            }
+        }, 'json');
+    });
+});
+</script>

@@ -1,0 +1,5 @@
+@import "../../iCMS/wxss/common.wxss";
+.page{padding-bottom:100rpx;}
+.tags{margin-top:0px;padding:16rpx;border-top:none;}
+.tags-title{text-align:center;height:70rpx;font-size:11pt;color:#999;}
+.tag{color:#00a2ea;border:1px solid #a0d1e5;padding:8rpx 16rpx;display:inline-block;margin-right:10rpx;border-radius:20rpx;margin-bottom:10rpx;font-size:11pt;}

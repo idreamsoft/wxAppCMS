@@ -1,0 +1,34 @@
+<div class="iCMS_USER_CARD">
+    <div class="upper">
+        <a class="avatar-link" href="<!--{$user.urls.home}-->">
+            <img class="avatar" src="<!--{$user.avatar}-->" onerror="iUSER.NOAVATAR(this);">
+            <span class="name"><!--{$user.nickname}--></span> </a> <i class="ui_icon <!--{$user.gender}-->"></i>
+        <div class="slogan">
+            <!--{$user.data.slogan|default:'这家伙太懒了,什么都没有留下!'}-->
+        </div>
+        <!--{if $secondary}-->
+        <div class="secondary">
+            <!--{$secondary}-->
+        </div>
+        <!--{/if}-->
+    </div>
+    <div class="clearfix"></div>
+    <div class="lower">
+        <div class="meta">
+            <a class="item" target="_blank" href="<!--{$user.urls.home}-->"> <span class="value"><!--{$user.article|num10K}--></span> <span class="key">文章</span> </a>
+            <a class="item" target="_blank" href="javascript:;"> <span class="value"><!--{$user.comments|num10K}--></span> <span class="key">评论</span> </a>
+            <a class="item" target="_blank" href="<!--{$user.urls.fans}-->"> <span class="value"><!--{$user.fans|num10K}--></span> <span class="key">关注者</span> </a>
+        </div>
+        <div class="operation">
+            <!--{if $status.isme}-->
+            <span class="self">我自己</span>
+            <!--{else}-->
+            <a i="follow:<!--{$user.uid}-->:0" href="javascript:;" class="btn btn-default zg-btn <!--{if !$status.followed}--> hide<!--{/if}-->">取消关注</a>
+            <a i="follow:<!--{$user.uid}-->:1" href="javascript:;" class="btn btn-success zg-btn <!--{if $status.followed}--> hide<!--{/if}-->"><i class="fa fa-plus"></i> 关注</a>
+            <a i="pm:<!--{$user.uid}-->:<!--{$user.nickname}-->" href="<!--{$user.urls.home}-->" class="btn btn-default zg-btn-white" href="<!--{$user.inbox}-->"><i class="iCMS_icon zg-icon pm">私信</i></a>
+            <!--{/if}-->
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix mb5"></div>
+</div>

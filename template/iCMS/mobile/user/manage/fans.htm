@@ -1,0 +1,22 @@
+<h4 class="manage-title">我的粉丝</h4>
+<table class="table table-striped">
+    <tbody>
+        <!--{iCMS:user:follow loop="true" page="true" data="true" row="10" fuid="$user.uid" followed="$user.uid"}-->
+        <!--{include file="./user.follow.htm" import="true"}-->
+        <!--{iCMSelse}-->
+        <tr>
+            <td><i class="fa fa-ban"></i> 暂无粉丝</td>
+        </tr>
+        <!--{/iCMS}-->
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">
+                <div class="iCMS_pagination">
+                    <!--{$iCMS.PAGE.NAV}-->
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+

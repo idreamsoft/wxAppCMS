@@ -1,0 +1,27 @@
+<!--{&$article.pubdate|date:"Y-m-d H:i"}-->
+<!--{&$article.source|html2text}-->
+<!--{&$article.body|regex_replace:'/<script.+?<\/script>/is':''}-->
+<!--{&$article.body|regex_replace:'/\[video\](.+)\[\/video\]/is':'<video src="$1" controls></video>'}-->
+<!--{&$article.body|replace:'<img':'<img width="100%"'}-->
+<!--{&$article.body|replace:'<p><br /></p>':''}-->
+{
+"article":<!--{$article|json_encode}-->,
+"category":<!--{$category|json_encode}-->,
+<!--{iCMS:comment:list row="10" by="ASC" iid="$article.id"}-->
+"comment":<!--{$comment_list|json_encode}-->,
+<!--{iCMS:article:prev cid="$article.cid" id="$article.id"}-->
+"article_prev":<!--{$article_prev|json_encode}-->,
+<!--{iCMS:article:next cid="$article.cid" id="$article.id"}-->
+"article_next":<!--{$article_next|json_encode}-->,
+"article_list":[
+<!--{iCMS:article:list
+    cid="$category.cid"
+    id!="$article.id"
+    keys="id,url,title,description,pic,pubdate,category" loop="true" row="5"
+    page="true"
+}-->
+<!--{include file="./article_list.json.htm"}-->
+<!--{/iCMS}-->
+]
+}
+<!--{clean}-->

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <title>
+        <!--{$forms.title}-->_
+        <!--{$site.title}-->_
+        <!--{$site.seotitle}-->
+        </title>
+        <meta name="keywords" content="<!--{$forms.keywords}-->" />
+        <meta name="description" content="<!--{$forms.description}-->" />
+        <link rel="canonical" href="<!--{$forms.iurl.desktop.url}-->">
+        <!--{iCMS:public:ui}-->
+    </head>
+    <body class="articleApp" i="<!--{$iCMS.APP.NAME}-->">
+        <!--{include file="./header.htm"}-->
+        <div class="body">
+            <div class="wrapper clearfix mt5">
+                <article>
+                    <header class="article-header">
+                        <h1 class="article-title">
+                        <!--{$forms.title}-->
+                        </h1>
+                        <div class="article-meta">
+                            <time>
+                            <i class="iconfont icon-time"></i>
+                            <!--{$forms.addtime|date:"Y-m-d H:s"}-->
+                            </time>
+                        </div>
+                    </header>
+                    <div class="form-body">
+                        <iframe class="hide" id="iForms_FRAME" name="iForms_FRAME"></iframe>
+                        <!--自定义表单的表单-->
+                        <form action="<!--{$forms.action}-->" id="<!--{$forms.layout_id}-->"
+                             class="form-inline" method="post" target="iForms_FRAME">
+                            <!--表单结构-->
+                            <!--{iCMS:forms:create form="$forms"}-->
+                            <div class="mb10"></div>
+                            <div class="form-actions">
+                                <button class="btn btn-lg btn-primary" type="submit">
+                                    <i class="fa fa-check"></i> 提 交
+                                </button>
+                            </div>
+                        </form>
+                        <!--自定义表单提交脚本 可以自己写-->
+                        <script>
+                        $(function(){
+                            $("#<!--{$forms.layout_id}-->").submit(function(){
+                                event.preventDefault();
+                                var me = $(this);
+                                var param = me.serialize();
+                                $.post('<!--{$forms.action}-->', param,
+                                    function(ret) {
+                                        if(ret.code){
+                                            me.html('<div class="alert alert-success" role="alert">'+ret.msg+'</div>');
+                                        }else{
+                                            if(ret.forward){
+                                                $("#"+ret.forward.id).focus();
+                                            }
+                                            iCMS.UI.alert(ret.msg);
+                                        }
+                                    }
+                                ,'json');
+                                return false;
+                            });
+                        });
+                        </script>
+                    </div>
+                </article>
+                <div class="clearfix"></div>
+                <div class="share">
+                    <div class="share-icon">
+                        <div class="t">分享到</div>
+                        <div class="bdsharebuttonbox" id="share-bd">
+                            <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                            <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                            <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+                            <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                            <a href="#" class="bds_more" data-cmd="more"></a>
+                        </div>
+                    </div>
+                    <script>
+                    window._bd_share_config = {
+                            common: {
+                                bdText: '<!--{$forms.title}-->',
+                                bdDesc: '<!--{$forms.description|html2txt}-->',
+                                bdUrl: '<!--{$forms.url}-->',
+                                bdPic: '<!--{$forms.pic.url}-->'
+                            },
+                            share: [{
+                                "bdSize": 16
+                            }]
+                        }
+                        //以下为js加载部分
+                    with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+                    </script>
+                </div>
+            </div>
+
+            <div class="clearfix mt10"></div>
+            <section class="bg-white">
+                <div class="u-ttl">
+                    <h2><i class="iconfont icon-news"></i> 最新<!--{$category.name}--></h2>
+                </div>
+                <ul class="list-wrap">
+                    <!--{iCMS:article:list loop="true" row="5"}-->
+                    <!--{include file="./article.item.htm" import="true"}-->
+                    <!--{/iCMS}-->
+                </ul>
+            </section>
+            <div class="clearfix mt10"> </div>
+
+            <section class="bg-white">
+                <div class="u-ttl">
+                    <h2><i class="iconfont icon-ranking"></i> <!--{$category.name}-->排行榜</h2>
+                </div>
+                <ul class="list-wrap">
+                    <!--{iCMS:article:list loop="true" row="5" orderby="week"}-->
+                    <!--{include file="./article.item.htm" import="true"}-->
+                    <!--{/iCMS}-->
+                </ul>
+            </section>
+        </div>
+        <div class="clearfix mt10"> </div>
+        <!--{include file="./footer.htm"}-->
+    </body>
+</html>

@@ -1,0 +1,127 @@
+<style>
+.info { text-align: right; }
+.info span { float: left; }
+.inbox_content span{font-size: 12px;color: #999}
+.inbox_content a{color: #337ab7;text-decoration: none;}
+</style>
+<h4 class="manage-title">消息管理</h4>
+<div class="manage-pm">
+    <ul id="message-tab" class="nav nav-tabs">
+        <li class="active" name="t1"><a href="<!--{$manage.url}-->"><i class="fa fa-dashboard"></i> 我的私信</a></li>
+        <li name="sys"><a href="<!--{$manage.url}-->type=sys"><i class="fa fa-minus-circle"></i> 系统通知</a></li>
+    </ul>
+    <table class="table table-striped">
+        <tbody>
+            <!--{iCMS:message:list loop="true" type="$_GET.type" friend="$_GET.user"}-->
+            <tr id="id-<!--{$message_list.id}-->">
+                <td class="avatar_35">
+                    <a i="ucard:<!--{$message_list.user.uid}-->" href="<!--{$message_list.user.url}-->">
+                    <img class="avatar_35" src="<!--{$message_list.user.avatar}-->" onerror="iUSER.NOAVATAR(this);"> </a>
+                </td>
+                <td>
+                    <!--{if $message_list.type_text=="msg"}-->
+                        <span class="label label-success">私信</span>
+                        <!--{if $message_list.is_sender}-->
+                            我发送给
+                        <!--{/if}-->
+                        <!--{$message_list.user.link}-->
+                    <!--{/if}-->
+                    <!--{if $message_list.type_text=="sys"}-->
+                        <b><!--{$message_list.sender.name}--></b>
+                    <!--{/if}-->
+                    ：
+                    <div class="inbox_content"><!--{$message_list.content}--></div>
+                    <div class="clearfix mt10"></div>
+                    <div class="info">
+                        <span class="label label-default"><!--{$message_list.sendtime|format_date}--></span>
+                        <!--{if !$message_list.readtime}-->
+                            <span data-id="<!--{$message_list.id}-->" class="readtime label label-danger">new!</span>
+                        <!--{/if}-->
+                        <!--{if $message_list.msg_count>1 && $message_list.type_text=="msg"}-->
+                        <a href="<!--{$message_list.url}-->"> 共 <!--{$message_list.msg_count}--> 条对话 </a>
+                        <!--{/if}-->
+                        <!--{if $message_list.type_text=="msg"}-->
+                        <a href="javascript:;" class="btn btn-xs btn-primary"
+                            i="pm:<!--{$message_list.user.uid}-->:<!--{$message_list.user.name}-->:<!--{$message_list.id|authcode:'ENCODE'}-->">
+                            <i class="fa fa-reply"></i> 回复
+                        </a>
+                        <!--{/if}-->
+                        <!--{if $message_list.type_text=="msg"}-->
+                        <a href="javascript:;" class="btn btn-xs btn-warning"
+                            i="report"
+                            data-param='{"appid":"6","iid":"<!--{$message_list.id}-->","userid":"<!--{$message_list.send_uid}-->"}' title="举报私信骚扰">
+                            <i class="fa fa-flag"></i> 举报
+                        </a>
+                        <!--{/if}-->
+                        <!--{if !$message_list.readtime && !$message_list.msg_count}-->
+                        <a href="javascript:;" class="btn btn-xs btn-success"
+                           data-id="<!--{$message_list.id}-->"
+                           data-action="read">
+                            <i class="fa fa-bell"></i> 标为已读
+                        </a>
+                        <!--{/if}-->
+                        <!--{if $message_list.msg_count>1}-->
+                        <a href="javascript:;" class="btn btn-xs btn-danger"
+                            data-id="<!--{$message_list.id}-->"
+                            data-user="<!--{$message_list.user.uid}-->"
+                            data-action="del">
+                            <i class="fa fa-trash-o"></i> 删除
+                        </a>
+                        <!--{else}-->
+                        <a href="javascript:;" class="btn btn-xs btn-danger"
+                            data-id="<!--{$message_list.id}-->"
+                            data-action="del">
+                            <i class="fa fa-trash-o"></i> 删除
+                        </a>
+                        <!--{/if}-->
+                    </div>
+                </td>
+            </tr>
+            <!--{/iCMS}-->
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3">
+                <div class="iCMS_pagination">
+                    <!--{$iCMS.PAGE.NAV}-->
+                </div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script type="text/javascript">
+$(function() {
+    <!--{if $_GET.type}-->
+    var tab = $("#message-tab");
+    $("li", tab).removeClass("active");
+    $("[name=<!--{$_GET.type}-->]", tab).addClass("active");
+    <!--{/if}-->
+
+    $("[data-action]").on('click', function(event) {
+        event.preventDefault();
+        var param = {
+            'user': $(this).attr("data-user"),
+            'id': $(this).attr("data-id"),
+            'act': $(this).attr("data-action"),
+            'pg': 'message',
+            'action': 'manage'
+        }
+        $.post("<!--{iCMS:router url='user'}-->", param, function(c) {
+            if (c.code) {
+                if(param.act=='del'){
+                    $("#id-" + param.id).hide('500', function() {
+                        $(this).remove();
+                    });
+                }
+                if(param.act=='read'){
+                    $('.readtime[data-id="'+param.id+'"]').hide();
+                    $('[data-id="'+param.id+'"][data-action="read"]').hide();
+                }
+            } else {
+                iCMS.UI.alert(c.msg);
+            }
+        }, 'json');
+    });
+});
+</script>

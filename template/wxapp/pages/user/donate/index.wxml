@@ -1,0 +1,60 @@
+<view class="page" hidden="{{page_hidden}}">
+    <view class="page__bd">
+        <view class="weui-tab">
+            <view class="weui-navbar">
+                <block wx:for="{{tabs}}" wx:key="*this">
+                    <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+                        <view class="weui-navbar__title">{{item}}</view>
+                    </view>
+                </block>
+                <view class="weui-navbar__slider" style="width: {{sliderWidth}}%;left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+            </view>
+            <view class="weui-tab__panel">
+                    <view class="weui-tab__content">
+                        <view class="weui-cells weui-cells_after-title">
+                            <block wx:for="{{result}}" wx:key="id">
+                                <view class="result_box">
+                                    <view class="weui-cell">
+                                        <view class="weui-cell__hd">[文章]</view>
+                                        <view class="weui-cell__bd">
+                                            <text class="title">{{item.title}}</text>
+                                        </view>
+                                    </view>
+                                    <view class="weui-cell" wx:if="{{activeIndex == 0}}">
+                                        <view class="weui-cell__hd flex-row">
+                                            <image class="avatar_url" src="{{item.receiver.avatar}}"></image>
+                                             <view class="flex-col">
+                                                <text class="name">{{item.receiver.name}}</text>
+                                                <text class="time">{{item.pay_time}}</text>
+                                            </view>
+                                        </view>
+                                        <view class="weui-cell__bd"></view>
+                                        <view class="weui-cell__ft">赞赏:{{item.amount}}元</view>
+                                    </view>
+                                    <view class="weui-cell" wx:if="{{activeIndex == 1}}">
+                                        <view class="weui-cell__hd flex-row">
+                                            <image class="avatar_url" src="{{item.donator.avatar}}"></image>
+                                             <view class="flex-col">
+                                                <text class="name">{{item.donator.name}}</text>
+                                                <text class="time">{{item.pay_time}}</text>
+                                            </view>
+                                        </view>
+                                        <view class="weui-cell__bd"></view>
+                                        <view class="weui-cell__ft">赞赏:{{item.amount}}元</view>
+                                    </view>
+                                </view>
+                                <view class="clearfix mt10"></view>
+                            </block>
+                            <block wx:if="{{!result[0]}}">
+                                <view class="clearfix"></view>
+                                <view class="weui-loadmore weui-loadmore_line">
+                                    <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无数据</view>
+                                </view>
+                            </block>
+                        </view>
+                    </view>
+            </view>
+        </view>
+    </view>
+</view>
+<loading class="loading" hidden="{{page_loading}}">加载中...</loading>

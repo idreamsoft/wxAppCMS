@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ueditor图片对话框</title>
+    <script type="text/javascript" src="../internal.js"></script>
+
+    <!-- jquery -->
+    <script type="text/javascript" src="../../../jquery-1.11.0.min.js"></script>
+
+    <!-- webuploader -->
+    <script src="../../third-party/webuploader/webuploader.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../third-party/webuploader/webuploader.css">
+    <link rel="stylesheet" href="../../../bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../iCMS.css" type="text/css" />
+
+    <!-- attachment dialog -->
+    <link rel="stylesheet" href="attachment.css" type="text/css" />
+</head>
+<body>
+
+    <div class="wrapper">
+        <div id="tabhead" class="tabhead">
+            <span class="tab focus" data-content-id="upload"><var id="lang_tab_upload"></var></span>
+            <span class="tab" data-content-id="online"><var id="lang_tab_online"></var></span>
+        </div>
+        <div id="tabbody" class="tabbody">
+            <!-- 上传图片 -->
+            <div id="upload" class="panel focus">
+                <div id="queueList" class="queueList">
+                    <div class="statusBar element-invisible">
+                        <div class="progress">
+                            <span class="text">0%</span>
+                            <span class="percentage"></span>
+                        </div><div class="info"></div>
+                        <div class="btns">
+                            <div id="filePickerBtn"></div>
+                            <div class="uploadBtn"><var id="lang_start_upload"></var></div>
+                        </div>
+                    </div>
+                    <div id="dndArea" class="placeholder">
+                        <div class="filePickerContainer">
+                            <div id="filePickerReady"></div>
+                        </div>
+                    </div>
+                    <ul class="filelist element-invisible">
+                        <li id="filePickerBlock" class="filePickerBlock"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 在线图片 -->
+            <div id="online" class="panel">
+                <div id="fileList"><var id="lang_imgLoading"></var></div>
+            </div>
+
+        </div>
+    </div>
+    <script id="explorer" type="text/html">
+      <div class="widget-box widget-plain" id="files-explorer">
+        <div class="widget-title">
+          <h5 class="brs">文件管理</h5>
+            <span class="label label-info pwd"><a href="{{URI}}{{parent}}" class="getdir">iCMS://{{pwd}}</a></span>
+            <div class="buttons">
+            <a href="javascript:;" class="btn btn-mini btn-success" id="refresh"><i class="icon-refresh icon-white"></i> 刷新</a></div>
+        </div>
+        <div class="widget-content nopadding">
+            {{ if DirArray }}
+            <table class="table table-bordered table-condensed table-hover">
+              <tbody>
+                <tr>
+                  <td><a href="{{URI}}{{parent}}" class="getdir"><i class="icon-arrow-up"></i> 返回上级目录</a></td>
+                </tr>
+                {{each DirArray}}
+                <tr>
+                  <td><a href="{{$value.url}}" class="getdir dir">{{$value.name}}</a></td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            {{/if}}
+            {{ if FileArray }}
+            <table class="table table-bordered table-condensed table-hover">
+              <thead>
+                <tr>
+                  <th><i class="icon-resize-vertical"></i></th>
+                  <th style="width:300px;">文件名(点击文件图标可查看图片)</th>
+                  <th>大小</th>
+                  <th>最后修改时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{each FileArray}}
+                <tr>
+                  <td><input type="checkbox" class="url" value="{{$value.url}}" /></td>
+                  <td>
+                      <a href="{{$value.url}}"  target="_blank" title="点击查看图片"><img src="../../../../../admincp/ui/fileicons/{{$value.ext}}.gif" /></a>
+                      <a href="{{$value.url}}" class="file">{{$value.name}}</a>
+                  </td>
+                  <td>{{$value.size}}</td>
+                  <td>{{$value.modified}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            {{/if}}
+        </div>
+      </div>
+    </script>
+    <script type="text/javascript" src="../../../template-3.0.js"></script>
+    <script type="text/javascript" src="attachment.js"></script>
+
+</body>
+</html>

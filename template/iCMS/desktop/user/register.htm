@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <!--{if $user}-->欢迎加入
+        <!--{else}-->新用户注册
+        <!--{/if}-->|
+        <!--{$site.title}-->
+    </title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->" />
+    <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->" />
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.tpl}-->/static/css/user.css" type="text/css" />
+    <script>
+    //初始化注册接口
+    $(function() {
+        var register = $("#register-box");
+        $("input", register).click(function() {
+            if (!$(this).data('check')) {
+                tip({
+                    forward: this.name,
+                    msg: 'def'
+                });
+            }
+        }).blur(function() {
+            check_form(this);
+        });
+        $("#register_submit").click(function(event) {
+            event.preventDefault();
+            var checkform = false,
+                param = {};
+            $("input", register).each(function() {
+                check_form(this);
+            }).each(function() {
+                if (!$(this).data('check')) {
+                    checkform = true;
+                    return false;
+                }
+                if (this.name) {
+                    param[this.name] = this.value;
+                }
+            });
+            //表单检查不通过
+            if (checkform) return false;
+            param.gender = $('input[name="gender"]:checked', register).val();
+            <!--{if $user.openid}-->
+            //绑定账号 接收用户信息
+            param.openid = "<!--{$user.openid}-->";
+            param.platform = "<!--{$user.platform}-->";
+            <!--{/if}-->
+            <!--{if $iCMS.CONFIG.user.register.seccode }-->
+            //检查验证码
+            param.register_seccode = true;
+            <!--{/if}-->
+            iCMS.run('passport', function($PASSPORT) {
+                //注册成功 事件绑定
+                $PASSPORT.SUCCESS = function(s) {
+                    // console.log('****',s);
+                    window.top.location.href = "<!--{$forward}-->";
+                }
+                //注册失败 事件绑定
+                $PASSPORT.FAIL = function(f) {
+                    iCMS.UI.seccode(".seccode-img", register);
+                    tip(f);
+                }
+                //提交参数
+                $PASSPORT.REGISTER(param);
+            });
+        });
+
+        function check_form(a) {
+            var ret = {
+                forward: a.name,
+                msg: 'ok'
+            }
+            if (a.value == "") {
+                ret.msg = 'empty';
+                return tip(ret);
+            }
+            var ajax_check = false;
+            switch (a.name) {
+                case 'username':
+                    var pattern = /^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9._-])+/;
+                    if (!pattern.test(a.value)) {
+                        ret.msg = 'error';
+                        return tip(ret);
+                    }
+                    ajax_check = true;
+                    break;
+                case 'nickname':
+                    var length = a.value.replace(/[^\x00-\xff]/g, 'xx').length;
+                    if (length < 4) {
+                        ret.msg = 'error';
+                        return tip(ret);
+                    }
+                    if (length > 20) {
+                        ret.msg = 'error';
+                        return tip(ret);
+                    }
+                    ajax_check = true;
+                    break;
+                case 'password':
+                    if (a.value.length < 6) {
+                        ret.msg = 'error';
+                    }
+                    return tip(ret);
+                    break;
+                case 'rstpassword':
+                    var pwd = $("input[name='password']").val();
+                    if (pwd.length < 6) {
+                        ret.msg = 'len_error';
+                    }
+                    if (pwd != a.value) {
+                        ret.msg = 'error';
+                    }
+                    return tip(ret);
+                    break;
+                case 'seccode':
+                    ajax_check = true;
+                    break;
+                case 'agreement':
+                    checked = $('input[name="agreement"]', register).prop("checked");
+                    if (!checked) {
+                        ret.msg = 'def';
+                    }
+                    return tip(ret);
+                    break;
+                default:
+                    $("input[name='" + a.name + "']").data('check', true);
+            }
+            if (ajax_check) {
+                iCMS.run('passport', function($PASSPORT) {
+                    $PASSPORT.CHECK({
+                            name: a.name,
+                            value: a.value
+                        },
+                        function() { //CHECK成功 事件
+                            tip(ret);
+                        },
+                        function(f) { //CHECK失败 事件
+                            if (a.name == 'seccode') {
+                                iCMS.UI.seccode(".seccode-img", register);
+                            }
+                            tip(f);
+                        }
+                    );
+                });
+            };
+        }
+
+        function tip(a) {
+            var info = {
+                'error_username': '电子邮箱格式不正确！',
+                'error_nickname': '昵称只能4~20位，每个中文字算2位字符。',
+                'error_password': '密码太短啦，至少要6位哦',
+                'error_rstpassword': '密码与确认密码不一致！',
+                'len_error_rstpassword': '请重复输入一次密码！',
+                'error_ajax_username': '邮件地址已经注册过了,请直接登录或者换个邮件再试试。',
+                'error_ajax_nickname': '昵称已经被注册了,请换个再试试。',
+                'error_ajax_seccode': '',
+                'empty_username': '请填写电子邮箱！',
+                'empty_nickname': '请填写昵称！',
+                'empty_password': '请填写密码！',
+                'empty_rstpassword': '请重复输入一次密码！',
+                'empty_seccode': '请输入验证码！',
+                'def_username': '请填写正确的常用邮箱，以便找回密码。<br />比如：example@example.com',
+                'def_nickname': '支持中文，不能以数字开头，最多20个字符，中文算两个字符。',
+                'def_password': '6-20个字母、数字或者符号',
+                'def_rstpassword': '这里要重复输入一下你的密码',
+                'def_seccode': '请输入图片中的字符!',
+                'def_agreement': '请勾选同意网络服务使用协议'
+            }
+            var name = a.forward,
+                type = a.msg;
+            var tip = $('.tip-' + name),
+                input = $("input[name='" + name + "']");
+            // console.log(a);
+            if (type == "ok") {
+                tip.hide();
+                input.data('check', true);
+            } else if (type && type != "ok") {
+                // if(name=='seccode') iCMS.UI.seccode(".seccode-img",register);
+                var text = info[type + '_' + name] || a.msg;
+                tip.text(text).show();
+                input.data('check', false);
+            }
+        }
+    });
+    </script>
+</head>
+
+<body class="userApp passport">
+    <div class="register-wrap">
+        <!--{include file="./user.header.htm" import="true"}-->
+        <div class="passport-wrap">
+            <div class="passport-main">
+                <h1><!--{if $user}-->欢迎加入<!--{$site.title}--><!--{else}-->新用户注册<!--{/if}--></h1>
+                <!--{if $user}-->
+                <div class="alert" style="width: 500px;margin-top: 10px;margin-bottom: 5px;">
+                    <strong>*</strong>请先补充必要的个人信息，只有补充完这些信息才能真正加入
+                    <!--{$site.title}-->哦
+                </div>
+                <!--{/if}-->
+                <div id="register-box" class="passport-form form-horizontal">
+                    <div class="form-group">
+                        <label for="username" class="control-label">电子邮箱：</label>
+                        <input type="email" name="username" class="form-control" id="username" placeholder="请输入邮箱">
+                        <p class="help-block tip-error tip-username">请输入邮箱</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname" class="control-label">昵称：</label>
+                        <input type="text" name="nickname" class="form-control" id="nickname" placeholder="请输入昵称">
+                        <p class="help-block tip-error tip-nickname">请输入昵称</p>
+                    </div>
+                    <div class="radio">
+                        <label class="control-label">性别：</label>
+                        <div class="form-control" style="padding: 8px;">
+                            <label style="margin-right: 5px;">
+                                <input type="radio" name="gender" value="girl" checked="checked">女
+                            </label>
+                            <label>
+                                <input type="radio" name="gender" value="boy">男
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label">密码：</label>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="请输入密码">
+                        <p class="help-block tip-error tip-password">请输入密码</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="rstpassword" class="control-label">确认密码：</label>
+                        <input type="password" name="rstpassword" class="form-control" id="rstpassword" placeholder="请输入确认密码">
+                        <p class="help-block tip-error tip-rstpassword">请输入确认密码</p>
+                    </div>
+                    <!--{if $iCMS.CONFIG.user.register.seccode }-->
+                    <div class="form-group">
+                        <label for="seccode" class="control-label">验证码：</label>
+                        <input type="text" maxlength="4" name="seccode" class="seccode form-control" id="seccode" placeholder="请输入验证码">
+                        <!--{iCMS:public:seccode}-->
+                        <p class="help-block tip-error tip-seccode">请输入验证码</p>
+                    </div>
+                    <!--{/if}-->
+                    <div class="form-group opt">
+                        <label>
+                            <input type="checkbox" value="1" name="agreement" class="check" checked="checked"> 我已看过并同意《
+                            <a href="<!--{iCMS:router url='public:agreement'}-->" target="_blank">
+                                <!--{$site.title}-->网络服务使用协议</a>》
+                        </label>
+                        <p class="help-block tip-error tip-agreement">请勾选同意网络服务使用协议</p>
+                    </div>
+                    <div class="form-group submit">
+                        <a href="javascript:;" id="register_submit" class="btn btn-success btn-lg">注 册</a>
+                        <a class="findpwd" href="<!--{$iCMS.SAPI}-->&do=findpwd">忘记密码？</a>
+                    </div>
+                </div>
+            </div>
+            <div class="passport-right">
+                <div class="right-wrap">
+                    <h2>已经有帐号？请直接登录</h2>
+                    <a class="btn btn-primary" href="<!--{iCMS:router url='user:login' query="$query"}-->">登 录</a>
+                    <div class="other_login">
+                        <p>您也可以用以下方式登录：</p>
+                        <!--{if $iCMS.CONFIG.user.open.QQ.enable }-->
+                        <a class="open_icon icon_qq" href="<!--{iCMS:router url='user:login:qq'}-->">QQ 帐号</a>
+                        <!--{/if}-->
+                        <!--{if $iCMS.CONFIG.user.open.WB.enable }-->
+                        <a class="open_icon icon_wb" href="<!--{iCMS:router url='user:login:wb'}-->">新浪微博</a>
+                        <!--{/if}-->
+                        <!--{if $iCMS.CONFIG.user.open.WX.enable }-->
+                        <a class="open_icon icon_wx" href="<!--{iCMS:router url='user:login:wx'}-->">微信账号</a>
+                        <!--{/if}-->
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!--{include file="iCMS://footer.htm"}-->
+</body>
+
+</html>

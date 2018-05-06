@@ -1,0 +1,18 @@
+<div class="commentApp-form mini-form">
+    <div class="comment-editor">
+        <input i="comment_content" class="form-control" type="text" placeholder="写下你的评论…">
+    </div>
+    <div class="clearfix mt10"></div>
+    <div class="comment-command">
+        <!--{if $iCMS.CONFIG.comment.seccode }-->
+        <div class="comment-seccode">
+            <label for="seccode" class="control-label">验证码：</label>
+            <input type="text" maxlength="4" i="comment_seccode" class="seccode form-control" placeholder="验证码">
+            <!--{iCMS:public:seccode}-->
+        </div>
+        <!--{/if}-->
+        <button i="comment_add" class="btn btn-sm btn-primary fr"><i class="fa fa-check"></i> 评 论</button>
+        <a href="javascript:;" i="comment_cancel" class="comment_cancel">取消</a>
+    </div>
+    <div class="clearfix"></div>
+</div>

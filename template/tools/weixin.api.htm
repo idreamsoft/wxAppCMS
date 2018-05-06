@@ -1,0 +1,29 @@
+<xml>
+<ToUserName><![CDATA[<!--{$weixin.FromUserName}-->]]></ToUserName>
+<FromUserName><![CDATA[<!--{$weixin.ToUserName}-->]]></FromUserName>
+<CreateTime><!--{$weixin.CreateTime}--></CreateTime>
+<!--{if $weixin.Content}-->
+	<!--{iCMS:article:list row="5" keywords="$weixin.Content"}-->
+	<!--{if $article_list}-->
+	<MsgType><![CDATA[news]]></MsgType>
+	<Content><![CDATA[]]></Content>
+	<ArticleCount><!--{$article_list|count}--></ArticleCount>
+	<Articles>
+	<!--{foreach key=key value=art_list from="$article_list"}-->
+		<item>
+		<Title><![CDATA[<!--{$art_list.title}-->]]></Title>
+		<Description><![CDATA[<!--{$art_list.description}-->]]></Description>
+		<PicUrl><![CDATA[<!--{$art_list.pic.url}-->]]></PicUrl>
+		<Url><![CDATA[<!--{$art_list.url}-->]]></Url>
+		</item>
+	<!--{/foreach}-->
+	</Articles>
+	<!--{else}-->
+	<MsgType><![CDATA[text]]></MsgType>
+	<Content><![CDATA[对不起，没找到相关内容]]></Content>
+	<!--{/if}-->
+<!--{else}-->
+	<MsgType><![CDATA[text]]></MsgType>
+	<Content><![CDATA[对不起，没找到相关内容]]></Content>
+<!--{/if}-->
+</xml>

@@ -1,0 +1,29 @@
+<view class="page" hidden="{{page_hidden}}">
+    <view class="page__bd">
+        <view class="donate_page">
+            <view class="head"></view>
+            <view class="donate_wrap">
+                <view class="avatar-wrap">
+                    <image class="avatar" src="{{article.user.avatar}}" background-size="cover"></image>
+                </view>
+                <text class="nickname">{{article.user.name}}</text>
+                <text class="msg">{{article.title}}</text>
+                <view class="clearfix mt30"></view>
+                <view class="line"></view>
+                <view class="clearfix mt30"></view>
+            </view>
+            <view class="donate">
+                <block wx:for="{{moneys}}" wx:key="*this">
+                    <button type="warn" class="paybtn" bindtap="payTap" data-amount="{{item}}">
+                        <text>{{item}}</text>元
+                    </button>
+                </block>
+            </view>
+            <view class="clearfix mt50"></view>
+            <view class="weui-footer">
+                <view class="weui-footer__text">赞赏是为表示鼓励而对文章内容的无偿赠与</view>
+            </view>
+        </view>
+    </view>
+</view>
+<loading class="loading" hidden="{{page_loading}}">加载中...</loading>

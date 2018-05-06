@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <!--{$search.title}-->_
+        <!--{$site.title}-->_
+        <!--{$site.seotitle}-->
+    </title>
+    <meta name="keywords" content="<!--{$search.title}-->" />
+    <meta name="description" content="搜索<!--{$search.title}-->结果" />
+    <meta name="mobile-agent" content="format=xhtml;url=<!--{$search.iurl.mobile.url}-->">
+    <meta name="mobile-agent" content="format=html5;url=<!--{$search.iurl.mobile.url}-->">
+    <link rel="alternate" media="only screen and(max-width: 640px)" href="<!--{$search.iurl.mobile.url}-->">
+    <!--{iCMS:public:ui}-->
+</head>
+
+<body class="searchApp" i="<!--{$iCMS.APP.NAME}-->">
+    <!--{include file="./header.htm"}-->
+    <div class="body clearfix ">
+        <div class="body-wrap r5">
+            <div class="main-col">
+                <ul class="breadcrumb">
+                    <li><a href="<!--{$site.url}-->">首页</a></li>
+                    <li class="active">
+                        搜索<!--{$search.title}-->结果
+                    </li>
+                </ul>
+                <div class="tabs-wrap">
+                    <div class="tabs-head">
+                        <div class="tag-wrap">
+                            <!--{if $search.keyword}-->
+                            <h1><!--{$search.title}--></h1>
+                            <!--{else}-->
+                            <blockquote>
+                                <p>您想查找什么呢?</p>
+                            </blockquote>
+                            <!--{/if}-->
+                        </div>
+                    </div>
+                    <div class="clearfix mt10"></div>
+                    <div class="tabs-content">
+                        <div class="tabs-pane">
+                            <ul class="media-list">
+                                <!--{iCMS:article:list loop="true" page="true" row="10" keywords="$search.keyword"}-->
+                                <li class="media">
+                                    <!--{if $article_list.pic.url}-->
+                                    <a class="media-object" href="<!--{$article_list.url}-->">
+                                            <img class="r5 lazy" data-src="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.tpl}-->/static/img/loading.gif">
+                                        </a>
+                                    <!--{/if}-->
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a>
+                                            </h4>
+                                        <p class="media-text">
+                                            <!--{$article_list.description|cut:110:'...'}-->
+                                            <a href="<!--{$article_list.url}-->" target="_blank" class="blue">[详细]</a>
+                                        </p>
+                                        <div class="media-info">
+                                            <span class="date"><!--{$article_list.pubdate|date:'Y-m-d H:i'}--></span>
+                                            <span class="category">分类：<!--{$article_list.category.link}--></span>
+                                            <!--{if $article_list.tags_link}-->
+                                            <span class="tags"><!--{$article_list.tags_link}--></span>
+                                            <!--{/if}-->
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <!--{/iCMS}-->
+                            </ul>
+                            <div class="pagination">
+                                <!--{$iCMS.PAGE.NAV}-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="side-col">
+                <div class="mod-box rank">
+                    <div class="mod-title">
+                        <ul>
+                            <li class="active"><a href="javascript:void(0);" data-target="#rank-week" data-toggle="tab">周点击榜</a></li>
+                            <li><a href="javascript:void(0);" data-target="#rank-momth" data-toggle="tab">周热评榜</a></li>
+                        </ul>
+                    </div>
+                    <div class="mod-content">
+                        <ul class="rank-list" id="rank-week">
+                            <!--{iCMS:article:list loop="true" row="10" sub="all" orderby="week"}-->
+                            <li>
+                                <em class="no<!--{$article_list.rownum}-->"><!--{$article_list.rownum}--></em>
+                                <a href="<!--{$article_list.url}-->" target="_blank">
+                                    <!--{$article_list.title}-->
+                                </a>
+                            </li>
+                            <!--{/iCMS}-->
+                        </ul>
+                        <ul class="rank-list hide" id="rank-momth">
+                            <!--{iCMS:article:list loop="true" row="10" sub="all" orderby="comment" startdate="-7 day"}-->
+                            <li>
+                                <em class="no<!--{$article_list.rownum}-->"><!--{$article_list.rownum}--></em>
+                                <a href="<!--{$article_list.url}-->" target="_blank">
+                                    <!--{$article_list.title}-->
+                                </a>
+                            </li>
+                            <!--{/iCMS}-->
+                        </ul>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="mod-box hot-tags">
+                    <div class="mod-title">
+                        <h3 class="mod-txt">标签云</h3>
+                    </div>
+                    <div class="mod-content">
+                        <ul>
+                            <!--{iCMS:tag:list loop="true" row="15" sub="all" orderby="hot"}-->
+                            <li>
+                                <a href="<!--{$tag_list.url}-->" target="_blank" class="btn">
+                                    <!--{$tag_list.name}-->
+                                </a>
+                            </li>
+                            <!--{/iCMS}-->
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="mod-box pictxt">
+                    <div class="mod-title">
+                        <h3 class="mod-txt">图文推荐</h3>
+                    </div>
+                    <div class="mod-content">
+                        <!--{iCMS:article:list loop="true" pic="true" sub="all" row="8"}-->
+                        <div class="pictxt-list <!--{cycle values='fl,fr'}-->">
+                            <a href="<!--{$article_list.url}-->" target="_blank">
+                                <span class="pictxt-img">
+                                        <img src="<!--{$article_list.pic.url}-->" alt="<!--{$article_list.title}-->">
+                                    </span>
+                                <p class="pictxt-text">
+                                    <!--{$article_list.title}-->
+                                </p>
+                            </a>
+                        </div>
+                        <!--{/iCMS}-->
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix mb10"></div>
+        </div>
+        <div class="clearfix mb20"></div>
+    </div>
+    <!--{include file="./footer.htm"}-->
+</body>
+
+</html>

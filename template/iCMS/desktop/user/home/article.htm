@@ -1,0 +1,34 @@
+<div class="home-article">
+    <ul>
+        <!--{iCMS:article:list loop="true" page="true" row="10" call="user" userid="$user.uid" ucid="$user.category.cid"}-->
+        <li>
+            <div class="list_top">
+                <div class="rep_num">
+                    <!--{$article_list.hits.count}-->
+                </div>
+                <h3 class="title"> <a href="<!--{$article_list.url}-->" target="_blank" class="i_th_tit"><!--{$article_list.title}--></a> </h3>
+                <div class="info"> <span class="date"><!--{$article_list.pubdate|date:'Y-m-d'}--></span> </div>
+            </div>
+            <div class="list_detail">
+                <div class="text">
+                    <!--{$article_list.description|nl2br}-->
+                </div>
+                <!--{if $article_list.pic.url}-->
+                <div class="pic">
+                    <img class="lazy" data-src="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.ui}-->/img-default.png" onload="imgFix(this,550,150);">
+                </div>
+                <!--{/if}-->
+            </div>
+            <div class="clearfix"></div>
+            <div class="article_action" data-param='<!--{$article_list.param|json_encode}-->'>
+                <a i="vote:article:good" href="javascript:;" title="赞"><i class="z-icon-thumbs-up"></i>赞(<span i="vote_good_num"><!--{$article_list.good}--></span>)</a>
+                <a i="comment:article" href="javascript:;" title="评论"><i class="z-icon-comment"></i>评论(<span i="comment_num"><!--{$article_list.comments}--></span>)</a>
+                <a i="favorite:article" href="javascript:;" title="添加到收藏夹"><i class="z-icon-collect"></i>收藏(<span i="favorite_num"><!--{$article_list.favorite}--></span>)</a>
+            </div>
+        </li>
+        <div class="clearfix"></div>
+        <!--{iCMSelse}-->
+        <li>暂无内容</li>
+        <!--{/iCMS}-->
+    </ul>
+</div>

@@ -1,0 +1,202 @@
+<style>
+.creative {}
+.creative .bootstrap-switch { border-radius: 0px 5px 5px 0px !important; box-shadow: none !important; border-color: #ccc !important; width: 106px !important; height: 35px !important; }
+.creative .bootstrap-switch .bootstrap-switch-label { background: #fafafa; }
+.creative .bootstrap-switch-container span { width: 53px !important; height: 35px !important; }
+.creative .bootstrap-switch-container .bootstrap-switch-primary { border-radius: 0px !important; }
+</style>
+<link href="<!--{$site.urls.public}-->/ui/lib/bootstrap-switch.min.css" type="text/css" rel="stylesheet" />
+<script src="<!--{$site.urls.public}-->/ui/lib/bootstrap-switch.min.js"></script>
+<script>
+window.UMEDITOR_HOME_URL = "<!--{$site.urls.public}-->/js/libs/umeditor/";
+</script>
+<link href="<!--{$site.urls.public}-->/js/libs/umeditor/themes/default/css/umeditor.min.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="<!--{$site.urls.public}-->/js/libs/umeditor/umeditor.mconfig.js" charset="utf-8"></script>
+<script type="text/javascript" src="<!--{$site.urls.public}-->/js/libs/umeditor/umeditor.min.js" charset="utf-8"></script>
+<form class="form-inline" role="form" action="<!--{iCMS:router url='user'}-->" method="post" target="iCMS_FRAME">
+    <input name="action" type="hidden" value="manage" />
+    <input name="pg" type="hidden" value="publish" />
+    <input name="id" type="hidden" value="<!--{$article.id}-->" />
+    <input name="ucid" id="ucid" type="hidden" value="<!--{$article.ucid}-->" />
+    <input name="_ucid" type="hidden" value="<!--{$article.ucid}-->" />
+    <input name="_cid" type="hidden" value="<!--{$article.cid}-->" />
+    <input name="mobile" type="hidden" value="1" />
+    <h3 class="title"><span><i class="fa fa-edit"></i> 发表文章</span></h3>
+    <div class="input-group">
+        <div class="input-group-addon">
+            <label for="cid" class="control-label">栏 目</label>
+        </div>
+        <select name="cid" id="cid" class="form-control" placeholder="请选择所属栏目">
+            <option value="0"> == 请选择所属栏目 == </option>
+            <!--{$option}-->
+        </select>
+        <div class="input-group-addon">
+            <div class="dropdown">
+                <a data-toggle="dropdown" id="user_category_dropdown"> <span class="caret"></span> <span id="user_category_select">默认分类</span></a>
+                <ul class="dropdown-menu">
+                    <!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
+                    <li>
+                        <a href="javascript:;" cid="<!--{$user_category.cid}-->" class="user_category_item">
+                            <!--{$user_category.name}-->
+                        </a>
+                    </li>
+                    <!--{/iCMS}-->
+                    <li id="user_category_item_0"><a href="javascript:;" cid="0" class="user_category_item">默认分类</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript:;" title="添加分类" id="add_category" class="btn"><i class="fa fa-edit"></i> 添加分类</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix mt10"></div>
+    <div class="input-group">
+        <span class="input-group-addon">
+            <label for="title" class="control-label">标 题</label>
+        </span>
+        <input class="form-control" name="title" id="title" type="text" value="<!--{$article.title}-->" placeholder="请输入标题">
+    </div>
+    <div class="clearfix mt10"></div>
+    <div class="input-group">
+        <span class="input-group-addon">
+            <label for="description" class="control-label">简 介</label>
+        </span>
+        <textarea name="description" id="description" class="form-control" rows="4">
+        <!--{$article.description}-->
+        </textarea>
+    </div>
+    <div class="clearfix mt10"></div>
+    <div class="input-group <!--{if $article.creative}-->hide<!--{/if}-->" id="source-box">
+        <span class="input-group-addon">出 处</span>
+        <input class="form-control" name="source" id="source" type="text" value="<!--{$article.source}-->">
+    </div>
+    <div class="clearfix mt10"></div>
+    <div class="input-group creative">
+        <div class="input-group-addon">
+            <label for="article-type" class="control-label">文章类型？</label>
+        </div>
+        <div class="switch" id="article-type">
+            <input type="checkbox" name="creative" data-on-text="原创" data-off-text="转贴" <!--{if $article.creative}--> checked<!--{/if}-->/>
+        </div>
+    </div>
+    <div class="clearfix mt10"></div>
+    <div class="input-group" style="width:100%;">
+        <h3 class="title"><span>正 文</span></h3>
+        <script type="text/plain" id="editor" style="width:100%;height:360px;"><!--{$article_data.body}--></script>
+    </div>
+    <div class="clearfix mt10"></div>
+    <!--{if $iCMS.CONFIG.user.post.seccode }-->
+    <div class="input-group">
+        <div class="input-group-addon">
+            <label for="seccode" class="control-label">验证码：</label>
+        </div>
+        <input type="text" maxlength="4" name="seccode" class="seccode form-control" id="seccode" placeholder="请输入验证码">
+        <!--{iCMS:public:seccode}-->
+    </div>
+    <div class="clearfix mt10"></div>
+    <!--{/if}-->
+    <div class="form-actions">
+        <button class="btn btn-primary btn-lg btn-block _user_publish" type="submit">
+        <i class="fa fa-check"></i> 提交
+        </button>
+    </div>
+    <div class="clearfix mt20"></div>
+</form>
+<div id="user_category_add" style="display: none;">
+    <input class="form-control input-lg" id="user_category_new" type="text" placeholder="请输入分类名称">
+</div>
+<form class="hide" id="upfile" action="<!--{iCMS:router url='api'}-->?app=user&do=mobileUp&callback=upload_pic" role="form" method="post" enctype="multipart/form-data" target="iCMS_FRAME">
+    <input type="file" name="upfile">
+</form>
+
+<script type="text/javascript">
+var ed = UM.getEditor('editor');
+
+$(function(){
+    $('[name="creative"]').bootstrapSwitch().on('switchChange.bootstrapSwitch',function(event, state) {
+        if (state) {
+            $('#source-box').hide();
+            $('#source').val('');
+        } else {
+            $('#source-box').show();
+        }
+    });
+
+    <!--{if $article.cid}-->
+    $("#cid").val("<!--{$article.cid}-->");
+    <!--{/if}-->
+
+    <!--{if $article.ucid}-->
+    var uc = $("[cid='<!--{$article.ucid}-->']");
+    uc.parent().addClass('active');
+    $("#user_category_select").text(uc.text());
+    <!--{/if}-->
+
+    $("._user_publish").click(function() {
+        if ($("#cid option:selected").val() == "0") {
+            $("#cid").focus();
+            iCMS.UI.alert("请选择所属栏目");
+            return false;
+        }
+        if ($("#title").val() == '') {
+            $("#title").focus();
+            iCMS.UI.alert("标题不能为空!");
+            return false;
+        }
+
+        <!--{if $iCMS.CONFIG.user.post.seccode }-->
+        if ($(".seccode").val() == '') {
+            $(".seccode").focus();
+            iCMS.UI.alert("验证码不能为空!");
+            return false;
+        }
+        <!--{/if}-->
+
+        if (!ed.hasContents()) {
+            ed.focus();
+            iCMS.UI.alert("内容不能为空!");
+            return false;
+        }
+    });
+
+    $(document).on('click', '.user_category_item', function(event) {
+        event.preventDefault();
+        var $this = $(this),cid = $this.attr("cid"),name = $this.text();
+
+        $("#ucid").val(cid);
+        $("#user_category_select").text(name);
+        $(".user_category_item").parent().removeClass('active');
+        $this.parent().addClass('active');
+        $this.parent().parent().parent().removeClass("open");
+        return false;
+    });
+
+    $('#add_category').click(function() {
+        iCMS.UI.dialog({
+            follow:document.getElementById('user_category_dropdown'),
+            content: document.getElementById('user_category_add'),
+            quickClose: false,title: null,width:"auto",height:"auto",
+            okValue: '添加新分类',
+            ok: function() {
+                var a = $("#user_category_new"),name = a.val(),me = this;
+                if (name == "") {
+                    alert("请输入分类名称!");
+                    return false;
+                } else {
+                    $.post("<!--{iCMS:router url='user'}-->",{'action': 'add_category',name: name},function(j) {
+                        if (j.code) {
+                            $("#user_category_item_0").before('<li><a href="javascript:;" cid="' + j.forward + '" class="user_category_item">' + name + '</a></li>');
+                            $(".user_category_item[cid='"+j.forward+"']").click();
+                            me.close().remove();
+                        } else {
+                            alert(j.msg);
+                            a.focus();
+                            return false;
+                        }
+                    }, "json");
+                }
+                return false;
+            }
+        });
+    });
+});
+</script>

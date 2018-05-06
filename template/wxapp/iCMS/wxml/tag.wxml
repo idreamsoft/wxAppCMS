@@ -1,0 +1,9 @@
+<template name="tag_list">
+        <block wx:for="{{tag_list}}" wx:key="{{item.id}}">
+            <navigator wx:if="{{item.id}}" url="{{item.url}}" hover-class="none">
+                <view class="tag">
+                    <text>{{item.name}}</text>
+                </view>
+            </navigator>
+        </block>
+</template>

@@ -1,0 +1,27 @@
+<tr id="uid_<!--{$user_follow.uid}-->" class="user-follow">
+    <td class="avatar_35">
+        <a i="ucard:<!--{$user_follow.uid}-->" title="<!--{$user_follow.name}-->" href="<!--{$user_follow.url}-->">
+            <img class="avatar_60" src="<!--{$user_follow.avatar}-->" onerror="iUSER.NOAVATAR(this);">
+        </a>
+    </td>
+    <td>
+        <div class="info">
+            <a i="ucard:<!--{$user_follow.uid}-->" title="<!--{$user_follow.name}-->" href="<!--{$user_follow.url}-->"><b><!--{$user_follow.name}--></b></a>
+            <i class="icon icon-profile-<!--{$user.gender}-->"></i>
+            <span>
+                <!--{if $user_follow.uid==$me.uid}-->
+                你自己
+                <!--{else}-->
+                    <!--{if $user_follow.followed}-->
+                        <a href="javascript:;" i="follow:<!--{$user_follow.uid}-->:0" class="btn btn-link"><i class="fa fa-check"></i> 已关注，取消</a>
+                        <a href="javascript:;" i="follow:<!--{$user_follow.uid}-->:1" class="btn btn-success hide"><i class="fa fa-plus"></i> 关注</a>
+                    <!--{else}-->
+                        <a href="javascript:;" i="follow:<!--{$user_follow.uid}-->:0" class="btn btn-link hide"><i class="fa fa-check"></i> 已关注，取消</a>
+                        <a href="javascript:;" i="follow:<!--{$user_follow.uid}-->:1" class="btn btn-success"><i class="fa fa-plus"></i> 关注</a>
+                    <!--{/if}-->
+                <!--{/if}-->
+            </span>
+            <!--{if $user_follow.data.slogan}--><p class="mt5"><!--{$user_follow.data.slogan}--></p><!--{/if}-->
+        </div>
+    </td>
+</tr>

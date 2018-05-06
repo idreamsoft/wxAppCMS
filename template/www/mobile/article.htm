@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <title>
+        <!--{if $article.chapter && $article.subtitle}-->
+        <!--{$article.subtitle}-->_
+        <!--{/if}-->
+        <!--{$article.title}-->_
+        <!--{$category.name}-->_
+        <!--{$site.title}-->_
+        <!--{$site.seotitle}-->
+        </title>
+        <meta name="keywords" content="<!--{$article.keywords}-->" />
+        <meta name="description" content="<!--{$article.description}-->" />
+        <link rel="canonical" href="<!--{$article.iurl.desktop.url}-->">
+        <!--{iCMS:public:ui}-->
+        <script type="text/javascript">
+        var categoryId = '<!--{$category.cid}-->';
+        function showBodyUI (markup) {
+            //正文广告
+        }
+        $(function(){
+            $(".content img").each(function(i){
+                imgFix(this, 300);
+                $(this).fadeIn();
+            });
+        })
+        </script>
+    </head>
+    <body class="articleApp" i="<!--{$iCMS.APP.NAME}-->">
+        <!--{include file="./header.htm"}-->
+        <div class="body">
+            <div class="wrapper clearfix mt5">
+                <article>
+                    <header class="article-header">
+                        <h1 class="article-title">
+                        <!--{$article.title}-->
+                        </h1>
+                        <div class="article-meta">
+                            <time>
+                            <i class="iconfont icon-time"></i>
+                            <!--{$article.pubdate|date:"Y-m-d H:s"}-->
+                            </time>
+                            <span class="item">
+                                <i class="iconfont icon-list"></i>
+                                <a href="<!--{$category.url}-->" target="_blank">
+                                    <!--{$category.name}-->
+                                </a>
+                            </span>
+                            <span class="item">
+                                <i class="iconfont icon-user"></i>
+                                <!--{$article.user.at}-->
+                            </span>
+                        </div>
+                    </header>
+                    <div class="article_body">
+                        <div class="content">
+                            <!--{if $article.chapter}-->
+                            <h2 class="subtitle">
+                            <!--{$article.subtitle}-->
+                            </h2>
+                            <!--{if $article.mpic}-->
+                            <p align="center"> <img class="lazy r3" src="<!--{$article.mpic.url}-->" alt="<!--{$article.title}-->"> </p>
+                            <p><br /> </p>
+                            <!--{/if}-->
+                            <!--{/if}-->
+                            <div class="<!--{if $article.markdown}-->markdown<!--{/if}-->">
+                                <!--{$article.body}-->
+                            </div>
+                            <!--{if $article.tags_link}-->
+                            <p class="article-tags">
+                                <strong>继续阅读：</strong>
+                                <!--{$article.tags_link}-->
+                            </p>
+                            <!--{/if}-->
+                        </div>
+                        <!--{if $article.page.end}-->
+                        <div class="list-group">
+                            <h4>更多精彩内容</h4>
+                            <ul>
+                                <!--{iCMS:article:list loop="true" row="5"}-->
+                                <li><a href="<!--{$article_list.url}-->"><!--{$article_list.title}--></a></li>
+                                <!--{/iCMS}-->
+                            </ul>
+                        </div>
+                        <!--{/if}-->
+                    </div>
+                    <div class="article_pagenav clearfix">
+                        <!--{if $article.chapter}-->
+                        <div class="pagination chapterlist">
+                            <h3>内容导航</h3>
+                            <ul>
+                                <!--{foreach value="pagelist" from="$article.page.list"}-->
+                                <li> 第
+                                    <!--{$pagelist.pn}-->页：
+                                    <a href="<!--{$pagelist.url}-->" title="<!--{$pagelist.title}-->">
+                                        <!--{$pagelist.title|default:'下一页更精彩'}-->
+                                    </a>
+                                </li>
+                                <!--{/foreach}-->
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--{else}-->
+                        <div class="pagination">
+                            <!--{$article.page.text}-->
+                        </div>
+                        <!--{/if}-->
+                        <div class="clearfix mt10"> </div>
+                    </div>
+                </article>
+                <div class="article-like" data-param='<!--{$article.param|json_encode}-->'>
+                    <a i="vote:article:good" class="like-btn">
+                        <i class="like-icon up"></i>
+                        <span i="vote_good_num" class="like-num"><!--{$article.good}--></span>
+                        <span class="like-txt">赞</span>
+                    </a>
+                    <a i="vote:article:bad" class="like-btn">
+                        <i class="like-icon down"></i>
+                        <span i="vote_bad_num" class="like-num"><!--{$article.bad}--></span>
+                        <span class="like-txt">踩</span>
+                    </a>
+                    <a i="favorite:article" class="favorite-btn" title="添加到收藏夹">
+                        <i class="favorite-icon"></i>
+                        <span i="favorite_num" class="favorite-num"><!--{$article.favorite}--></span>
+                        <span class="like-txt">收藏</span>
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+                <div class="article-prevnext mt10">
+                    <p class="prev"><b>上一篇:</b>
+                        <!--{iCMS:article:prev cid="$article.cid" id="$article.id"}-->
+                        <!--{if $article_prev}-->
+                        <a href="<!--{$article_prev.url}-->" class="prev" target="_self">
+                            <!--{$article_prev.title}-->
+                        </a>
+                        <!--{else}-->
+                        没有了
+                        <!--{/if}-->
+                    </p>
+                    <p class="next">
+                        <b>下一篇:</b>
+                        <!--{iCMS:article:next cid="$article.cid" id="$article.id"}-->
+                        <!--{if $article_next}-->
+                        <a href="<!--{$article_next.url}-->" class="next" target="_self">
+                            <!--{$article_next.title}-->
+                        </a>
+                        <!--{else}-->
+                        没有了
+                        <!--{/if}-->
+                    </p>
+                </div>
+                <div class="share">
+                    <div class="share-icon">
+                        <div class="t">分享到</div>
+                        <div class="bdsharebuttonbox" id="share-bd">
+                            <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                            <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                            <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+                            <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                            <a href="#" class="bds_more" data-cmd="more"></a>
+                        </div>
+                    </div>
+                    <script>
+                    window._bd_share_config = {
+                        common: {
+                            bdText: '<!--{$article.title}-->',
+                            bdDesc: '<!--{$article.description|html2txt}-->',
+                            bdUrl: '<!--{$article.url}-->',
+                            bdPic: '<!--{$article.pic.url}-->'
+                        },
+                        share: [{
+                            "bdSize": 16
+                        }]
+                    }
+                    //以下为js加载部分
+                    with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+                    </script>
+                </div>
+            </div>
+            <div class="clearfix mt10"> </div>
+            <section class="bg-white comment">
+                <div class="u-ttl">
+                    <h2><i class="icon-comments"></i> 精彩评论</h2>
+                </div>
+                <div class="mod-content">
+                    <div id="comment-list">
+                        <!--{iCMS:comment:list display="default"}-->
+                    </div>
+                    <div class="clearfix"></div>
+                    <div id="comment-form">
+                        <!--{iCMS:comment:form display="default"}-->
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </section>
+            <div class="clearfix mt10"></div>
+            <section class="bg-white">
+                <div class="u-ttl">
+                    <h2><i class="iconfont icon-news"></i> 最新<!--{$category.name}--></h2>
+                </div>
+                <ul class="list-wrap">
+                    <!--{iCMS:article:list loop="true" row="5" cid="$category.cid"}-->
+                    <!--{include file="./article.item.htm" import="true"}-->
+                    <!--{/iCMS}-->
+                </ul>
+            </section>
+            <div class="clearfix mt10"> </div>
+            <section class="bg-white">
+                <div class="u-ttl">
+                    <h2><i class="iconfont icon-ranking"></i> <!--{$category.name}-->排行榜</h2>
+                </div>
+                <ul class="list-wrap">
+                    <!--{iCMS:article:list loop="true" row="5" orderby="week" cid="$category.cid"}-->
+                    <!--{include file="./article.item.htm" import="true"}-->
+                    <!--{/iCMS}-->
+                </ul>
+            </section>
+        </div>
+        <div class="clearfix mt10"> </div>
+        <!--{include file="./footer.htm"}-->
+        <script src="<!--{$article.hits.script}-->"></script>
+    </body>
+</html>

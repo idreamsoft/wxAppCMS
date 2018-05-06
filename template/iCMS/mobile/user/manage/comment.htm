@@ -1,0 +1,89 @@
+<style>
+.cmt-reply {margin-left: 20px;}
+</style>
+<h4 class="manage-title">我的评论</h4>
+<div class="comment">
+    <table class="table table-striped">
+        <tbody>
+            <!--{iCMS:comment:list loop="true" page="true" reply="true" row="10" total_cache="G" userid="$user.uid"}-->
+            <tr id="id-<!--{$comment_list.id}-->">
+                <td class="avatar_35">
+                    <a title="<!--{$comment_list.user.name}-->" href="<!--{$comment_list.user.url}-->" i="ucard:<!--{$comment_list.user.uid}-->">
+                        <img class="avatar_35" src="<!--{$comment_list.user.avatar}-->" onerror="iUSER.NOAVATAR(this);">
+                    </a>
+                </td>
+                <td>您在
+                    <!--{$iAPP[$comment_list.appid].title}-->：
+                    <a href="<!--{$comment_list.url}-->" target="_blank">
+                        <span class="label label-default"><!--{$comment_list.title}--></span>
+                    </a>
+                    <!--{if $comment_list.reply_uid}-->
+                    回复了<span class="label label-success"><!--{$comment_list.reply_name}--></span>的评论
+                    <!--{else}-->
+                    发表评论
+                    <!--{/if}-->：
+                    <div class="clearfix mt10"></div>
+                    <p class="alert alert-info">
+                        <!--{$comment_list.content}-->
+                    </p>
+                    <div class="clearfix"></div>
+                    <!--{if $comment_list.reply_id}-->
+                    <!--{if $comment_list.reply_data}-->
+                    <p class="alert alert-success cmt-reply">
+                        <a href="<!--{$comment_list.reply_data.user.url}-->" target="_blank" i="ucard:<!--{$comment_list.userid}-->">
+                        <!--{$comment_list.reply_data.user.name}-->：</a>
+                        <!--{$comment_list.reply_data.content}-->
+                        <span class="label label-default"><!--{$comment_list.addtime|format_date}--></span>
+                        <span class="label label-info"><i class="fa fa-thumbs-up"></i> (<!--{$comment_list.reply_data.up}-->)</span>
+                    </p>
+                    <!--{else}-->
+                    <p class="alert alert-error cmt-reply">评论已被删除!</p>
+                    <!--{/if}-->
+                    <div class="clearfix"></div>
+                    <!--{/if}-->
+                    <div class="info">
+                        <span class="gray mr10"><!--{$comment_list.addtime|format_date}--></span>
+                        <span class="gray"><i class="fa fa-thumbs-up"></i> (<!--{$comment_list.up}-->)</span>
+                    </div>
+                </td>
+                <td>
+                    <a href="javascript:;" class="ml10 tip"
+                        data-action="del"
+                    data-id="<!--{$comment_list.id}-->" title="删除评论"><i class="fa fa-times"></i></a>
+                </td>
+            </tr>
+            <!--{/iCMS}-->
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3">
+              <div class="pagination"><!--{$iCMS.PAGES|method:'current_page():bartext()'}--></div>
+              <div class="pagination"><!--{$iCMS.PAGES|method:'show(9)'}--></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script type="text/javascript">
+$(function() {
+    $("[data-action]").on('click', function(event) {
+        event.preventDefault();
+        var param = {
+            'id': $(this).attr("data-id"),
+            'act': $(this).attr("data-action"),
+            'pg': 'comment',
+            'action': 'manage'
+        }
+        $.post("<!--{iCMS:router url='user'}-->", param,
+            function(c) {
+                if (c.code) {
+                    $("#id-" + param.id).hide('500', function() {
+                        $(this).remove();
+                    });
+                } else {
+                    iCMS.UI.alert(c.msg);
+                }
+            }, 'json');
+    });
+});
+</script>

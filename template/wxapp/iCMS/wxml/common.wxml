@@ -1,0 +1,16 @@
+<template name="banner">
+    <block wx:if="{{banner.count>0}}">
+        <swiper class="swiper-wrap" autoplay="true" interval="3000" duration="1000">
+            <block wx:for="{{banner.data}}" wx:key="{{item.id}}">
+                <navigator wx:if="{{item.id}}" url="{{item.url}}">
+                    <swiper-item class="swiper">
+                        <image mode="aspectFill" src="{{item.pic.url}}" class="swiper-image" width="100%" height="100%" />
+                        <view class="swiper-title">
+                            <text>{{item.title}}</text>
+                        </view>
+                    </swiper-item>
+                </navigator>
+            </block>
+        </swiper>
+    </block>
+</template>

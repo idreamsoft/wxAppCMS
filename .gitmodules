@@ -1,0 +1,3 @@
+[submodule "app/admincp/ui/editor.md"]
+    path = app/admincp/ui/editor.md
+    url = https://github.com/pandao/editor.md.git

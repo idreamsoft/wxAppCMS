@@ -1,0 +1,100 @@
+<div class="manage-article">
+    <ul id="article-tab" class="nav nav-tabs">
+        <li class="active" name="s1"><a href="<!--{$article.manage}-->"><i class="fa fa-dashboard"></i> 我的文章</a></li>
+        <li name="s3"><a href="<!--{$article.manage}-->status=3"><i class="fa fa-minus-circle"></i> 审核中文章</a></li>
+        <li name="s4"><a href="<!--{$article.manage}-->status=4"><i class="fa fa-times-circle"></i> 未通过审核</a></li>
+        <li name="s2"><a href="<!--{$article.manage}-->status=2"><i class="fa fa-trash-o"></i> 回收站</a></li>
+    </ul>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width:90px;">#Id</th>
+                <th><span class="label label-default">分类</span> 标题</th>
+                <th style="width:150px;">点/评/顶/踩</th>
+                <th style="width:120px;">栏目</th>
+                <th style="width:150px;">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--{iCMS:user:category userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
+            <!--{iCMS:article:list loop="true" page="true" row="12" call="user" total_cache="G" status="$status" cid="$cid" userid="$user.uid"}-->
+            <tr id="id-<!--{$article_list.id}-->">
+                <td>
+                    <!--{$article_list.id}-->
+                </td>
+                <td>
+                    <!--{if $article_list.status=="3"}-->
+                    <span class="label label-important">审核中</span>
+                    <!--{/if}-->
+                    <!--{if $article_list.status=="2"}-->
+                    <span class="label label-inverse">回收站</span>
+                    <!--{/if}-->
+                    <!--{if $article_list.status=="4"}-->
+                    <span class="label">未通过审核</span>
+                    <!--{/if}-->
+                    <span class="label label-default"><!--{$user_category[$article_list.ucid].name}--></span>
+                    <a href="<!--{if $article_list.status=="1"}--><!--{$article_list.url}--><!--{else}-->javascript:;<!--{/if}-->" target="_blank">
+                        <!--{$article_list.title}-->
+                    </a>
+                </td>
+                <td>
+                    <!--{$article_list.hits.count}-->/<!--{$article_list.comments}-->/<!--{$article_list.good}-->/<!--{$article_list.bad}-->
+                </td>
+                <td>
+                    <a href="<!--{$article.manage}-->cid=<!--{$article_list.cid}-->">
+                        <!--{$article_list.category.name}-->
+                    </a>
+                </td>
+                <td class="action">
+                    <a class="tip" href="<!--{$article.edit}-->id=<!--{$article_list.id}-->" title="编辑文章"><i class="fa fa-edit"></i> 编辑</a>
+                    <!--{if $article_list.status=="2"}-->
+                    <a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-trash-o"></i> 删除</a>
+                    <a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="renew" title="还原"><i class="fa fa-reply-all"></i> 还原</a>
+                    <!--{else}-->
+                    <a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="trash" title="删除到回收站"><i class="fa fa-times"></i> 回收站</a>
+                    <!--{/if}-->
+                </td>
+            </tr>
+            <!--{/iCMS}-->
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5">
+                <div class="pagination">
+                    <!--{$iCMS.PAGE.NAV}-->
+                </div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<style>
+#article-tab {
+padding-left: 20px;
+}
+</style>
+<script type="text/javascript">
+$(function() {
+    var tab = $("#article-tab");
+    $("li", tab).removeClass("active");
+    $("[name=s<!--{$status}-->]", tab).addClass("active");
+    $("[data-action]").on('click', function(event) {
+        event.preventDefault();
+        var param = {
+            'id': $(this).attr("data-id"),
+            'act': $(this).attr("data-action"),
+            'pg': 'article',
+            'action': 'manage'
+        }
+        $.post("<!--{iCMS:router url='user'}-->", param, function(c) {
+            if (c.code) {
+                $("#id-" + param.id).hide('500', function() {
+                    $(this).remove();
+                });
+            } else {
+                iCMS.UI.alert(c.msg);
+            }
+        }, 'json');
+    });
+});
+</script>

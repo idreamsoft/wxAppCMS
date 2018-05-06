@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>重设密码 <!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->"/>
+    <meta name="mobile-agent" content="format=xhtml;url=<!--{$site.urls.mobile}-->">
+    <meta name="mobile-agent" content="format=html5;url=<!--{$site.urls.mobile}-->"/>
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.tpl}-->/static/css/user.css" type="text/css" />
+    <script>
+    $(function() {
+        var resetpwd = $("#resetpwd-box");
+        $("#resetpwd-submit").click(function(event) {
+            event.preventDefault();
+            $(".tip-error").hide();
+            var param = {
+                seccode: $("#seccode", resetpwd).val(),
+                password: $("#password", resetpwd).val(),
+                rstpassword: $("#rstpassword", resetpwd).val(),
+                auth: '<!--{$auth}-->',
+                uid: '<!--{$user.uid}-->'
+            }
+
+            if (param.password.length < 6) {
+                tip({
+                    forward: 'password',
+                    msg: '新密码太短啦，至少要6位哦！'
+                });
+                return false;
+            }
+            if (param.rstpassword.length < 6) {
+                tip({
+                    forward: 'rstpassword',
+                    msg: '确认密码太短啦，至少要6位哦！'
+                });
+                return false;
+            }
+            if (param.password != param.rstpassword) {
+                tip({
+                    forward: 'rstpassword',
+                    msg: '新密码与确认密码不一致！'
+                });
+                return false
+            }
+            if (param.seccode == "") {
+                tip({
+                    forward: 'seccode',
+                    msg: '请输入验证码'
+                });
+                return false
+            }
+            iCMS.run('passport', function($PASSPORT) {
+                //成功 事件绑定
+                $PASSPORT.SUCCESS = function(s) {
+                  iCMS.UI.alert(s.msg);
+                  window.top.location.href = "<!--{iCMS:router url='user:login'}-->";
+                }
+                //失败 事件绑定
+                $PASSPORT.FAIL = function(f) {
+                  tip(f);
+                }
+                //提交参数
+                $PASSPORT.FINDPWD(param);
+            });
+        });
+      //提示
+      function tip(ret) {
+          iCMS.UI.seccode(".seccode-img", resetpwd);
+          var tip = $('.tip-' + ret.forward);
+          tip.text(ret.msg).show();
+      }
+    })
+    </script>
+
+  </head>
+<body class="userApp passport">
+  <!--{include file="./user.header.htm" import="true"}-->
+  <div class="resetpwd-wrap">
+    <div class="passport-wrap">
+      <div class="passport-main" style="width: auto;">
+        <h1>重设密码</h1>
+        <div id="resetpwd-box" class="passport-form form-horizontal">
+          <div class="form-group">
+            <label for="uname" class="control-label">邮箱：</label>
+            <div class="form-control" style="padding: 10px;"><!--{$user.username}--></div>
+          </div>
+          <div class="form-group">
+            <label for="uname" class="control-label">昵称：</label>
+            <div class="form-control" style="padding: 10px;"><!--{$user.nickname}--></div>
+          </div>
+          <div class="form-group">
+            <label for="password" class="control-label">新密码：</label>
+            <input type="password" name="password" class="form-control" id="password" placeholder="请输入密码">
+            <p class="help-block tip-error tip-password">请输入密码</p>
+          </div>
+          <div class="form-group">
+            <label for="rstpassword" class="control-label">确认密码：</label>
+            <input type="password" name="rstpassword" class="form-control" id="rstpassword" placeholder="请输入确认密码">
+            <p class="help-block tip-error tip-rstpassword">请输入确认密码</p>
+          </div>
+          <div class="form-group">
+            <label for="seccode" class="control-label">验证码：</label>
+            <input type="text" maxlength="4" name="seccode" class="seccode form-control" id="seccode" placeholder="请输入验证码">
+            <!--{iCMS:public:seccode}-->
+            <p class="help-block tip-error tip-seccode">请输入验证码</p>
+          </div>
+          <div class="form-group submit">
+            <button class="btn btn-large btn-primary" id="resetpwd-submit" type="button">重设密码</button>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <!--{include file="iCMS://footer.htm"}-->
+</body>
+</html>

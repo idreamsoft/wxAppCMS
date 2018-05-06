@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>
+        <!--{$user.nickname}-->的
+        <!--{$site.title}-->_
+        <!--{$site.seotitle}-->
+    </title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$user.nickname}-->的<!--{$site.title}-->" />
+    <meta name="mobile-agent" content="format=html5;url=<!--{$user.urls.home}-->" />
+    <!--{iCMS:public:ui}-->
+    <link href="<!--{$site.urls.tpl}-->/static/css/user.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="userApp">
+    <!--{include file="iCMS://header.htm"}-->
+    <div class="clearfix mt20"></div>
+    <div class="userhome-wrap">
+        <div class="userhome-header">
+            <div class="card_banner"> <img src="<!--{$user.coverpic.pc}-->" alt="<!--{$user.nickname}-->的封面" onerror="iUSER.NOCOVER(this);"> </div>
+            <div class="card_top">
+                <div class="card_info">
+                    <a class="card_title_name" i="ucard:<!--{$user.uid}-->" href="<!--{$user.urls.home}-->">
+                        <!--{$user.nickname}-->
+                    </a>
+                    <i class="icon icon-profile-<!--{$user.gender}-->"></i>
+
+                    <a i="follow:<!--{$user.uid}-->:1" class="follow_btn follow <!--{if $status.followed}-->hide<!--{/if}-->"></a>
+                    <a i="follow:<!--{$user.uid}-->:0" class="follow_btn unfollow <!--{if !$status.followed}-->hide<!--{/if}-->"></a>
+
+                    <p class="card_slogan">
+                        <!--{$user.data.slogan|default:'这家伙太懒了,什么都没有留下!'}-->
+                    </p>
+                </div>
+                <div class="card_data">
+                    <ul>
+                        <li class='last'>
+                            <a href="<!--{$user.urls.fans}-->"> <span class="text_count"><!--{$user.fans|num10K}--></span> <span class="text_atr">粉丝</span> </a>
+                        </li>
+                        <li>
+                            <a href="<!--{$user.urls.follower}-->"> <span class="text_count"><!--{$user.follow|num10K}--></span> <span class="text_atr">关注</span> </a>
+                        </li>
+                        <li class='first'>
+                            <a href="<!--{$user.urls.home}-->"> <span class="text_count"><!--{$user.article|num10K}--></span> <span class="text_atr">文章</span> </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card_avatar"> <a i="ucard:<!--{$user.uid}-->" href="<!--{$user.urls.home}-->"> <img class="card_avatar_img" src="<!--{$user.avatar}-->" onerror="iUSER.NOAVATAR(this);"> </a> </div>
+            </div>
+        </div>
+        <div class="home-main">
+            <!--{if $user.category.name}-->
+            <h3 class="category_name"><span class="label label-primary"><!--{$user.category.name}--></span></h3>
+            <!--{/if}-->
+            <!--{switch from="$iCMS.APP.DO"}-->
+                <!--{case value="follower"}-->
+                    <!--{include file="./home/follower.htm" import="true"}-->
+                <!--{case value="fans"}-->
+                    <!--{include file="./home/fans.htm" import="true"}-->
+                <!--{case}-->
+                    <!--{include file="./home/article.htm" import="true"}-->
+            <!--{/switch}-->
+            <div class="pagination">
+                <!--{$iCMS.PAGE.NAV}-->
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="home-side">
+            <!--{if $status.isme}-->
+            <div class="mod-box home-btn">
+                <a href="<!--{iCMS:router url='user:publish'}-->" class="btn btn-success"><i class="icon-publish"></i> 发表文章</a>
+                <a href="<!--{iCMS:router url='user:manage'}-->" class="btn btn-primary"><i class="icon-manage"></i> 主页管理</a>
+            </div>
+            <!--{/if}-->
+            <div class="mod-box home-category">
+                <div class="mod-title">
+                    <h3 class="mod-txt">分类<span>CATEGORY</span></h3>
+                    <!--{if $status.isme}-->
+                    <span class="fr"><a href="<!--{iCMS:router url='user:category'}-->" target="_blank" class="more">管理&gt;&gt;</a></span>
+                    <!--{/if}-->
+                </div>
+                <div class="mod-content">
+                    <ul class="txtList">
+                        <!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
+                        <li>
+                            <a href="<!--{$user_category.url}-->">
+                                <!--{$user_category.name}--><span>(<!--{$user_category.count}-->)</span></a>
+                        </li>
+                        <!--{/iCMS}-->
+                    </ul>
+                </div>
+            </div>
+            <div class="mod-box home-fansList">
+                <div class="mod-title">
+                    <h3 class="mod-txt">粉丝<span>FANS</span></h3>
+                    <!--{if $status.isme}-->
+                    <span class="fr"><a href="<!--{iCMS:router url='user:manage:fans'}-->" target="_blank" class="more">管理&gt;&gt;</a></span>
+                    <!--{/if}-->
+                </div>
+                <div class="mod-content">
+                    <ul class="avatar_list">
+                        <!--{iCMS:user:follow loop="true" row="30" fuid=$user.uid}-->
+                        <li>
+                            <a i="ucard:<!--{$user_follow.uid}-->"  href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->">
+                                    <img class="avatar_30" src="<!--{$user_follow.avatar}-->" onerror="iUSER.NOAVATAR(this);"> </a>
+                        </li>
+                        <!--{iCMSelse}-->
+                        <li><span class="fs12 gray">居然没人关注，太low了吧</span></li>
+                        <!--{/iCMS}-->
+                    </ul>
+                </div>
+            </div>
+            <div class="mod-box home-followList">
+                <div class="mod-title">
+                    <h3 class="mod-txt">关注<span>FOLLOW</span></h3>
+                    <!--{if $status.isme}-->
+                    <span class="fr"><a href="<!--{iCMS:router url='user:manage:follow'}-->" target="_blank" class="more">管理&gt;&gt;</a></span>
+                    <!--{/if}-->
+                </div>
+                <div class="mod-content">
+                    <ul class="avatar_list">
+                        <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
+                        <li>
+                            <a i="ucard:<!--{$user_follow.uid}-->"  href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->">
+                                    <img class="avatar_30" src="<!--{$user_follow.avatar}-->" onerror="iUSER.NOAVATAR(this);">
+                            </a>
+                        </li>
+                        <!--{iCMSelse}-->
+                        <li><span class="fs12 gray">没有关注</span></li>
+                        <!--{/iCMS}-->
+                    </ul>
+                </div>
+            </div>
+            <div class="mod-box statistics">
+                <div class="mod-title">
+                    <h3 class="mod-txt">统计 <span>STATISTICS</span></h3>
+                </div>
+                <div class="mod-content">
+                    <ul>
+                        <li><span class="fs12">今日访问：<!--{$user.hits_today}--></span></li>
+                        <li><span class="fs12">昨日访问：<!--{$user.hits_yday}--></span></li>
+                        <li><span class="fs12">本周访问：<!--{$user.hits_week}--></span></li>
+                        <li><span class="fs12">本月访问：<!--{$user.hits_month}--></span></li>
+                        <li><span class="fs12">所有访问：<!--{$user.hits}--></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix mt20"></div>
+    <script src="<!--{$user.hits_script}-->">
+    </script>
+    <!--{include file="iCMS://footer.htm"}-->
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+@import "../../iCMS/wxss/common.wxss";
+@import "/wxParse/wxParse.wxss";
+.page { /*padding-bottom: 100rpx;*/ }
+.article-pic { width: 100%; height: 300rpx; overflow: hidden; }
+.article-pic image { width: 100%; }
+.article-wrap { display: flex; flex-direction: column; justify-content: space-between; background-color: #fff; padding: 20rpx; }
+.article-title { margin-bottom: 20rpx; font-weight: bold; font-size: 20pt; line-height: 1.2; }
+.article-info { margin-top: 20rpx; font-size: 11pt; height: 50rpx; padding: 10rpx 0; border-top: 1px solid #E5E5E5; overflow: hidden; display: flex; }
+.article-info text { color: #888; }
+.article-desc { border-radius: 8rpx; background-color: #f0f0f0; color: #888; padding: 16rpx; margin-bottom: 8rpx; font-size: 11pt; line-height: 1.4; }
+.article-tags { display: flex; }
+.tag-name { font-size: 11pt; background-color: #70d7fa; line-height: 30rpx; border-radius: 4rpx; color: #fff; padding: 10rpx; margin-right: 20rpx; }
+.article-body { padding: 0; font-size: 13pt; line-height: 1.75; color: #1a1a1a; margin: 0; z-index: 0; }
+.comment-bar { height: 100rpx; border-top: 1px solid #ddd; }
+.article_prev_next { padding: 20rpx; }
+.article_prev, .article_next { height: 50rpx; font-size: 13pt; color: #00A2EA; width: 100%; font-weight: 400; overflow: hidden; text-overflow: ellipsis; }
+.article-action { text-align: center; align-items: center; display: flex; }
+.article-action .icon { width: 40rpx; height: 40rpx; margin-top: 16rpx; float: left; margin-right: 8rpx; }
+.article-action .donate { width: 144rpx; height: 144rpx; border-radius: 50%; position: relative; border: 0px; line-height: 144rpx; }
+.article-action .donate::after { border: 0px; }
+.article-action .donateImg { width: 160px; height: 160px; position: absolute; top: 0px; left: 0px; }
+.article-action text { font-size: 13pt; }
+.share { position: fixed; top: 27%; right: 2rpx; border: 1px solid #E5E5E5; border-radius: 50%; background-color: #fff; text-align: center; padding: 4rpx; width: 60rpx; height: 60rpx; }
+.share image { width: 40rpx; height: 40rpx; margin-top:10rpx;}
+.share button { background-color: #FFFFFF; margin: 0;padding:0;}
+.share button::after { border: 0px; }

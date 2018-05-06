@@ -1,0 +1,57 @@
+{
+    "pages": [
+        "pages/index/index",
+        "pages/category/index",
+        "pages/article/article",
+        "pages/category/category",
+        "pages/tag/tag",
+        "pages/user/index",
+        "pages/search/index",
+        "pages/search/search",
+        "pages/donate/donate",
+        "pages/user/publish/index",
+        "pages/user/article/index",
+        "pages/user/donate/index"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#00a2ea",
+        "navigationBarTitleText": "",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#FFFFFF",
+        "enablePullDownRefresh":true
+    },
+    "tabBar": {
+        "color": "#7A7E83",
+        "selectedColor": "#2EA2DF",
+        "borderStyle": "black",
+        "backgroundColor": "#FFFFFF",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "主页",
+                "iconPath": "images/home.png",
+                "selectedIconPath": "images/home_s.png"
+            },
+            {
+                "pagePath": "pages/category/index",
+                "text": "分类",
+                "iconPath": "images/category.png",
+                "selectedIconPath": "images/category_s.png"
+            },
+            {
+                "pagePath": "pages/user/index",
+                "text": "我的",
+                "iconPath": "images/user.png",
+                "selectedIconPath": "images/user_s.png"
+            }
+        ]
+    },
+    "networkTimeout": {
+        "request": 30000,
+        "connectSocket": 30000,
+        "uploadFile": 30000,
+        "downloadFile": 30000
+    },
+    "debug": true
+}

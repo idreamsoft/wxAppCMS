@@ -1,0 +1,6 @@
+/* =body.tagApp== */
+.tagApp .body-wrap { padding-top: 0px; }
+.tag-wrap  h1 { font: bold 34px/40px "microsoft yahei", Arial; color: #333; margin: 15px 0; }
+.tag-wrap  blockquote { text-indent: 2em; background-color: #EEE; color: #666; padding: 10px; margin: 0px 10px 5px 0px; font-size: 16px; line-height: 32px; }
+.tag-wrap  blockquote h2 { margin: 0px; font-size: 18px; font-weight: bold; }
+.tag-wrap  blockquote p { margin: 0px; }

@@ -1,0 +1,54 @@
+<template name="foot">
+    <view class="weui-footer">
+        <view class="weui-footer__links">
+            <navigator url="/page/index/index" open-type="switchTab" class="weui-footer__link">{{APP.name}}</navigator>
+        </view>
+        <view class="weui-footer__text">{{APP.config.description}}</view>
+        <view class="weui-footer__text">Copyright © 2008-2018</view>
+    </view>
+</template>
+<template name="navtab3">
+    <view class="clearfix mt50"></view>
+    <view class="footer-navtab">
+        <view class="fnav footer-navtab__index">
+            <navigator url="../index/index" hover-class="none" open-type="switchTab">
+                <image class="icon" mode="aspectFit" src="../../images/home.png"></image>
+                首页
+            </navigator>
+        </view>
+        <view class="fnav footer-navtab__category">
+            <navigator url="../category/index" hover-class="none" open-type="switchTab">
+                <image class="icon" mode="aspectFit" src="../../images/category.png"></image>
+                分类
+            </navigator>
+        </view>
+        <view class="fnav footer-navtab__user">
+            <navigator url="../user/index" hover-class="none" open-type="switchTab">
+                <image class="icon" mode="aspectFit" src="../../images/user.png"></image>
+                我的
+            </navigator>
+        </view>
+    </view>
+</template>
+<template name="navtab">
+    <view class="navbar flex-row">
+            <navigator url="../index/index" class="flex-grow-1 flex-y-center" open-type="switchTab">
+                <view>
+                    <image class="navbar-icon" src="../../images/home.png"></image>
+                    <view class="navbar-text" style="color:#7A7E83">首页</view>
+                </view>
+            </navigator>
+            <navigator url="../category/index" class="flex-grow-1 flex-y-center" open-type="switchTab">
+                <view>
+                    <image class="navbar-icon" src="../../images/category.png"></image>
+                    <view class="navbar-text" style="color:#7A7E83">分类</view>
+                </view>
+            </navigator>
+            <navigator url="../user/index" class="flex-grow-1 flex-y-center" open-type="switchTab">
+                <view>
+                    <image class="navbar-icon" src="../../images/user.png"></image>
+                    <view class="navbar-text" style="color:#7A7E83">我的</view>
+                </view>
+            </navigator>
+    </view>
+</template>

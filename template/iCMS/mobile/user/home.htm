@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title><!--{$user.nickname}-->的<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$user.nickname}-->的<!--{$site.title}-->"/>
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.tpl}-->/static/css/user.css" type="text/css" />
+  </head>
+  <body class="userApp">
+    <!--{include file="./user.header.htm" import="true"}-->
+    <div class="body">
+      <div class="wrapper" id="userApp-home">
+        <div class="userApp_header">
+          <p class="userApp_cover">
+          <img class="userApp_cover_img" src="<!--{$user.coverpic.mo}-->" onerror="iUSER.NOCOVER(this,'m');"></a>
+        </p>
+        <p class="userApp_name">
+          <a href="<!--{$user.urls.home}-->"><!--{$user.nickname}--></a>
+        </p>
+        <p class="userApp_avatar"><a href="<!--{$user.urls.home}-->">
+        <img class="userApp_avatar_img" src="<!--{$user.avatar}-->" onerror="iUSER.NOAVATAR(this);"></a>
+      </p>
+      <p class="userApp_slogan">
+        <!--{$user.data.slogan|default:'这家伙太懒了,什么都没有留下!'}-->
+      </p>
+    </div>
+    <div class="userApp_content">
+      <!--{iCMS:article:list page="true" row="8" call="user" archive="date" userid="$user.uid"}-->
+      <!--{foreach key=date value=alist from=$article_list}-->
+      <div class="userApp_day">
+        <div class="date">
+          <!--{$date}-->
+        </div>
+        <div class="content">
+          <!--{foreach key=key value=art from=$alist}-->
+          <div class="artlist">
+            <!--{if $art.pic.url}-->
+            <p class="thumb">
+              <a href="<!--{$art.url}-->" target="_blank">
+                <img class="lazy" data-src="<!--{$art.pic.url}-->" src="<!--{$site.urls.tpl}-->/static/img/nopic.png">
+              </a>
+            </p>
+            <p class="title">
+              <a href="<!--{$art.url}-->"><!--{$art.title}--></a>
+            </p>
+            <div class="clearfix"></div>
+            <!--{else}-->
+            <p class="title npic">
+              <a href="<!--{$art.url}-->"><!--{$art.title}--></a>
+            </p>
+            <!--{/if}-->
+            <div class="article_action" data-param='<!--{$art.param|json_encode}-->'>
+              <a i="vote:article:good" href="javascript:;" title="赞"><i class="z-icon-thumbs-up"></i>赞(<span i="vote_good_num"><!--{$art.good}--></span>)</a>
+              <a i="comment:article" href="javascript:;" title="评论"><i class="z-icon-comment"></i>评论(<span i="comment_num"><!--{$art.comments}--></span>)</a>
+              <a i="favorite:article" href="javascript:;" title="添加到收藏夹"><i class="z-icon-collect"></i>收藏(<span i="favorite_num"><!--{$art.favorite}--></span>)</a>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <!--{/foreach}-->
+        </div>
+      </div>
+      <!--{/foreach}-->
+    </div>
+  </div>
+</div>
+<div id="pages_next" class="hide">
+  <!--{$iCMS.PAGE.NEXT}-->
+</div>
+<script>
+    scrollLoad(".userApp_content",".userApp_day","#pages_next","<!--{$iCMS.PAGE.TOTAL}-->");
+</script>
+<div class="clearfix mt10"> </div>
+<!--{include file="iCMS://footer.htm"}-->
+<script src="<!--{$user.hits_script}-->"></script>
+</body>
+</html>

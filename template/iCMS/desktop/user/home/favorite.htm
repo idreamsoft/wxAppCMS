@@ -1,0 +1,32 @@
+<div class="home-favorite">
+    <ul>
+        <!--{iCMS:favorite:list loop="true" page="true" row="10" userid="$user.uid" mode="1"}-->
+        <li>
+            <div class="item-link">
+                <!--{if !$status.isme}-->
+                <a class="fav-follow btn btn-success" href="javascript:;" data-id="<!--{$favorite_list.id}-->"><i class="fa fa-plus"></i> 关 注</a>
+                <!--{/if}-->
+                <a class="fav-link" href="<!--{$favorite_list.url}-->">
+                    <h2><!--{$favorite_list.title}--></h2>
+                </a>
+            </div>
+            <div class="meta gray">
+                <span class="num"><!--{$favorite_list.count}--></span> 篇文章
+                <span class="bull">•</span>
+                <!--{$favorite_list.follow}-->人关注
+            </div>
+            <div class="data">
+                <!--{iCMS:favorite:data loop="true" row="3" userid="$user.uid" fid="$favorite_list.id"}-->
+                <p>
+                    <a class="fav-data-link" href="<!--{$favorite_data.url}-->">
+                        <!--{$favorite_data.title}-->
+                    </a>
+                </p>
+                <div class="clearfix"></div>
+                <!--{/iCMS}-->
+                <a class="gray" href="<!--{$favorite_list.url}-->">查看全部 »</a>
+            </div>
+        </li>
+        <!--{/iCMS}-->
+    </ul>
+</div>

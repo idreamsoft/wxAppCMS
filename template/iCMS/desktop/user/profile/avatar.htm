@@ -1,0 +1,41 @@
+<script src="<!--{$site.urls.public}-->/ui/lib/meitu/xiuxiu.js" type="text/javascript"></script>
+<h4 class="profile-title">设置头像</h4>
+<div id="userApp-avatar-editor"></div>
+<script type="text/javascript">
+window.onload = function() {
+    xiuxiu.setLaunchVars("avatarPreview", {
+        visible: true,
+        label: "裁剪预览",
+        small: {
+            width: 30,
+            height: 30
+        },
+        medium: {
+            width: 60,
+            height: 60
+        },
+        large: {
+            width: 150,
+            height: 150,
+            label: "大尺寸"
+        }
+    });
+    xiuxiu.embedSWF("userApp-avatar-editor", 5, "800", "600");
+    xiuxiu.setUploadURL("<!--{iCMS:router url='user' host='true'}-->");
+    xiuxiu.onInit = function() {
+        xiuxiu.loadPhoto("<!--{$me.avatar}-->?<!--{$iCMS.TIME}-->");
+        xiuxiu.setUploadArgs({'action': 'profile','pg': 'avatar'});
+        xiuxiu.setUploadDataFieldName('upfile');
+        xiuxiu.setUploadType(2);
+    }
+    xiuxiu.onUploadResponse = function(data) {
+        var a = $.parseJSON(data);
+        iCMS.UI.alert(a.msg, a.code);
+        if (a.code) {
+            window.setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+        }
+    }
+}
+</script>

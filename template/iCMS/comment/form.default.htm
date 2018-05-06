@@ -1,0 +1,45 @@
+<div class="commentApp-form">
+    <div i="login" class="passport">
+        <a href="<!--{iCMS:router url='user:login'}-->" title="登录"><i class="fa fa-user"></i> 登录</a>
+        <a href="<!--{iCMS:router url='user:register'}-->" target="_blank"><i class="fa fa-heart"></i> 注册</a>
+    </div>
+    <div i="profile" class="profile">
+        <!--{include file="iCMS://user/profile.menu.htm"}-->
+    </div>
+    <div class="alert alert-warning" role="alert">
+        <i class="fa fa-warning "></i> 请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论！
+    </div>
+    <div class="comment-editor">
+        <textarea i="comment_content" class="form-control comment_content" placeholder="写下你的评论…"></textarea>
+    </div>
+    <div class="clearfix"></div>
+    <div class="comment-command" style="display:block;">
+        <!--{if $iCMS.CONFIG.comment.seccode }-->
+        <div class="comment-seccode">
+            <label for="seccode" class="control-label">验证码：</label>
+            <input type="text" maxlength="4" i="comment_seccode" class="seccode form-control" placeholder="请输入验证码">
+            <!--{iCMS:public:seccode}-->
+        </div>
+        <!--{/if}-->
+        <input i="comment_param" type="hidden" data-param='<!--{$comment_vars.param|json_encode}-->' />
+        <button i="comment_add" class="btn btn-primary comment_add">
+            <i class="fa fa-check"></i> 评 论
+        </button>
+        <a i="comment_cancel" href="javascript:;" class="comment_cancel">取 消</a>
+    </div>
+    <div class="clearfix mb10"></div>
+</div>
+<script>
+$(function() {
+    var $form = $('.commentApp-form');
+    //提交评论
+    iCMS.$('comment_add', $form).click(function(event) {
+        event.preventDefault();
+        iCMS.run('comment', function($COMMENT) {
+            var $param = iCMS.$('comment_param').param();
+            $COMMENT.options.list = $('.commentApp-list');//设置评论列表容器
+            $COMMENT.add($param,$form);//提交评论
+        });
+    });
+})
+</script>

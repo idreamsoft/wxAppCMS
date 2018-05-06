@@ -1,0 +1,11 @@
+/* ==articleApp== */
+body.articleApp { }
+.articleApp .body-wrap { padding-top: 0px; }
+.content-wrap .article-desc { border-radius: 5px; text-indent: 2em; background-color: #f0f0f0; color: #797979; padding: 20px; margin-bottom: 4px; }
+.content-wrap .tags-link{background: url(./../img/tag.png) no-repeat 0 4px; padding-left: 20px; }
+.content-wrap .text-body tkbox { margin: 0px auto; }
+.content-wrap .tip { text-align: center; color: #999; margin-bottom: 10px; }
+.content-wrap .chapterlist { border: 1px dashed #CCC; max-height: none; padding: 10px; }
+.content-wrap .chapterlist h3 { height: 30px; line-height: 30px; text-align: left; font-size: 14px; margin: 0px !important; }
+.content-wrap .chapterlist li { width: 48%; float: left; text-align: left; margin-bottom: 5px; }
+.content-wrap .chapterlist li a { border: 0px; text-align: left; padding: 3px !important; }

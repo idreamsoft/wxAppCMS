@@ -1,0 +1,18 @@
+<div class="profile-wrap dropdown">
+    <a data-toggle="dropdown" class="user-home" href="<!--{iCMS:router url='user:home'}-->">
+        <img i="user_avatar" class="avatar r3" src="<!--{$site.urls.ui}-->/avatar.gif" onerror="iUSER.NOAVATAR(this);">
+        <span class="label label-success">
+            <span i="user_nickname">iCMS</span>
+            <i class="caret"></i>
+        </span>
+    </a>
+    <ul class="dropdown-menu">
+        <li><a href="<!--{iCMS:router url='user:home'}-->" target="_blank"> <i class="fa fa-home"></i> 我的主页</a></li>
+        <li><a href="<!--{iCMS:router url='user:article'}-->" target="_blank"> <i class="fa fa-dashboard"></i> 我的文章</a></li>
+        <li><a href="<!--{iCMS:router url='user:comment'}-->" target="_blank"> <i class="fa fa-comments"></i> 我的评论</a></li>
+        <li><a href="<!--{iCMS:router url='user:inbox'}-->" target="_blank"> <i class="fa fa-envelope-o"></i> 我的私信 <span i="user_message_num" class="badge badge-red">0</span></a></li>
+        <li><a href="<!--{iCMS:router url='user:profile'}-->" target="_blank"> <i class="fa fa-cog"></i> 账号设置</a></li>
+        <li class="divider"></li>
+        <li><a i="logout" href="javascript:;" class="user-logout"> <i class="fa fa-sign-out"></i> 退出</a></li>
+    </ul>
+</div>

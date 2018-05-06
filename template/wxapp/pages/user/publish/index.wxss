@@ -1,0 +1,23 @@
+@import "../../../iCMS/wxss/common.wxss";
+page { height: auto; }
+page, .page, .page__bd { background-color: #f8f8f8; line-height: 1.6; margin: 0; }
+.weui-cells:before { border-top: none; }
+.weui-cells:after { border-bottom: none; }
+.weui-cells__title.tips { background-color: #eee; font-size: 16px; padding: 10px 15px; text-align: left; margin-top: 0px; margin-bottom: 0px; }
+.weui-cell__bd_in-select-before { padding-left: 10rpx; }
+.h10 { height: 20rpx; background-color: #eee; }
+.h5 { height: 10rpx; background-color: #eee; }
+.weui-textarea { height: 10em; background-color: #fefefe; }
+.weui-select { padding: 0 6rpx; font-size: 11pt; }
+.tabbar { z-index: 999999999; border-top: 1rpx solid rgba(0, 0, 0, .1); position: fixed; width: 100%; height: 100rpx; left: 0; right: 0; bottom: 0; background-color: white; display: flex; flex-direction: row; justify-content: space-between; }
+.tabbar .item { flex-grow: 1; flex-shrink: 1; display: flex; justify-content: center; align-items: center; }
+.tabbar .item .icon { width: 70rpx; height: 70rpx; }
+.tabbar button { background-color: #FFFFFF; color: #575757; line-height: 1.5; margin-top: 0px; margin-bottom: 0px; text-align: left; padding-left: 0px; padding-right: 0px; }
+.tabbar button::after { border: 0px; }
+.body-wrap { background-color: #FFFFFF; border-top: 1rpx solid #ddd; border-bottom: 1rpx solid #ddd; }
+.body { position: relative; padding: 10rpx 15rpx; margin-bottom: 4rpx; border-top: 1rpx dotted #ddd; }
+.body .close { z-index: 999999; border: 1rpx #ddd dotted; content: "×"; position: absolute; right: 0rpx; top: 0rpx; font-size: 11pt; width: 40rpx; height: 40rpx; line-height: 40rpx; text-align: center; color: #aaa; background-color: #FFFAF0; }
+.body .item-image, .body .item-video { text-align: center; display: flex; flex-wrap: wrap; }
+.body .item-image image { margin: 5rpx 4rpx; padding: 4rpx; width: 220rpx; max-height: 220rpx; border: 1rpx solid #ddd; position: relative; }
+.body  progress { position: absolute; z-index: 999999; width: 100%; bottom: 0; }
+.body .item-text{font-size: 9pt;}

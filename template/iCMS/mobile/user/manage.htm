@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title><!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->"/>
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.tpl}-->/static/css/user.css" type="text/css" />
+  </head>
+  <body class="userApp">
+    <!--{include file="./user.header.htm" import="true"}-->
+    <div class="userApp-wrap">
+        <div class="contents manage_<!--{$pg}-->">
+            <form action="<!--{iCMS:router url='user'}-->" method="post" target="iCMS_FRAME">
+                <input name="action" type="hidden" value="manage" />
+                <input name="pg" type="hidden" value="<!--{$pg}-->" />
+                <!--{switch from=$pg}-->
+                <!--{case value="publish"}-->
+                <!--{include file="./manage/publish.htm" import="true"}-->
+                <!--{case value="category"}-->
+                <!--{include file="./manage/category.htm" import="true"}-->
+                <!--{case value="article"}-->
+                <!--{include file="./manage/article.htm" import="true"}-->
+                <!--{case value="comment"}-->
+                <!--{include file="./manage/comment.htm" import="true"}-->
+                <!--{case value="inbox"}-->
+                <!--{include file="./manage/inbox.htm" import="true"}-->
+                <!--{case value="favorite"}-->
+                <!--{include file="./manage/favorite.htm" import="true"}-->
+                <!--{case value="share"}-->
+                <!--{include file="./manage/share.htm" import="true"}-->
+                <!--{case value="follow"}-->
+                <!--{include file="./manage/follow.htm" import="true"}-->
+                <!--{case value="fans"}-->
+                <!--{include file="./manage/fans.htm" import="true"}-->
+                <!--{/switch}-->
+            </form>
+        </div>
+    </div>
+    <div class="clearfix"> </div>
+    <iframe class="hide" id="iCMS_FRAME" name="iCMS_FRAME"></iframe>
+    <!--{include file="iCMS://footer.htm"}-->
+  </body>
+</html>

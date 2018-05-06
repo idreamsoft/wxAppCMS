@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title>重设密码 <!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->"/>
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.tpl}-->/static/css/user.css" type="text/css" />
+    <script>
+    $(function(){
+      $("#iCMS_resetpwd").click(function(event) {
+        var password = $('input[name="password"]').val();
+        if (password.length < 6) {
+          iCMS.tip($('input[name="password"]'), '<i class="fa fa-times-circle"></i> 新密码太短啦，至少要6位哦！');
+          return false;
+        }
+        $(".password_tip").html('<i class="fa fa-check-circle" style="color: #33B800;"></i>');
+
+        var rstpassword = $('input[name="rstpassword"]').val();
+        if (rstpassword.length < 6) {
+          iCMS.tip($('input[name="rstpassword"]'), '<i class="fa fa-times-circle"></i> 确认密码太短啦，至少要6位哦！');
+          return false;
+        }
+        if (password != rstpassword) {
+          iCMS.tip($('input[name="rstpassword"]'), '<i class="fa fa-times-circle"></i> 新密码与确认密码不一致！');
+          return false;
+        }
+        $(".rstpassword_tip").html('<i class="fa fa-check-circle" style="color: #33B800;"></i>');
+
+        var seccode = $('input[name="seccode"]').val();
+        if (!seccode) {
+          $('input[name="seccode"]').focus();
+          iCMS.tip($('input[name="seccode"]'), '<i class="fa fa-times-circle"></i> 请填写验证码！');
+          return false;
+        }
+        $(".seccode_tip").html('<i class="fa fa-check-circle" style="color: #33B800;"></i>');
+
+        var param = {'action':'findpwd','uid':'<!--{$user.uid}-->','auth':$('input[name="auth"]').val(),'seccode':seccode,'password':password,'rstpassword':rstpassword}
+        $.post(iCMS.api('user'), param, function(ret) {
+          if (ret.code) {
+            alert(ret.msg);
+            window.top.location.href = '<!--{iCMS:router url='user:login'}-->';
+          } else {
+            iCMS.alert(ret.msg);
+          }
+        }, 'json');
+      });
+    })
+    </script>
+  </head>
+  <body class="iCMS-mobile">
+    <nav id="header" class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="btn btn-default header-back" href="<!--{$forward}-->"><i class="fa fa-arrow-left"></i></a>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#iCMS-menu-box">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          </button>
+          <h3 class="header-title">重设密码</h1>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="wrapper login_reg_wrapper" id="iCMS-login-page">
+          <div class="logo"><a href="<!--{$site.url}-->"><img src="<!--{$site.urls.ui}-->/img/iCMS.logo-6.0.png" width="180"/></a></div>
+          <div class="form-group">
+            <label for="login_uname">邮箱：</label>
+            <!--{$user.username}-->
+          </div>
+          <div class="form-group">
+            <label for="login_uname">昵称：</label>
+            <!--{$user.nickname}-->
+          </div>
+          <div class="form-group">
+            <!-- <label for="iCMS-reg-password">密 码</label> -->
+            <input type="password" placeholder="请输入您的新密码" data-container=".password_tip" name="password" id="iCMS-reg-password" class="form-control">
+            <span class="help-block password_tip">6-20个字母、数字或者符号</span>
+          </div>
+          <div class="form-group">
+            <!-- <label for="iCMS-reg-rstpassword">确认密码</label> -->
+            <input type="password" placeholder="请在一次输入您的新密码" data-container=".rstpassword_tip" name="rstpassword" id="iCMS-reg-rstpassword" class="form-control">
+            <span class="help-block rstpassword_tip">这里要重复输入一下你的新密码</span>
+          </div>
+          <div class="form-group">
+            <input type="text" maxlength="4" name="seccode" class="iCMS_login_seccode iCMS_seccode form-control" placeholder="验证码"  data-container=".seccode_tip" >
+             <!--{iCMS:public:seccode}-->
+            <span class="help-block seccode_tip">请输入图片中的字符!</span>
+          </div>
+          <div class="clearfix mt10">
+            <input name="auth" type="hidden" value="<!--{$auth}-->" />
+            <button type="submit" class="btn btn-primary btn-lg btn-block iCMS_login_btn" id="iCMS_resetpwd">重设密码</button>
+          </div>
+          <div class="clearfix mb20"></div>
+      </div>
+    </div>
+    <!--{include file="iCMS://footer.htm"}-->
+  </body>
+</html>

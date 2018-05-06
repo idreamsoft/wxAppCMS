@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+    <!--{$site.title}-->_
+    <!--{$site.seotitle}-->
+    </title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->" />
+    <!--{iCMS:public:ui}-->
+  </head>
+  <body class="indexApp" i="<!--{$iCMS.APP.NAME}-->">
+    <!--{include file="./header.htm"}-->
+    <!--{iCMS:article:list pic="true" row="5"}-->
+    <!--{if $article_list}-->
+    <section class="rotator">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <!--{foreach value=alist from=$article_list}-->
+          <div class="swiper-slide swiper-pic">
+            <a href="<!--{$alist.url}-->">
+              <img data-src="<!--{$alist.pic.url}-->" src="<!--{$site.urls.tpl}-->/static/img/nopic.png" alt="<!--{$alist.title}-->" class="lazy rotator-img" />
+              <span><!--{$alist.title}--></span>
+            </a>
+          </div>
+          <!--{/foreach}-->
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </section>
+    <div class="clearfix mb10"></div>
+    <!--{/if}-->
+<script>
+var mySwiper=new Swiper('.swiper-container',{
+  pagination:'.swiper-pagination',
+  loop:true,
+  grabCursor:true,
+  autoplay:3000,
+  paginationClickable:true
+})
+</script>
+    <div class="body">
+      <!--{iCMS:category:list loop="true" row="100" stype="top"}-->
+      <section class="bg-white">
+        <div class="u-ttl">
+          <h2><!--{$category_list.name}--></h2>
+        </div>
+        <ul class="list-wrap">
+          <!--{iCMS:article:list loop="true" user="true" sub="true" row="6" cid="$category_list.cid"}-->
+          <!--{include file="./article.item.htm" import="true"}-->
+          <!--{/iCMS}-->
+        </ul>
+        <a class="u-more" href="<!--{$category_list.url}-->"><i class="iconfont icon-more"></i> 查看全部 </a>
+      </section>
+      <div class="clearfix mb10"></div>
+      <!--{/iCMS}-->
+    </div>
+    <!--{include file="./footer.htm"}-->
+  </body>
+</html>

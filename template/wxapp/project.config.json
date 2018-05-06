@@ -1,0 +1,85 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": true,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "1.9.90",
+	"appid": "wxa91b5d9765e192a7",
+	"projectname": "wxAppCMS",
+	"isGameTourist": false,
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": 0,
+					"name": "art",
+					"pathName": "pages/article/article",
+					"query": "id=631",
+					"scene": "1001"
+				},
+				{
+					"id": 1,
+					"name": "donate",
+					"pathName": "pages/donate/donate",
+					"query": "id=238",
+					"scene": "1001"
+				},
+				{
+					"id": -1,
+					"name": "user",
+					"pathName": "pages/user/index",
+					"query": "",
+					"scene": "1001"
+				},
+				{
+					"id": -1,
+					"name": "publish",
+					"pathName": "pages/user/publish/index",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "donate",
+					"pathName": "pages/user/donate/index",
+					"query": "",
+					"scene": "1001"
+				},
+				{
+					"id": -1,
+					"name": "article.my",
+					"pathName": "pages/user/article/index",
+					"query": "",
+					"scene": "1001"
+				},
+				{
+					"id": -1,
+					"name": "publish",
+					"pathName": "pages/user/publish/index",
+					"query": ""
+				}
+			]
+		}
+	}
+}

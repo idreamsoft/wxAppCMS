@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <title>
+        <!--{$content.title}-->_
+        <!--{$category.name}-->_
+        <!--{$site.title}-->_
+        <!--{$site.seotitle}-->
+        </title>
+        <meta name="keywords" content="<!--{$content.keywords}-->" />
+        <meta name="description" content="<!--{$content.description}-->" />
+        <link rel="canonical" href="<!--{$content.url|replace:$site.urls.mobile:$site.url}-->">
+        <!--{iCMS:public:ui}-->
+<script type="text/javascript">
+var categoryId = '<!--{$category.cid}-->';
+function showBodyUI (markup) {
+    //正文广告
+}
+$(function(){
+    $(".content img").each(function(i){
+        imgFix(this, 300);
+        $(this).fadeIn();
+    });
+})
+</script>
+    </head>
+    <body class="articleApp" i="<!--{$iCMS.APP.NAME}-->">
+        <!--{include file="./header.htm"}-->
+        <div class="body">
+            <div class="wrapper clearfix mt5">
+                <article>
+                    <header class="article-header">
+                        <h1 class="article-title">
+                        <!--{$content.title}-->
+                        </h1>
+                        <div class="article-meta">
+                            <time>
+                            <i class="iconfont icon-time"></i>
+                            <!--{$content.pubdate|date:"Y-m-d H:s"}-->
+                            </time>
+                            <span class="item">
+                                <i class="iconfont icon-list"></i>
+                                <a href="<!--{$category.url}-->" target="_blank">
+                                    <!--{$category.name}-->
+                                </a>
+                            </span>
+                            <span class="item">
+                                <i class="iconfont icon-user"></i>
+                                <!--{$content.user.at}-->
+                            </span>
+                        </div>
+                    </header>
+                    <div class="article_body">
+                        <div class="content">
+                            所有可调用变量,具体调用请自行修改
+                            <pre>
+                                <!--{$content|print_r}-->
+                            </pre>
+
+                        </div>
+                    </div>
+                </article>
+                <div class="article-like" data-param='<!--{$content.param|json_encode}-->'>
+                    <a i="vote:<!--{$APP.app}-->:good" class="like-btn">
+                        <i class="like-icon up"></i>
+                        <span i="vote_good_num" class="like-num"><!--{$content.good}--></span>
+                        <span class="like-txt">赞</span>
+                    </a>
+                    <a i="vote:<!--{$APP.app}-->:bad" class="like-btn">
+                        <i class="like-icon down"></i>
+                        <span i="vote_bad_num" class="like-num"><!--{$content.bad}--></span>
+                        <span class="like-txt">踩</span>
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+                <div class="article-prevnext mt10">
+                    <p class="prev"><b>上一篇:</b>
+                        <!--{iCMS:content:prev cid="$content.cid" id="$content.id"}-->
+                        <a href="<!--{$content_prev.url}-->" class="prev" target="_self">
+                            <!--{$content_prev.title}-->
+                        </a>
+                    </p>
+                    <p class="next">
+                        <!--{iCMS:content:next cid="$content.cid" id="$content.id"}-->
+                        <a href="<!--{$content_next.url}-->" class="next" target="_self">
+                            <!--{$content_next.title}-->
+                        </a><b>:下一篇</b></p>
+                </div>
+                <div class="share">
+                    <div class="share-icon">
+                        <div class="t">分享到</div>
+                        <div class="bdsharebuttonbox" id="share-bd">
+                            <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                            <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                            <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+                            <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                            <a href="#" class="bds_more" data-cmd="more"></a>
+                        </div>
+                    </div>
+                    <script>
+                    window._bd_share_config = {
+                            common: {
+                                bdText: '<!--{$content.title}-->',
+                                bdDesc: '<!--{$content.description|html2txt}-->',
+                                bdUrl: '<!--{$content.url}-->',
+                                bdPic: '<!--{$content.pic.url}-->'
+                            },
+                            share: [{
+                                "bdSize": 16
+                            }]
+                        }
+                        //以下为js加载部分
+                    with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+                    </script>
+                </div>
+            </div>
+            <div class="clearfix mt10"> </div>
+            <section class="bg-white comment">
+                <div class="u-ttl">
+                    <h2><i class="icon-comments"></i> 精彩评论</h2>
+                </div>
+                <div class="mod-content">
+                    <div id="comment-list">
+                        <!--{iCMS:comment:list display="default"}-->
+                    </div>
+                    <div class="clearfix"></div>
+                    <div id="comment-form">
+                        <!--{iCMS:comment:form display="default"}-->
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </section>
+            <div class="clearfix mt10"></div>
+            <section class="bg-white">
+                <div class="u-ttl">
+                    <h2><i class="iconfont icon-news"></i> 最新<!--{$category.name}--></h2>
+                </div>
+                <ul class="list-wrap">
+                    <!--{iCMS:content:list loop="true" row="5" cid="$category.cid"}-->
+                    <!--{include file="./content.item.htm" import="true"}-->
+                    <!--{/iCMS}-->
+                </ul>
+            </section>
+            <div class="clearfix mt10"> </div>
+
+            <section class="bg-white">
+                <div class="u-ttl">
+                    <h2><i class="iconfont icon-ranking"></i> <!--{$category.name}-->排行榜</h2>
+                </div>
+                <ul class="list-wrap">
+                    <!--{iCMS:content:list loop="true" row="5" orderby="week" cid="$category.cid"}-->
+                    <!--{include file="./content.item.htm" import="true"}-->
+                    <!--{/iCMS}-->
+                </ul>
+            </section>
+        </div>
+        <div class="clearfix mt10"> </div>
+        <!--{include file="./footer.htm"}-->
+        <script src="<!--{$content.hits.script}-->"></script>
+    </body>
+</html>

@@ -1,0 +1,28 @@
+<div class="commentApp-list-wrap">
+    <div class="commentApp-list">
+        <!--{iCMS:comment:list loop="true" page="true" ajax="pagenav" row="10" by="ASC" vars="$comment_vars"}-->
+        <!--{include file="./comment.item.htm" import="true"}-->
+        <!--{iCMSelse}-->
+        <div class="commentApp-item empty"> 暂无评论... </div>
+        <!--{/iCMS}-->
+    </div>
+    <div class="pagination commentApp-pagenav" data-query="<!--{$comment_vars.query}-->">
+        <!--{$iCMS.PAGES|method:'show(4)'}-->
+    </div>
+    <div class="clearfix mb10"></div>
+</div>
+<script>
+//评论ajax翻页
+var comment_page_ajax = function(pn, a) {
+    iCMS.run('comment', function($COMMENT) {
+        $COMMENT.page(pn, a, function(b) {
+            var pp = $(a).parent().parent();
+            var list = $(".commentApp-list", $(b)).html(),
+                pagenav = $(".commentApp-pagenav", $(b)).html();
+            $(".commentApp-list", pp).html(list);
+            $(".commentApp-pagenav", pp).html(pagenav);
+            iUSER.UCARD(pp);
+        });
+    });
+}
+</script>

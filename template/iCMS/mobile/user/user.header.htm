@@ -1,0 +1,60 @@
+<header class="x_header">
+  <div class="x_hd_box">
+    <a href="javascript:;" class="x_menu_icon" data-toggle="collapse" data-target="#userApp-menu"></a>
+    <a href="<!--{$site.url}-->" class="x_logo_icon"></a>
+    <a i="profile" href="<!--{$user.urls.home}-->" class="x_profile">
+      <img src="<!--{$user.avatar}-->" onerror="iUSER.NOAVATAR(this);">
+    </a>
+    <a i="login" href="javascript:;" class="x_login_icon"></a>
+  </div>
+</header>
+<div class="clearfix" style="height:45px;"></div>
+<nav class="collapse" role="navigation" id="userApp-menu">
+  <div class="navbar-collapse">
+    <div class="menu-head">
+      <div i="login" class="user-login">
+        <a class="navbar-brand mlogo" href="<!--{$site.url}-->">
+          <img src="<!--{$site.urls.tpl}-->/static/img/iCMS.LOGO.fff.png" />
+        </a>
+        <a class="btn btn-primary btn-sm" href="<!--{iCMS:router url='user:login'}-->"><i class="fa fa-user"></i> 登 录</a>
+        <a class="btn btn-success btn-sm" href="<!--{iCMS:router url='user:register'}-->"><i class="fa fa-heart"></i> 注册</a>
+      </div>
+      <div i="profile" class="user-profile hide">
+        <div class="x_user">
+          <div class="x_avatar">
+            <img i="user_avatar" src="<!--{$site.urls.ui}-->/avatar.gif" onerror="iUSER.NOAVATAR(this);">
+          </div>
+          <div class="txt">
+            <a i="logout" href="javascript:;" class="logout btn btn-link">登出</a>
+            <em i="user_nickname">iCMS</em>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <ul class="nav navbar-nav">
+      <li class="divider"></li>
+      <li><a href="<!--{$site.url}-->"><i class="fa fa-home"></i> 网站首页</a></li>
+      <li class="divider"></li>
+    </ul>
+    <ul i="profile" class="nav navbar-nav hide">
+      <li class="publish"><a href="<!--{iCMS:router url='user:publish'}-->"><i class="fa fa-edit"></i> 发表文章</a></li>
+      <li class="article"><a href="<!--{iCMS:router url='user:article'}-->"><i class="fa fa-dashboard"></i> 我的文章</a></li>
+      <li class="category"><a href="<!--{iCMS:router url='user:category'}-->"><i class="fa fa-list-alt"></i> 我的分类</a></li>
+      <li class="inbox"><a href="<!--{iCMS:router url='user:inbox'}-->"><i class="fa fa-envelope-o"></i> 我的私信</a></li>
+      <li class="comment"><a href="<!--{iCMS:router url='user:comment'}-->"><i class="fa fa-comments"></i> 我的评论</a></li>
+      <li class="favorite"><a href="<!--{iCMS:router url='user:manage:favorite'}-->"><i class="fa fa-star"></i> 我的收藏</a></li>
+      <li class="divider"></li>
+      <li class="base"><a href="<!--{iCMS:router url='user:profile:base'}-->"><i class="fa fa-info-circle"></i> 基本信息</a></li>
+      <li class="avatar"><a href="<!--{iCMS:router url='user:profile:avatar'}-->"><i class="fa fa-meh-o"></i> 修改头像</a></li>
+      <li class="setpassword"><a href="<!--{iCMS:router url='user:profile:setpassword'}-->"><i class="fa fa-cog"></i> 修改密码</a></li>
+      <li class="custom"><a href="<!--{iCMS:router url='user:profile:custom'}-->"><i class="fa fa-picture-o"></i> 个人封面</a></li>
+    </ul>
+    <!--{if $pg}-->
+    <script>$("li.<!--{$pg}-->").addClass('active');</script>
+    <!--{/if}-->
+  </div>
+  <div class="menu-right">
+    <span class="circle menu-close"><i class="fa fa-times">X</i></span>
+  </div>
+</nav>

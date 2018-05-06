@@ -1,0 +1,22 @@
+<div class="home-follower">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th colspan="3">
+                    <a class="nickname" data-tip="iCMS:ucard:<!--{$user.uid}-->" href="<!--{$user.urls.home}-->">
+                        <!--{$user.nickname}-->
+                    </a>
+                    关注了 <span><!--{$user.follow|num10K}--></span>人</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--{iCMS:user:follow loop="true" page="true" data="true" row="15" userid="$user.uid" followed="$me.uid"}-->
+            <!--{include file="./user.follow.htm" import="true"}-->
+            <!--{iCMSelse}-->
+            <tr>
+                <td colspan="3"><i class="fa fa-ban"></i> 暂无关注</td>
+            </tr>
+            <!--{/iCMS}-->
+        </tbody>
+    </table>
+</div>

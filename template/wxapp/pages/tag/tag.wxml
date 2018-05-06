@@ -1,0 +1,30 @@
+<import src="../../iCMS/wxml/common.wxml" />
+<import src="../../iCMS/wxml/article.wxml" />
+
+<view class="page" hidden="{{page_hidden}}">
+    <scroll-view scroll-y="true" style="height:{{scrollHeight}}px" bindscrolltoupper="refresh" bindscrolltolower="loadMore">
+        <block wx:if="{{banner.count}}">
+            <template is="banner" data="{{banner}}"/>
+            <view class="mt10"></view>
+        </block>
+        <view class="tag-container">
+            <view class="tag-title">{{tag.name}}</view>
+            <view class="tag-section">
+                <view class="tag-subtitle" wx:if="{{tag.subtitle}}">{{tag.subtitle}}</view>
+                <view class="tag-pic" wx:if="{{tag.pic.url}}">
+                    <image class="weui-article__img" src="{{tag.pic.url}}" mode="aspectFill" style="width:100%;height:120px" />
+                </view>
+                <view class="tag-desc" wx:if="{{tag.description}}">{{tag.description}}</view>
+            </view>
+        </view>
+        <view class="sub-title">{{tag.name}}相关文章</view>
+        <view class="article-list">
+            <template is="article_list" data="{{article_list}}"/>
+        </view>
+    </scroll-view>
+    <view class="weui-loadmore" hidden="{{data_loading}}">
+        <view class="weui-loading"></view>
+        <view class="weui-loadmore__tips">数据加载中...</view>
+    </view>
+</view>
+<loading class="loading" hidden="{{page_loading}}">加载中...</loading>

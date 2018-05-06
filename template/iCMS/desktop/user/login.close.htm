@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><!--{$site.name}-->会员系统已关闭!</title>
+        <meta name="keywords" content="<!--{$site.keywords}-->" />
+        <meta name="description" content="<!--{$site.description}-->" />
+        <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->" />
+        <!--{iCMS:public:ui}-->
+        <link rel="stylesheet" href="<!--{$site.urls.tpl}-->/static/css/user.css" type="text/css" />
+    </head>
+    <body class="userApp passport">
+        <div class="login-wrap">
+            <!--{include file="./user.header.htm" import="true"}-->
+            <div class="passport-wrap pl20 pr20 pt40">
+                <div class="clearfix mt10"></div>
+                <div class="alert alert-warning" role="alert">
+                    <strong>Warning!</strong> 系统已关闭登录功能.
+                </div>
+                <div class="clearfix mt10"></div>
+            </div>
+        </div>
+        <!--{include file="iCMS://footer.htm"}-->
+    </body>
+</html>

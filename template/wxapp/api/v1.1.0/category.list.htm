@@ -1,0 +1,26 @@
+{
+"category":<!--{$category|keys:"cid,url,name,title,description"|json_encode}-->,
+"article_list":[
+<!--{iCMS:article:list
+    sub="true" cid="$category.cid"
+    keys="id,url,title,description,pic,pubdate,category" loop="true" row="5"
+    page="true"
+}-->
+<!--{include file="./article_list.json.htm"}-->
+<!--{/iCMS}-->
+]
+,"PAGE":<!--{$iCMS.PAGE|keys:"NAV,NEXT,PREV":true|json_encode}-->
+<!--{if $iCMS.PAGE.CURRENT<2}-->
+,"banner":{
+<!--{iCMS:article:list
+    sub="true" cid="$category.cid"
+    as="banner"
+    keys="id,url,title,description,pic"
+    pic="true" row="8"
+}-->
+"data":<!--{$banner|json_encode}-->,
+"count":<!--{$banner|count}-->
+}
+<!--{/if}-->
+}
+<!--{clean}-->

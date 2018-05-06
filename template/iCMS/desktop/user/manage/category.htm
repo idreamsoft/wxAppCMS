@@ -1,0 +1,46 @@
+<h4 class="manage-title">我的分类</h4>
+<div class="manage-category form-inline">
+    <!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
+    <input name="_cid[]" type="hidden" value="<!--{$user_category.cid}-->" />
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <!--{$user_category.rownum}-->
+            </div>
+            <input type="text" class="form-control" name="name[<!--{$user_category.cid}-->]" value="<!--{$user_category.name}-->">
+            <div class="input-group-addon info">文章数:
+                <!--{$user_category.count}-->
+            </div>
+        </div>
+        <a href="javascript:;" class="btn btn-default del_uc tip" title="删除后,记得更新哦">删除</a>
+    </div>
+    <div class="mb10"></div>
+    <!--{/iCMS}-->
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-addon">新分类</div>
+            <input type="text" class="form-control" name="newname" placeholder="请输入新分类名称">
+        </div>
+    </div>
+    <div class="mb10"></div>
+    <button class="btn btn-primary btn-lg" type="submit"><i class="fa fa-check"></i> 添加/更新</button>
+</div>
+<style>
+.info { text-align: left; color: #999; }
+.form-control { width: 320px !important; }
+.btn-lg { width: 150px !important; }
+</style>
+<script type="text/javascript">
+function callback(a) {
+    if (a.code) {
+        window.location.reload();
+    } else {
+        iCMS.UI.alert(a.msg);
+    }
+}
+$(function() {
+    $(document).on('click', '.del_uc', function() {
+        $(this).parent().remove();
+    });
+});
+</script>

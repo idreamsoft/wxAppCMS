@@ -1,0 +1,21 @@
+<li>
+  <a href="<!--{$article_list.url}-->">
+    <div class="p10 clearfix">
+      <!--{if $article_list.pic.url}-->
+      <span class="cover">
+        <img class="lazy" data-src="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.tpl}-->/static/img/nopic.png">
+      </span>
+      <!--{/if}-->
+      <div class="info">
+        <h3 class="title"><!--{$article_list.title}--></h3>
+        <!--{if $article_list.description}-->
+        <p class="summary"><!--{$article_list.description}--></p>
+        <!--{/if}-->
+        <div class="author">
+          <span><!--{$article_list.category.name}--></span>
+          <span>阅读(<!--{$article_list.hits.count}-->)</span>
+        </div>
+      </div>
+    </div>
+  </a>
+</li>

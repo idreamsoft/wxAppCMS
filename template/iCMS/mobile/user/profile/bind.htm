@@ -1,0 +1,32 @@
+<div class="account_bind" id="user_form">
+    <div class="account_bind_title"> 绑定帐号可以把您的文章同步给更多好友。 <a class="bind_help" target="_blank" href="<!--{$site.urls.public}-->/account_bind.html">什么是绑定帐号，绑定帐号有什么用？</a></div>
+    <ul class="bind_logo">
+      <li>
+        <div class="icon i_qzone"></div>
+        <div class="bind_web">
+          <p class="unbind">你的QQ帐号<!--{if $platform[2]==""}-->(未绑定)<!--{/if}--></p>
+          <p class="bind_result"><!--{if $me.qqopenid==""}--><a href="<!--{$iCMS.SAPI}-->&do=bind&sign=qq" class="btn btn-success btn-mini"><b>绑定并关注<!--{$site.title}--></b><i></i></a><!--{else}--><a href="/user/unbind/qq" class="green_base_btn" target="LB_FRAME"><b>取消绑定</b><i></i></a><!--{/if}--></p>
+        </div>
+      </li>
+      <li>
+        <div class="icon i_sina"></div>
+        <div class="bind_web">
+          <p class="unbind">你的新浪微博<!--{if $platform[3]==""}-->(未绑定)<!--{/if}--></p>
+          <p class="bind_result"><!--{if $me.wbopenid==""}--><a href="<!--{$iCMS.SAPI}-->&do=bind&sign=wb" class="btn btn-success btn-mini"><b>绑定并关注<!--{$site.title}--></b><i></i></a><!--{else}--><a href="/user/unbind/wb" class="green_base_btn" target="LB_FRAME"><b>取消绑定</b><i></i></a><!--{/if}--></p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="clearfix"></div>
+  <form action="" method="post" id="myform">
+    <input type="hidden" name="user_id" id="user_id" value="">
+    <input type="hidden" name="user_name" id="user_name" value="">
+    <input type="hidden" name="keys" id="keys" value="">
+    <input type="hidden" name="secrect" id="secrect" value="">
+    <input type="hidden" name="follow_number" id="follow_number" value="">
+    <input type="hidden" name="fav_number" id="fav_number" value="">
+    <input type="hidden" name="bind_type" id="bind_type" value="">
+    <input type="hidden" name="expires_in" id="expires_in" value="">
+    <input type="hidden" name="refresh_token" id="refresh_token" value="">
+    <input type="hidden" name="errorbindmsg" id="errorbindmsg" value="">
+  </form>

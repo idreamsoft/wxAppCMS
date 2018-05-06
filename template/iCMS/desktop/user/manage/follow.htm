@@ -1,0 +1,21 @@
+<h4 class="manage-title">我的关注</h4>
+<table class="table table-striped">
+    <tbody>
+        <!--{iCMS:user:follow loop="true" page="true" data="true" row="10" userid="$user.uid" followed="$user.uid"}-->
+        <!--{include file="./user.follow.htm" import="true"}-->
+        <!--{iCMSelse}-->
+        <tr>
+            <td><i class="fa fa-ban"></i> 暂无关注</td>
+        </tr>
+        <!--{/iCMS}-->
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">
+                <div class="pagination">
+                    <!--{$iCMS.PAGE.NAV}-->
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

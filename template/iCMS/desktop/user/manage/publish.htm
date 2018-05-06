@@ -1,0 +1,241 @@
+<style>
+.manage-publish { margin-left: 20px; }
+.input-group-addon { padding: 5px 12px; width: 60px !important; }
+.input-group-addon label { float: right; }
+.input-group-addon #user_category_dropdown { height: 20px; display: block; line-height: 20px; text-decoration: none; }
+#add_category { border-radius: 0px; }
+.input-group input.form-control, .input-group textarea.form-control { width: 500px !important; }
+.input-group select.form-control { width: 300px !important; }
+#description { width: 580px !important; height: 120px; }
+#body { width: 98%; height: 500px; }
+#source-box .form-control { width: 285px !important; }
+.creative { width: 220px; display: inline-block; }
+.creative .bootstrap-switch { border-radius: 0px 5px 5px 0px !important; box-shadow: none !important; border-color: #ccc !important; width: 106px !important; height: 35px !important; }
+.creative .bootstrap-switch .bootstrap-switch-label { background: #fafafa; }
+.creative .bootstrap-switch-container span { width: 53px !important; height: 35px !important; }
+.creative .bootstrap-switch-container .bootstrap-switch-primary { border-radius: 0px !important; }
+.manage-publish .dropdown-menu{top:31px;}
+.manage-publish .dropdown-menu:before {left: 35%;}
+.manage-publish .dropdown-menu:after {left: 35%;top: -6px;}
+.input-group input.seccode{width: 120px !important; border-radius: 0px 4px 4px 0px !important;}
+</style>
+<link href="<!--{$site.urls.public}-->/ui/lib/bootstrap-switch.min.css" type="text/css" rel="stylesheet" />
+<script src="<!--{$site.urls.public}-->/ui/lib/bootstrap-switch.min.js"></script>
+<script>
+window.UMEDITOR_HOME_URL = "<!--{$site.urls.public}-->/js/libs/umeditor/";
+</script>
+<link href="<!--{$site.urls.public}-->/js/libs/umeditor/themes/default/css/umeditor.min.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="<!--{$site.urls.public}-->/js/libs/umeditor/umeditor.config.js" charset="utf-8"></script>
+<script type="text/javascript" src="<!--{$site.urls.public}-->/js/libs/umeditor/umeditor.min.js" charset="utf-8"></script>
+<input name="id" type="hidden" value="<!--{$article.id}-->" />
+<input name="ucid" id="ucid" type="hidden" value="<!--{$article.ucid}-->" />
+<input name="_ucid" type="hidden" value="<!--{$article.ucid}-->" />
+<input name="_cid" type="hidden" value="<!--{$article.cid}-->" />
+<input name="mobile" type="hidden" value="0" />
+<h4 class="manage-title">发表文章</h4>
+<div class="manage-publish form-inline" id="publish">
+    <div class="input-group">
+        <div class="input-group-addon">
+            <label for="cid" class="control-label">栏 目</label>
+        </div>
+        <select name="cid" id="cid" class="form-control">
+            <option value="0"> == 请选择所属栏目 == </option>
+            <!--{iCMS:category:select selected="$article.cid" echo="true" appid="1"}-->
+        </select>
+    </div>
+    <button class="btn btn-primary _user_publish" type="submit"><i class="fa fa-check"></i> 提交</button>
+    <div class="mb10"></div>
+    <div class="input-group">
+        <div class="input-group-addon">
+            <label for="title" class="control-label">标 题</label>
+        </div>
+        <input class="form-control" name="title" id="title" type="text" value="<!--{$article.title}-->">
+        <div class="input-group-addon">
+            <div class="dropdown">
+                <a data-toggle="dropdown" id="user_category_dropdown"> <span class="caret"></span> <span id="user_category_select">默认分类</span></a>
+                <ul class="dropdown-menu">
+                    <!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
+                    <li>
+                        <a href="javascript:;" cid="<!--{$user_category.cid}-->" class="user_category_item">
+                            <!--{$user_category.name}-->
+                        </a>
+                    </li>
+                    <!--{/iCMS}-->
+                    <li id="user_category_item_0"><a href="javascript:;" cid="0" class="user_category_item">默认分类</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript:;" title="添加分类" id="add_category" class="btn"><i class="fa fa-edit"></i> 添加分类</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mb10"></div>
+    <div class="input-group">
+        <div class="input-group-addon">
+            <label for="pic" class="control-label">缩略图</label>
+        </div>
+        <input class="form-control" type="text" name="pic" id="pic" value="<!--{$article.pic}-->"/>
+        <span class="input-group-btn">
+            <button id="upload_pic" type="button" class="btn btn-success">上传图片</button>
+        </span>
+    </div>
+    <div class="mb10"></div>
+    <div class="input-group">
+        <div class="input-group-addon">
+            <label for="keywords" class="control-label">关键字</label>
+        </div>
+        <input class="form-control" name="keywords" id="keywords" type="text" value="<!--{$article.keywords}-->">
+    </div>
+    <div class="mb10"></div>
+    <div class="input-group creative">
+        <div class="input-group-addon">
+            <label for="article-type" class="control-label">文章类型？</label>
+        </div>
+        <div class="switch" id="article-type">
+            <input type="checkbox" name="creative" data-on-text="原创" data-off-text="转贴" <!--{if $article.creative}--> checked<!--{/if}-->/>
+        </div>
+    </div>
+    <div class="input-group <!--{if $article.creative}-->hide<!--{/if}-->" id="source-box">
+        <div class="input-group-addon">
+            <label for="source" class="control-label">出 处</label>
+        </div>
+        <input class="form-control" name="source" id="source" type="text" value="<!--{$article.source}-->">
+    </div>
+    <div class="mb10"></div>
+    <div class="form-group">
+        <h4 class="manage-title">简 介</h4>
+        <textarea name="description" id="description" class="form-control"><!--{$article.description}--></textarea>
+    </div>
+    <div class="mb10"></div>
+    <div class="form-group" style="width:100%;">
+        <h4 class="manage-title">正 文</h4>
+        <script type="text/plain" id="editor" style="width:100%;height:360px;"><!--{$article_data.body}--></script>
+    </div>
+    <div class="mb10"></div>
+    <!--{if $iCMS.CONFIG.user.post.seccode }-->
+    <div class="input-group">
+        <div class="input-group-addon">
+            <label for="seccode" class="control-label">验证码：</label>
+        </div>
+        <input type="text" maxlength="4" name="seccode" class="seccode form-control" id="seccode" placeholder="请输入验证码">
+        <!--{iCMS:public:seccode}-->
+    </div>
+    <!--{/if}-->
+    <div class="mb10"></div>
+    <div class="form-actions">
+        <button class="btn btn-lg btn-primary _user_publish" type="submit">
+        <i class="fa fa-check"></i> 提 交
+        </button>
+    </div>
+</div>
+<div id="user_category_add" style="display: none;">
+    <input class="form-control input-lg" id="user_category_new" type="text" placeholder="请输入分类名称">
+</div>
+
+<script type="text/javascript">
+var ed = UM.getEditor('editor');
+function upload_pic(c){
+    if (c.code){
+        $('#pic').val(c.path);
+    }
+}
+$(function() {
+
+    $("#upload_pic").click(function(){
+        $("input[name=upfile]").click();
+    })
+    $("input[name=upfile]").change(function(){
+        $("#upfileform").submit();
+    })
+    var publish = $("#publish");
+    $('[name="creative"]',publish).bootstrapSwitch().on('switchChange.bootstrapSwitch',function(event, state) {
+        if (state) {
+            $('#source-box').hide();
+            $('#source').val('');
+        } else {
+            $('#source-box').show();
+        }
+    });
+
+    <!--{if $article.cid}-->
+        $("#cid",publish).val("<!--{$article.cid}-->");
+    <!--{/if}-->
+
+    <!--{if $article.ucid}-->
+        var uc = $("[cid='<!--{$article.ucid}-->']",publish);
+        uc.parent().addClass('active');
+        $("#user_category_select").text(uc.text());
+    <!--{/if}-->
+
+    $("._user_publish").click(function() {
+        if ($("#cid option:selected").val() == "0") {
+            $("#cid").focus();
+            iCMS.UI.alert("请选择所属栏目");
+            return false;
+        }
+        if ($("#title").val() == '') {
+            $("#title").focus();
+            iCMS.UI.alert("标题不能为空!");
+            return false;
+        }
+
+        <!--{if $iCMS.CONFIG.user.post.seccode }-->
+        if ($(".seccode").val() == '') {
+            $(".seccode").focus();
+            iCMS.UI.alert("验证码不能为空!");
+            return false;
+        }
+        <!--{/if}-->
+
+        if (!ed.hasContents()) {
+            ed.focus();
+            iCMS.UI.alert("内容不能为空!");
+            return false;
+        }
+    });
+    $("#keywords").keyup(function(event) {
+        this.value=this.value.replace(/，/ig,',');
+        this.value=this.value.replace(/\s/ig,',');
+        this.value=this.value.replace(/,{2,}/ig,',');
+    });
+
+    $(document).on('click', '.user_category_item', function(event) {
+        event.preventDefault();
+        var $this = $(this),cid = $this.attr("cid"),name = $this.text();
+
+        $("#ucid").val(cid);
+        $("#user_category_select").text(name);
+        $(".user_category_item").parent().removeClass('active');
+        $this.parent().addClass('active');
+        $this.parent().parent().parent().removeClass("open");
+        return false;
+    });
+    $('#add_category').click(function() {
+        iCMS.UI.dialog({
+            follow:document.getElementById('user_category_dropdown'),
+            content: document.getElementById('user_category_add'),
+            quickClose: false,title: null,width:"auto",height:"auto",
+            okValue: '添加新分类',
+            ok: function() {
+                var a = $("#user_category_new"),name = a.val(),me = this;
+                if (name == "") {
+                    alert("请输入分类名称!");
+                    return false;
+                } else {
+                    $.post("<!--{iCMS:router url='user'}-->",{'action': 'add_category',name: name},function(j) {
+                        if (j.code) {
+                            $("#user_category_item_0").before('<li><a href="javascript:;" cid="' + j.forward + '" class="user_category_item">' + name + '</a></li>');
+                            $(".user_category_item[cid='"+j.forward+"']").click();
+                            me.close().remove();
+                        } else {
+                            alert(j.msg);
+                            a.focus();
+                            return false;
+                        }
+                    }, "json");
+                }
+                return false;
+            }
+        });
+    });
+});
+</script>

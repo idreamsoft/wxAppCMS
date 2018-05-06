@@ -1,0 +1,18 @@
+<div class="iCMS_profile_wrap btn-group">
+  <a class="iCMS_user_home dropdown-toggle" data-toggle="dropdown" href="<!--{iCMS:router url='/user/home'}-->">
+    <img class="avatar r3" src="<!--{$site.urls.ui}-->/avatar.gif" onerror="iUSER.NOAVATAR(this);">
+    <span class="label label-success">
+      <span class="name">iCMS</span>
+      <i class="caret"></i>
+    </span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li> <a href="<!--{iCMS:router url='/user/home'}-->" target="_blank"> <i class="fa fa-home"></i> 我的主页</a> </li>
+    <li> <a href="<!--{iCMS:router url='/user/article'}-->" target="_blank"> <i class="fa fa-dashboard"></i> 文章</a> </li>
+    <li> <a href="<!--{iCMS:router url='/user/comment'}-->" target="_blank"> <i class="fa fa-comments"></i> 评论</a> </li>
+    <li> <a href="<!--{iCMS:router url='/user/inbox'}-->" target="_blank"> <i class="fa fa-envelope-o"></i> 私信</a> </li>
+    <li> <a href="<!--{iCMS:router url='/user/profile'}-->" target="_blank"> <i class="fa fa-cog"></i> 设置</a> </li>
+    <li class="divider"></li>
+    <li> <a href="javascript:;" class="iCMS_user_logout"> <i class="fa fa-sign-out"></i> 退出</a> </li>
+  </ul>
+</div>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <!--{if $article.chapter && $article.subtitle}-->
+        <!--{$article.subtitle}-->_
+        <!--{/if}-->
+        <!--{$article.title}-->_
+        <!--{$category.name}-->_
+        <!--{$site.title}-->_
+        <!--{$site.seotitle}-->
+    </title>
+    <meta name="keywords" content="<!--{$article.keywords}-->" />
+    <meta name="description" content="<!--{$article.description}-->" />
+    <meta name="mobile-agent" content="format=xhtml;url=<!--{$article.iurl.mobile.url}-->">
+    <meta name="mobile-agent" content="format=html5;url=<!--{$article.iurl.mobile.url}-->">
+    <link rel="alternate" media="only screen and(max-width: 640px)" href="<!--{$article.iurl.mobile.url}-->">
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.tpl}-->/static/css/article.css" type="text/css" />
+</head>
+
+<body class="articleApp" i="<!--{$iCMS.APP.NAME}-->">
+    <!--{include file="./header.htm"}-->
+    <div class="body clearfix">
+        <div class="body-wrap r5">
+            <div class="main-col">
+                <ul class="breadcrumb">
+                    <li><a href="<!--{$site.url}-->">首页</a></li>
+                    <!--{foreach value="catenav" from="$category.navArray"}-->
+                    <li>
+                        <a href='<!--{$catenav.url}-->'>
+                            <!--{$catenav.name}-->
+                        </a>
+                    </li>
+                    <!--{/foreach}-->
+                    <li class="active">
+                        <!--{$article.link}-->
+                    </li>
+                </ul>
+                <div class="content-wrap">
+                    <h1><!--{$article.title}--></h1>
+                    <div class="info">
+                        <span><a href="<!--{$site.url}-->"><!--{$site.name}--></a> <!--{$site.url}--></span>
+                        <span class="pubdate"><!--{$article.pubdate|date:"Y-m-d H:i"}--></span>
+                        <span class="source">出处：<!--{$article.source|default:'网络'}--> </span>
+                        <!--{if $article.author}--><span class="author">作者：<!--{$article.author}--></span>
+                        <!--{/if}-->
+                        <span class="editor">编辑：<!--{$article.user.at}--></span>
+                        <span id="cmt_count" class="cmt_count"></span>
+                    </div>
+                    <!--{if $article.description}-->
+                    <div class="article-desc">
+                        <!--{$article.description}-->
+                    </div>
+                    <!--{/if}-->
+                    <div class="clearfix"></div>
+                    <!--{if $article.tags}-->
+                    <div class="tags-link">
+                        <b>相关专题：</b>
+                        <!--{$article.tags_link}-->
+                    </div>
+                    <!--{/if}-->
+                    <article class="text-body">
+                        <div class="<!--{if $article.markdown}-->markdown<!--{/if}-->">
+                            <!--{$article.body}-->
+                        </div>
+                        <!--{if $article.page.end}-->
+                        <!--{/if}-->
+                    </article>
+                    <!--{if $article.taoke}-->
+                    <!-- taoke code -->
+                    <!--{/if}-->
+                    <!--{if $article.page.nav}-->
+                    <div class="clearfix"></div>
+                    <!--{if $article.chapter}-->
+                      <div class="pagenav iCMS_pagination clr chapterlist">
+                        <h3>内容导航</h3>
+                        <ul>
+                        <!--{foreach value="pagelist" from="$article.page.list"}-->
+                          <li>第<!--{$pagelist.pn}-->章：
+                            <a href="<!--{$pagelist.url}-->" title="<!--{$pagelist.title}-->">
+                              <!--{if $pagelist.title}-->
+                              <!--{$pagelist.title|default:'下一页更精彩'}-->
+                              <!--{else}-->
+                              第<!--{$pagelist.pn}-->章
+                              <!--{/if}-->
+                            </a>
+                          </li>
+                        <!--{/foreach}-->
+                        </ul>
+                        <div class="clearfix"></div>
+                      </div>
+                    <!--{else}-->
+                    <div class="pagenav">
+                        <div class="pagination">
+                        <!--{$article.page.nav}-->
+                        </div>
+                    </div>
+                    <!--{/if}-->
+
+                    <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
+                    <!--{/if}-->
+                    <script>
+                    $(function() {
+                        $(window).keydown(function(event) {
+                            switch (event.keyCode) {
+                                case 37:
+                                    window.location.href = '<!--{$article.page.prev.url}-->';
+                                    break;
+                                case 39:
+                                    window.location.href = '<!--{$article.page.next.url}-->';
+                                    break;
+                            }
+                        });
+                    })
+                    </script>
+                    <div class="clearfix mb10"></div>
+                    <div class="share">
+                        <div class="share-icon">
+                            <div class="t">分享到</div>
+                            <div class="bdsharebuttonbox" id="share-bd">
+                                <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                                <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                                <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+                                <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                                <a href="#" class="bds_more" data-cmd="more"></a>
+                            </div>
+                        </div>
+                        <script>
+                        window._bd_share_config = {
+                                common: {
+                                    bdText: '<!--{$article.title}-->',
+                                    bdDesc: '<!--{$article.description|html2txt}-->',
+                                    bdUrl: '<!--{$article.url}-->',
+                                    bdPic: '<!--{$article.pic.url}-->'
+                                },
+                                share: [{
+                                    "bdSize": 16
+                                }]
+                            }
+                            //以下为js加载部分
+                        with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+                        </script>
+                    </div>
+                    <div class="APP-like" data-param='<!--{$article.param|json_encode}-->'>
+                        <div i="vote:article:good" class="btn btn-success btn-sm" title="不错!点个赞">
+                            <i class="fa fa-thumbs-up"></i>
+                            <span i="vote_good_num" class="like-num"><!--{$article.good}--></span>
+                        </div>
+                        <div i="vote:article:bad" class="btn btn-danger btn-sm" title="太烂了!踩一下">
+                            <i class="fa fa-thumbs-down"></i>
+                            <span i="vote_bad_num" class="like-num"><!--{$article.bad}--></span>
+                        </div>
+                        <div i="favorite:article" class="btn btn-primary btn-sm" title="非常棒!收藏起来">
+                            <i class="fa fa-heart"></i>
+                            <span i="favorite_num" class="favorite-num"><!--{$article.favorite}--></span>
+                        </div>
+                    </div>
+                    <div class="clearfix mt20"></div>
+                    <div class="prev-next">
+                        <p class="prev">
+                            <b>上一篇:</b>
+                            <!--{iCMS:article:prev cid="$article.cid" id="$article.id"}-->
+                            <!--{if $article_prev}-->
+                            <a href="<!--{$article_prev.url}-->" class="prev" target="_self">
+                                <!--{$article_prev.title}-->
+                            </a>
+                            <!--{else}-->
+                            没有了
+                            <!--{/if}-->
+                        </p>
+                        <p class="next">
+                            <!--{iCMS:article:next cid="$article.cid" id="$article.id"}-->
+                            <!--{if $article_next}-->
+                            <a href="<!--{$article_next.url}-->" class="next" target="_self">
+                                <!--{$article_next.title}-->
+                            </a>
+                            <!--{else}-->
+                            没有了
+                            <!--{/if}-->
+                            <b>:下一篇</b>
+                        </p>
+                        <p class="clearfix"></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="related">
+                    <h3><i class="line"></i>更多 <b><!--{$category.link}--></b> 相关资讯：</h3>
+                    <div class="related-left">
+                        <ul>
+                            <!--{iCMS:article:list loop='true' row='9' cid="$category.cid"}-->
+                            <li>
+                                <a href="<!--{$article_list.url}-->">
+                                    <!--{$article_list.title}-->
+                                </a>
+                            </li>
+                            <!--{/iCMS}-->
+                        </ul>
+                    </div>
+                    <div class="related-right">
+                        <div style="width:300px;height:250px;background-color:#ccc;"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix mb10"></div>
+                <div class="mod-box comment">
+                    <div class="mod-title">
+                        <h3 class="mod-txt"><i class="icon-comments"></i> 精彩评论</h3>
+                    </div>
+                    <div class="mod-content">
+                        <div id="comment-list">
+                            <!--{iCMS:comment:list display="default"}-->
+                        </div>
+                        <div class="clearfix"></div>
+                        <div id="comment-form">
+                            <!--{iCMS:comment:form display="default"}-->
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="side-col">
+                <div class="mod-box rank">
+                    <div class="mod-title">
+                        <ul>
+                            <li class="active"><a href="javascript:;" data-target="#rank-week" data-toggle="tab">周点击榜</a></li>
+                            <li><a href="javascript:;" data-target="#rank-momth" data-toggle="tab">周热评榜</a></li>
+                        </ul>
+                    </div>
+                    <div class="mod-content">
+                        <ul class="rank-list" id="rank-week">
+                            <!--{iCMS:article:list loop="true" row="10" sub="all" orderby="week" cid="$category.cid"}-->
+                            <li>
+                                <em class="no<!--{$article_list.rownum}-->"><!--{$article_list.rownum}--></em>
+                                <a href="<!--{$article_list.url}-->" target="_blank">
+                                    <!--{$article_list.title}-->
+                                </a>
+                            </li>
+                            <!--{/iCMS}-->
+                        </ul>
+                        <ul class="rank-list hide" id="rank-momth">
+                            <!--{iCMS:article:list loop="true" row="10" sub="all" orderby="comment" startdate="-7 day" cid="$category.cid"}-->
+                            <li>
+                                <em class="no<!--{$article_list.rownum}-->"><!--{$article_list.rownum}--></em>
+                                <a href="<!--{$article_list.url}-->" target="_blank">
+                                    <!--{$article_list.title}-->
+                                </a>
+                            </li>
+                            <!--{/iCMS}-->
+                        </ul>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="mod-box hot-tags">
+                    <div class="mod-title">
+                        <h3 class="mod-txt">热门标签</h3>
+                    </div>
+                    <div class="mod-content">
+                        <ul>
+                            <!--{iCMS:tag:list loop="true" row="15" sub="all" orderby="hot" cid="$category.cid"}-->
+                            <li>
+                                <a href="<!--{$tag_list.url}-->" target="_blank" class="btn">
+                                    <!--{$tag_list.name}-->
+                                </a>
+                            </li>
+                            <!--{/iCMS}-->
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="mod-box pictxt">
+                    <div class="mod-title">
+                        <h3 class="mod-txt">图文推荐</h3>
+                    </div>
+                    <div class="mod-content">
+                        <!--{iCMS:article:list loop="true" pic="true" sub="all" row="8" cid="$category.cid"}-->
+                        <div class="pictxt-list <!--{cycle values='fl,fr'}-->">
+                            <a href="<!--{$article_list.url}-->" target="_blank">
+                                <span class="pictxt-img">
+                                            <img src="<!--{$article_list.pic.url}-->" alt="<!--{$article_list.title}-->">
+                                        </span>
+                                <p class="pictxt-text">
+                                    <!--{$article_list.title}-->
+                                </p>
+                            </a>
+                        </div>
+                        <!--{/iCMS}-->
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix mb10"></div>
+        </div>
+        <div class="clearfix mb20"></div>
+    </div>
+    <!--{include file="./footer.htm"}-->
+    <script src="<!--{$article.hits.script}-->"></script>
+</body>
+
+</html>

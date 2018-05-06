@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title>用户登录 <!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->"/>
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.tpl}-->/static/css/user.css" type="text/css" />
+    <script>
+    //初始化登录接口
+    $(function() {
+        var login = $("#login-box");
+        $("#login-submit").click(function(event) {
+            event.preventDefault();
+            $(".tip-error").hide();
+            var param = {
+                uname: $("#uname", login).val(),
+                pass: $("#pass", login).val(),
+                seccode: $("#seccode", login).val(),
+                remember: $('input[name="remember"]', login).val()
+            }
+            if (param.uname == "") {
+                tip({
+                    forward: 'uname',
+                    msg: '请输入用户名'
+                });
+                return false
+            }
+            if (param.pass == "") {
+                tip({
+                    forward: 'pass',
+                    msg: '请输入密码'
+                });
+                return false
+            }
+            <!--{if $iCMS.CONFIG.user.login.seccode }-->
+            //检查验证码
+            param.login_seccode = true;
+            if (param.login_seccode) {
+                if (param.seccode == "") {
+                    tip({
+                        forward: 'seccode',
+                        msg: '请输入验证码'
+                    });
+                    return false
+                }
+            }
+            <!--{/if}-->
+
+            <!--{if $user.openid}-->
+            //绑定账号
+            param.openid = "<!--{$user.openid}-->";
+            <!--{/if}-->
+            //登录接口
+            iCMS.run('passport', function($PASSPORT) {
+                //登录成功 事件绑定
+                $PASSPORT.SUCCESS = function(s) {
+                    window.top.location.href = "<!--{$forward}-->";
+                }
+                //登录失败 事件绑定
+                $PASSPORT.FAIL = function(f) {
+                    tip(f);
+                }
+                //提交参数
+                $PASSPORT.LOGIN(param);
+            });
+            //提示
+            function tip(ret) {
+                iCMS.UI.seccode(".seccode-img", login);
+                var tip = $('.tip-' + ret.forward);
+                tip.text(ret.msg).css('display', 'block');
+                $("#"+ret.forward).focus();
+            }
+        });
+    })
+    </script>
+  </head>
+  <body class="userApp passport">
+    <!--{include file="./user.header.htm" import="true"}-->
+    <div class="container">
+      <div id="login-box" class="wrapper">
+        <div class="logo">
+          <a href="<!--{$site.url}-->">
+            <img src="<!--{$site.urls.tpl}-->/static/img/iCMS.LOGO.png" />
+          </a>
+        </div>
+        <div class="form-group">
+          <label for="uname">用户名</label>
+          <input type="text" placeholder="邮箱 或 昵称" id="uname" name="uname" class="form-control" />
+          <span class="help-block tip-error tip-uname"></span>
+        </div>
+        <div class="form-group">
+          <label for="pass">密码</label>
+          <input type="password" placeholder="请输入您的密码" id="pass" name="pass" class="form-control" />
+          <span class="help-block tip-error tip-pass"></span>
+        </div>
+        <!--{if $iCMS.CONFIG.user.login.seccode }-->
+        <div class="form-group seccode-wrap">
+          <label for="seccode">验证码</label>
+          <input type="text" id="seccode" name="seccode" class="form-control" placeholder="验证码" />
+          <!--{iCMS:public:seccode}-->
+          <p class="help-block tip-error tip-seccode">请输入图片中的字符!</p>
+        </div>
+        <!--{/if}-->
+        <div class="checkbox">
+          <label for="remember">
+            <input type="checkbox" value="1" name="remember" id="remember" checked="checked">
+            <span>记住我（两周免登录）</span>
+          </label>
+        </div>
+        <div class="clearfix mt10">
+          <button type="submit" id="login-submit" class="btn btn-primary btn-lg btn-block">登 录</button>
+        </div>
+        <div class="clearfix mt10">
+          <a class="btn btn-success" href="<!--{iCMS:router url='user:register'}-->">
+            <i class="fa fa-user"></i> 我没有账号？去注册 »
+          </a>
+        </div>
+        <div class="clearfix mt10">
+          <a class="btn btn-info" href="<!--{iCMS:router url='user:findpwd'}-->">
+            <i class="fa fa-user"></i> 忘记密码？
+          </a>
+        </div>
+
+        <!--{if !$user}-->
+        <hr />
+        <div class="open-btn">
+          <h3 class="gray mb10">您也可以用以下方式登录：</h3>
+          <!--{if $iCMS.CONFIG.user.open.QQ.enable }-->
+          <a class="btn btn-primary btn-sm" href="<!--{iCMS:router url='user:login:qq'}-->"><i class="fa fa-qq"></i> QQ 登录</a>
+          <!--{/if}-->
+          <!--{if $iCMS.CONFIG.user.open.WB.enable }-->
+          <a class="btn btn-danger btn-sm" href="<!--{iCMS:router url='user:login:wb'}-->"><i class="fa fa-weibo"></i> 微博登录</a>
+          <!--{/if}-->
+          <!--{if $iCMS.CONFIG.user.open.WX.enable }-->
+          <a class="btn btn-success btn-sm" href="<!--{iCMS:router url='user:login:wx'}-->"><i class="fa fa-weixin"></i> 微信登录</a>
+          <!--{/if}-->
+        </div>
+        <!--{/if}-->
+        <div class="clearfix mt10"></div>
+      </div>
+    </div>
+    <div class="clearfix mt10"></div>
+    <!--{include file="iCMS://footer.htm"}-->
+  </body>
+</html>

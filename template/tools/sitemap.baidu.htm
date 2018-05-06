@@ -1,0 +1,61 @@
+<!--{'<'|cat:'?xml version="1.0" encoding="UTF-8"?'|cat:'>'}-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc><!--{$site.url}--></loc>
+        <lastmod><!--{$iCMS.NOW|date:"Y-m-d"}--></lastmod>
+        <changefreq>hourly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <!--{if $cid}-->
+        <!--{iCMS:category:list loop="true" stype='sub' row="1000" cid="$cid"}-->
+        <url>
+            <loc><!--{$category_list.url|escape}--></loc>
+            <changefreq>hourly</changefreq>
+            <priority>1.0</priority>
+        </url>
+    	<!--{/iCMS}-->
+        <!--{iCMS:article:list loop="true" row="5000" sub="all" cid="$cid"}-->
+        <url>
+            <loc><!--{$article_list.url|escape}--></loc>
+            <lastmod><!--{$article_list.pubdate|date:"Y-m-d"}--></lastmod>
+            <changefreq>always</changefreq>
+        </url>
+        <!--{/iCMS}-->
+        <!--{iCMS:tag:list loop="true" row="5000" sub="all" cid="$cid"}-->
+        <url>
+            <loc><!--{$tag_list.url|escape}--></loc>
+            <lastmod><!--{$iCMS.NOW|date:"Y-m-d"}--></lastmod>
+            <changefreq>always</changefreq>
+        </url>
+        <!--{/iCMS}-->
+    <!--{else}-->
+        <!--{iCMS:category:list loop="true" row="100" stype="top"}-->
+            <url>
+                <loc><!--{$category_list.url|escape}--></loc>
+                <changefreq>hourly</changefreq>
+                <priority>1.0</priority>
+            </url>
+            <!--{iCMS:category:list as="sub_category" loop="true" stype='sub' row="100" cid=$category_list.cid}-->
+            <url>
+                <loc><!--{$sub_category.url|escape}--></loc>
+                <changefreq>hourly</changefreq>
+                <priority>1.0</priority>
+            </url>
+            <!--{/iCMS}-->
+        <!--{/iCMS}-->
+        <!--{iCMS:article:list loop="true" row="5000" sub="all"}-->
+        <url>
+            <loc><!--{$article_list.url|escape}--></loc>
+            <lastmod><!--{$article_list.pubdate|date:"Y-m-d"}--></lastmod>
+            <changefreq>always</changefreq>
+        </url>
+        <!--{/iCMS}-->
+        <!--{iCMS:tag:list loop="true" row="5000"}-->
+        <url>
+            <loc><!--{$tag_list.url|escape}--></loc>
+            <lastmod><!--{$iCMS.NOW|date:"Y-m-d"}--></lastmod>
+            <changefreq>always</changefreq>
+        </url>
+        <!--{/iCMS}-->
+    <!--{/if}-->
+</urlset>

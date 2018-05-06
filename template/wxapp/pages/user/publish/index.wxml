@@ -1,0 +1,82 @@
+<import src="../../../iCMS/wxml/foot.wxml" />
+<view class="page" hidden="{{page_hidden}}">
+    <form bindsubmit="formSubmit" bindreset="formReset">
+        <view class="publish-panel">
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell weui-cell_select">
+                    <view class="weui-cell__hd" style="width: 180rpx">
+                        <picker mode="multiSelector" value="{{ms_index}}"
+                        bindchange="bindPickerChange"
+                        bindcolumnchange="bindPickerChange"
+                        range="{{category_list}}" range-key="name">
+                          <input class="weui-select" placeholder="选择栏目"  disabled="true" hidden="{{placeholder}}"/>
+                          <input value="{{category_list[1][0].name}}" class="weui-select" disabled="true" hidden="{{!placeholder}}"/>
+                        </picker>
+                        <input class="hide" name="cid" value="{{cid}}"/>
+                    </view>
+                    <view class="weui-cell__bd weui-cell__bd_in-select-before">
+                        <input id="title" name="title" class="weui-input" placeholder="请输入文章标题" />
+                    </view>
+                </view>
+            </view>
+            <view class="body-wrap">
+                <block wx:for="{{bodyData}}" wx:for-index="rootid" wx:key="a_idx">
+                    <block wx:if="{{item}}">
+                        <view class="body">
+                            <view class="item-text" wx:if="{{item.type=='text'}}">
+                                <text>{{item.content}} </text>
+                            </view>
+                            <view class="item-image" wx:if="{{item.type=='image'}}">
+                                <block wx:for="{{item.content}}" wx:for-item="image" wx:key="c_idx">
+                                    <image mode="aspectFit" src="{{image}}"
+                                    data-key="{{index}}"
+                                    data-rootid="{{rootid}}"
+                                    catch:longpress="catchDelImage">
+                                        <progress percent="{{progress[image]}}" stroke-width="3" />
+                                    </image>
+                                </block>
+                            </view>
+                            <view class="item-video" wx:if="{{item.type=='video'}}">
+                                <video id="myVideo" src="{{item.content}}" controls>
+                                    <progress percent="{{progress[item.content]}}" stroke-width="3" />
+                                </video>
+                            </view>
+                            <view class="close"
+                            data-index="{{rootid}}"
+                            data-type="{{item.type}}"
+                            data-len="{{item.content.length}}"
+                            bindtap="bindDelBody"
+                            >×</view>
+                        </view>
+                    </block>
+                </block>
+            </view>
+            <view class="clearfix h10"></view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd">
+                        <textarea focus="true" class="weui-textarea" placeholder="撰写文章" maxlength="{{maxlength}}"
+                        bindinput="bindBodyInput"
+                        bindblur="bindBodyBlur"
+                        value="{{textarea}}"
+                        />
+                        <view class="weui-textarea-counter">{{counter}}/{{maxlength}}</view>
+                    </view>
+                </view>
+            </view>
+            <view class="clearfix" style="margin-top: 100rpx;"></view>
+        </view>
+        <view class="tabbar">
+            <button class="item" bindtap="textTap">
+                <image class="icon" mode="aspectFit" src="/images/tabbar/text.png"></image>
+            </button>
+            <button class="item" bindtap="mediaTap">
+                <image class="icon" mode="aspectFit" src="/images/tabbar/image.png"></image>
+            </button>
+            <button class="item" formType="submit">
+                <image class="icon" mode="aspectFit" src="/images/tabbar/ok.png"></image>
+            </button>
+        </view>
+    </form>
+</view>
+<loading class="loading" hidden="{{page_loading}}">加载中...</loading>

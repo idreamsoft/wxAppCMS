@@ -1,0 +1,13 @@
+{
+    "code":1,
+    <!--{iCMS:user:cookie}-->
+    <!--{if $_GET.type}-->
+        <!--{iCMS:donate:list keys="id,title,receiver,donator,amount,pay_time" row="50" uid="$user_cookie.uid"}-->
+    <!--{else}-->
+        <!--{iCMS:donate:list keys="id,title,receiver,donator,amount,pay_time" row="50" userid="$user_cookie.uid"}-->
+    <!--{/if}-->
+    <!--{&$donate_list|map:'pay_time':'get_date':"Y-m-d H:i"}-->
+    "result":<!--{$donate_list|json_encode}-->
+}
+
+<!--{clean}-->
