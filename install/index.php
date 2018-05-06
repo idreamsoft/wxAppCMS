@@ -4,8 +4,8 @@
 * Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
 * @author icmsdev <master@icmsdev.com>
-* @site https://www.icmsdev.com
-* @licence https://www.icmsdev.com/LICENSE.html
+* @site https://www.wxappcms.com
+* @licence https://www.wxappcms.com/LICENSE.html
 */
 define('iPHP',TRUE);
 define('iPHP_APP','iCMS'); //应用名
@@ -26,7 +26,7 @@ $lock_file = iPATH.'cache/install.lock';
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>iCMS <?php echo iCMS_VERSION ;?> - 安装向导</title>
+		<title>wxAppCMS <?php echo iCMS_VERSION ;?> - 安装向导</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta content="iCMSdev.com" name="Copyright" />
@@ -148,8 +148,8 @@ $lock_file = iPATH.'cache/install.lock';
 	<body>
 		<div class="jumbotron masthead">
 			<div class="container">
-				<h1>iCMS <?php echo iCMS_VERSION ;?></h1>
-				<p>简洁、高效、开源的内容管理系统，让网站管理更简单。</p>
+				<h1>wxAppCMS <?php echo iCMS_VERSION ;?></h1>
+				<p>简洁、高效、开源的微信小程序管理系统，让小程序管理更简单。</p>
 				<p>
 					<?php if(file_exists($lock_file)){ ?>
 					<button type="button" class="btn btn-large" disabled>开始安装</button>
@@ -159,10 +159,10 @@ $lock_file = iPATH.'cache/install.lock';
 				</p>
 				<ul class="masthead-links">
 					<li>
-						<a href="http://github.com/idreamsoft/iCMS" target="_blank">源码</a>
+						<a href="http://github.com/idreamsoft/wxAppCMS" target="_blank">源码</a>
 					</li>
 					<li>
-						<a href="https://www.icmsdev.com" target="_blank">官网</a>
+						<a href="https://www.wxappcms.com" target="_blank">官网</a>
 					</li>
 				</ul>
 			</div>
@@ -176,49 +176,21 @@ $lock_file = iPATH.'cache/install.lock';
 			<?php if(file_exists($lock_file)){ ?>
 			<div class="alert">
 			  <button type="button" class="close" data-dismiss="alert">&times;</button>
-			  <strong>Warning!</strong> 您已经安装过iCMS了，如果想要重新安装，请先删除 <span class="label label-info">cache/install.lock</span>这个文件。
+			  <strong>Warning!</strong> 您已经安装过wxAppCMS了，如果想要重新安装，请先删除 <span class="label label-info">cache/install.lock</span>这个文件。
 			  <br />
 			  如果已经安装完成，请马上删除本安装程序<span class="label label-important">install</span>目录，以免存在安全隐患
 			</div>
 			<?php };?>
-			<div class="marketing step" id="step0">
-				<h1>iCMS <?php echo iCMS_VERSION ;?>介绍。</h1>
-				<p class="marketing-byline">需要为爱上iCMS找N多理由吗？ 就在眼前。</p>
-				<div class="row-fluid">
-					<div class="span4">
-						<img class="marketing-img" src="./img/Development.png">
-						<h2>十年磨一剑,免费且开源</h2>
-						<p>由艾梦软件历时多年开发，并在实际项目中高效运行。iCMS 项目使用了
-						<a href="https://www.icmsdev.com/iPHP/" target="_blank">iPHP</a>、
-						<a href="http://github.com/twbs/bootstrap" target="_blank">Bootstrap</a>、
-						<a href="http://jquery.com" target="_blank">jQuery</a>、
-						<a href="http://ueditor.baidu.com" target="_blank">UEditor</a>、
-						<a href="https://github.com/aui/artDialog" target="_blank">artDialog</a>等开源软件，
-						并托管在 <a href="http://github.com/idreamsoft/iCMS" target="_blank">GitHub</a>、<a target="_blank" href="http://git.oschina.net/php/icms">GIT@OSC</a> 上，方便大家使用这一套程序构建更好的web应用。
-						</p>
-					</div>
-					<div class="span4">
-						<img class="marketing-img" src="./img/responsive-design.png">
-						<h2>一套程序,适配多种设备</h2>
-						<p>你的网站能在 <a href="https://www.icmsdev.com" target="_blank">iCMS</a> 的帮助下通过一套内容管理系统快速、有效适配手机、微信、微信小程序、平板、PC等设备，这一切都是归于 iCMS 多终端适配功能。</p>
-					</div>
-					<div class="span4">
-						<img class="marketing-img" src="./img/Enterprise-Features.jpg">
-						<h2>完整的功能支持</h2>
-						<p><a href="https://www.icmsdev.com" target="_blank">iCMS</a> 提供了网站运营所需的基本功能。也提供了功能强大标签(TAG)系统、自定义应用、自定义表单、内容多属性多栏目归属、自定义内链、高负载、整合第三方登陆</p>
-					</div>
-				</div>
-			</div>
 			<?php if(!file_exists($lock_file)){ ?>
 			<div class="license well hide step" id="step1">
-				<h1>iCMS使用许可协议</h1>
+				<h1>wxAppCMS使用许可协议</h1>
 				<p></p>
-				<p>感谢您选择iCMS <?php echo iCMS_VERSION ;?>。希望我们的努力能为您提供一个高效快速和强大的内容管理解决方案。</p>
-				<p>本软件为开源软件，遵循 <a href="http://www.gnu.org/licenses/lgpl-2.1.html">LGPL</a> (GNU Lesser General Public License)开源协议</p>
-				<p>本软件版权归 iCMS 官方所有，且受《中华人民共和国计算机软件保护条例》等知识产权法律及国际条约与惯例的保护。</p>
+				<p>感谢您选择wxAppCMS <?php echo iCMS_VERSION ;?>。希望我们的努力能为您提供一个高效快速和强大的内容管理解决方案。</p>
+				<p>本软件为开源软件，遵循 <a href="http://www.gnu.org/licenses/lgpl-3.0.html">LGPL3.0</a> (GNU Lesser General Public License)开源协议</p>
+				<p>本软件版权归 wxAppCMS 官方所有，且受《中华人民共和国计算机软件保护条例》等知识产权法律及国际条约与惯例的保护。</p>
 				<p>无论个人或组织、盈利与否、用途如何，均需仔细阅读本协议，在理解、同意、并遵守本协议的全部条款后，方可开始使用本软件。 </p>
 				<h2>开源协议</h2>
-				<p>iCMS 采用 <a href="http://www.gnu.org/licenses/lgpl-2.1.html">LGPL</a> 开源协议：</p>
+				<p>wxAppCMS 采用 <a href="http://www.gnu.org/licenses/lgpl-3.0.html">LGPL3.0</a> 开源协议：</p>
 				<ul>
 					<li>基于 GPL 的软件允许商业化销售，但不允许封闭源代码。</li>
 					<li>如果您对遵循 GPL 的软件进行任何改动和/或再次开发并予以发布，则您的产品必须继承 GPL 协议，不允许封闭源代码。</li>
@@ -229,14 +201,11 @@ $lock_file = iPATH.'cache/install.lock';
 				<ol>
 					<li>本软件及所附带的文件是作为不提供任何明确的或隐含的赔偿或担保的形式提供的。</li>
 					<li>您拥有使用本软件构建的网站全部内容所有权，并独立承担与这些内容的相关法律义务。 </li>
-					<li>用户出于自愿而使用本软件，您必须了解使用本软件的风险，iCMS 不承担任何因使用本软件而产生问题的相关责任。</li>
-					<li>iCMS 不对使用本软件构建的网站中的文章或信息承担责任。</li>
+					<li>用户出于自愿而使用本软件，您必须了解使用本软件的风险，wxAppCMS 不承担任何因使用本软件而产生问题的相关责任。</li>
+					<li>wxAppCMS 不对使用本软件构建的网站中的文章或信息承担责任。</li>
 				</ol>
-				<h2>商业授权</h2>
-				<p>详情请查看 <a href="https://www.icmsdev.com/docs/service.html" target="_blank">iCMS 商业授权细则</a></p>
-				<hr />
-				<p>电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。</p>
-				<div class="alert alert-error">您一旦开始安装 iCMS，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。</div>
+				<h3>电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。</h3>
+				<div class="alert alert-error">您一旦开始安装 wxAppCMS，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。</div>
 				<div class="form-actions">
 					<button type="button" class="btn btn-large btn-primary" data-toggle="step1">我同意并遵循以上协议，继续安装</button>
 					<a type="button" class="btn btn-link" onclick="javascript:window.open(location, '_self').close();">不接受</a>
@@ -244,7 +213,7 @@ $lock_file = iPATH.'cache/install.lock';
 			</div>
 			<div class="well hide step" id="step2">
 				<h1>第一步：安装须知</h1>
-				<p>欢迎使用 iCMS <?php echo iCMS_VERSION ;?>，本向导将帮助您将程序完整地安装在您的服务器内。</p>
+				<p>欢迎使用 wxAppCMS <?php echo iCMS_VERSION ;?>，本向导将帮助您将程序完整地安装在您的服务器内。</p>
 				<h2>请您先确认以下安装配置: </h2>
 				<ul>
 					<li>MySQL 主机名称/IP 地址 </li>
@@ -441,7 +410,7 @@ $lock_file = iPATH.'cache/install.lock';
 					<div class="control-group">
 						<label class="control-label" for="DB_PREFIX">数据表名前缀</label>
 						<div class="controls">
-							<input type="text" class="span4" id="DB_PREFIX" name="DB_PREFIX" value="icms_">
+							<input type="text" class="span4" id="DB_PREFIX" name="DB_PREFIX" value="wxappcms_">
 							<span class="help-block">数据表名前缀，同一数据库安装多个请修改此处。<span class="label label-important">如果存在同名数据表，程序将自动删除</span></span>
 						</div>
 					</div>
@@ -495,19 +464,19 @@ $lock_file = iPATH.'cache/install.lock';
 		<iframe class="hide" id="iCMS_FRAME" name="iCMS_FRAME"></iframe>
 		<footer class="footer">
 			<div class="container">
-				<p>iCMS(<a href="https://www.icmsdev.com" target="_blank">iCMSdev.com</a>) 版权所有  &copy; 2007-2017</p>
-				<p>iCMS 源码受 <a href="https://www.icmsdev.com/LICENSE.html" target="_blank">LGPL</a> 开源协议保护</p>
+				<p>wxAppCMS(<a href="https://www.wxappcms.com" target="_blank">wxAppCMS.com</a>) 版权所有  &copy; 2018</p>
+				<p>wxAppCMS 源码受 <a href="https://www.wxappcms.com/LICENSE.html" target="_blank">LGPL3.0</a> 开源协议保护</p>
 				<ul class="footer-links">
-					<li><a href="https://www.icmsdev.com" target="_blank">iCMS</a></li>
+					<li><a href="https://www.wxappcms.com" target="_blank">wxAppCMS</a></li>
 					<li class="muted">·</li>
-					<li><a href="https://www.icmsdev.com/feedback/" target="_blank">反馈问题</a></li>
+					<li><a href="https://www.wxappcms.com/feedback/" target="_blank">反馈问题</a></li>
 					<li class="muted">·</li>
-					<li><a href="https://www.icmsdev.com/releases.html" target="_blank">历史版本</a></li>
+					<li><a href="https://www.wxappcms.com/releases.html" target="_blank">历史版本</a></li>
 				</ul>
 			</div>
 		</footer>
 		<div class="hide">
-			<script type="text/javascript" src="https://www.icmsdev.com/cms/install.php"></script>
+			<script type="text/javascript" src="https://www.wxappcms.com/cms/install.php"></script>
 			<script type="text/javascript">
 			var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 			document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F7b43330a4da4a6f4353e553988ee8a62' type='text/javascript'%3E%3C/script%3E"));
