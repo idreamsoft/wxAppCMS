@@ -114,7 +114,9 @@ function login() {
                     }
                 }
             })
-            reject(err);
+            if (typeof(reject) === "function") {
+                reject(err);
+            }
         })
     });
 }

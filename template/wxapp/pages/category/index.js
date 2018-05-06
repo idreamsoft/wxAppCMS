@@ -29,7 +29,7 @@ $wxAppCMS.getData = function() {
 
 };
 $wxAppCMS.getList = function($cid) {
-    if (this.data.pageLast) return;
+    if (this.data.page_last) return;
 
     $cid = $cid || this.data.cid;
 
@@ -38,7 +38,7 @@ $wxAppCMS.getList = function($cid) {
         'category', {
             tpl: 'category.list',
             cid: $cid,
-            page: this.data.pageNum
+            page: this.data.page_no
         }
     );
     this.setData({

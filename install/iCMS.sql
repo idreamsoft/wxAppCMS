@@ -48,7 +48,7 @@ CREATE TABLE `icms_apps` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '应用状态',
   PRIMARY KEY (`id`),
   KEY `idx_name` (`app`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `icms_apps_store` */
 

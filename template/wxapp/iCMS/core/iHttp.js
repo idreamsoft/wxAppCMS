@@ -4,14 +4,7 @@ function get_header($header) {
     return $header;
 }
 
-function fail_reject(err, reject, method) {
-    if (typeof(reject) === "function") {
-        reject(err);
-    }
-    console.log(method + " failed")
-}
-
-function showModal(title,content,callback) {
+function show_modal(title,content,callback) {
     wx.showModal({
         title: title,
         showCancel: false,
@@ -23,27 +16,33 @@ function showModal(title,content,callback) {
         }
     })
 }
-function success_resolve(res, resolve, method) {
+
+function fail_reject(err, reject, method) {
+    console.log(err, method + " failed");
+    if (typeof(reject) === "function") {
+        reject(err);
+    }
+}
+
+function success_resolve(res,resolve,reject,method) {
     if (res.statusCode == 200) {
         if (res.data.code == "0") {
             console.log('data.code = 0');
-            console.log(res.data);
-            showModal('系统出错',res.data.msg+'请截图发给客服,谢谢');
+            if(res.data.showMsg){
+                show_modal('系统出错',res.data.msg+'请截图发给客服,谢谢');
+            }
+            fail_reject(res.data, reject, method);
         } else if (res.data.code == "-99") {
             wx.clearStorage();
             wx.reLaunch({
               url: '/pages/index/index?error='+res.data.error
             })
-            console.log(res.data);
+            fail_reject(res.data, reject, method);
         } else {
             resolve(res.data);
         }
     } else {
-        console.log(method + ' success data error');
-        console.log(res.data);
-        // if (typeof(reject) === "function") {
-        //     reject(res.data);
-        // }
+        fail_reject(res.data, reject, method);
     }
 }
 
@@ -56,7 +55,7 @@ function GET($url, $data = {}) {
             method: method,
             header: get_header({ 'content-type': 'application/json' }),
             success: function(res) {
-                success_resolve(res, resolve, method);
+                success_resolve(res,resolve,reject,method);
             },
             fail: function(err) {
                 fail_reject(err, reject, method);
@@ -74,7 +73,7 @@ function POST($url, $data = {}) {
             method: method,
             header: get_header({ 'content-type': 'application/x-www-form-urlencoded' }),
             success: function(res) {
-                success_resolve(res, resolve, method);
+                success_resolve(res,resolve,reject,method);
             },
             fail: function(err) {
                 fail_reject(err, reject, method);
@@ -107,7 +106,7 @@ function UPLOAD($filePath, $url, $data = {}) {
             formData: $data || {},
             header: get_header({ 'content-type': 'multipart/form-data' }),
             success: function(res) {
-                success_resolve(res, resolve, method);
+                success_resolve(res,resolve,reject,method);
             },
             fail: function(err) {
                 fail_reject(err, reject, method);
@@ -127,8 +126,9 @@ function DOWNLOAD($url, $data = {}) {
         let method = 'DOWNLOAD';
         const task = wx.downloadFile({
             url: $url,
+            header: get_header({}),
             success: function(res) {
-                success_resolve(res, resolve, method);
+                success_resolve(res,resolve,reject,method);
             },
             fail: function(err) {
                 fail_reject(err, reject, method);
@@ -150,5 +150,6 @@ module.exports = {
     DOWNLOAD,
     downloadTask,
     success_resolve,
-    fail_reject
+    fail_reject,
+    get_header
 }

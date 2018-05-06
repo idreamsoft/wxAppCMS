@@ -9,12 +9,12 @@ $wxAppCMS.addData({
 });
 
 $wxAppCMS.getList = function() {
-    if (this.data.pageLast) return;
+    if (this.data.page_last) return;
     this.data_loading('show');
 
     let that = this;
     let $url = this.iURL.make(
-        'search', { q: this.data.q, page: this.data.pageNum }
+        'search', { q: this.data.q, page: this.data.page_no }
     );
     this.GET($url).then(res => {
         that.data_loading('hide');
@@ -28,7 +28,7 @@ $wxAppCMS.getList = function() {
             search: res.search,
             article_list: that.data.article_list.concat(res.article_list),
             banner: res.banner,
-            pageLast: res.PAGE ? res.PAGE.LAST : false
+            page_last: res.PAGE ? res.PAGE.LAST : false
         });
     });
 

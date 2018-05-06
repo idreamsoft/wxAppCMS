@@ -40,9 +40,9 @@ App({
         // console.log(this.FLAGS['path']);
         // console.log("\n\n\n\n\n");
     },
-    onError: function(msg) {
-        console.log('onError:', msg)
-    },
+    // onError: function(msg) {
+    //     console.log('onError:', msg)
+    // },
     getURI: function(path,query) {
         if(query){
             let iUrl = require('./iCMS/core/iUrl.js');

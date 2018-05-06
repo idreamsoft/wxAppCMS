@@ -8,10 +8,11 @@ var iUI = require('iUI.js');
 
 var iCMS = utils.extend(true, iUI, {
     data: {
+        APP: {},
         scrollHeight: 0,
-        pageNum: 1,
-        pageLast: false,
         userInfo: null,
+        page_no: 1,
+        page_last: false,
         page_hidden: true,
         data_loading: true,
         page_loading: false
@@ -56,6 +57,8 @@ var iCMS = utils.extend(true, iUI, {
                     that.$globalData.session = res.session;
                     resolve(res);
                     that.getAppInfo(true);
+                }).catch(err => {
+
                 });
             });
         });
@@ -87,20 +90,30 @@ var iCMS = utils.extend(true, iUI, {
                 'signType': 'MD5',
                 'paySign': json.paySign,
                 'success': function(res) {
-                    resolve(res);
+                    if(res.errMsg=='requestPayment:ok'){
+                        if (typeof(resolve) === "function") {
+                            resolve(res);
+                        }
+                    }
                 },
                 'fail': function(res) {
-                    console.log(err, 'requestPayment fail');
+                    if(res.errMsg=='requestPayment:fail cancel'){
+                        wx.showToast({
+                          title: '取消支付',
+                          icon: 'none',
+                          duration: 1500
+                        });
+                    }
+                    if(res.errMsg=='requestPayment:fail'){
+
+                    }
                     if (typeof(reject) === "function") {
                         reject(res);
                     }
+                    // console.log(res);
+                    // iHttp.fail_reject(res, reject, 'requestPayment');
                 }
             });
-        }).catch(err => {
-            console.log(err, 'requestPayment failed');
-            if (typeof(reject) === "function") {
-                reject(err);
-            }
         });
     },
     success: function(title, duration) {
@@ -150,7 +163,7 @@ var iCMS = utils.extend(true, iUI, {
     getList: function() {},
     refresh: function() {},
     loadMore: function() {
-        ++this.data.pageNum;
+        ++this.data.page_no;
         this.getList();
     },
     onPullDownRefresh: function() {
