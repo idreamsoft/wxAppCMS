@@ -272,7 +272,7 @@ class iHttp{
         }
         return $responses;
     }
-    public static function send($url, $POSTFIELDS=null) {
+    public static function send($url, $POSTFIELDS=null,$ret=false) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
@@ -290,8 +290,11 @@ class iHttp{
         // self::$debug && var_dump($response);
         curl_close ($ch);
 
+        if($ret){
+            return $response;
+        }
         if(empty($response)){
-            return '-100000';
+            return '0000000';
         }
         return json_decode($response);
     }

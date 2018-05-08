@@ -48,12 +48,23 @@ class iView {
             "resource" => array(__CLASS__,"callback_resource"),
             "func"     => array(__CLASS__,"callback_func"),
             "plugin"   => array(__CLASS__,"callback_plugin"),
+            "block"    => array(__CLASS__,"callback_block"),
+            "register" => array(__CLASS__,"callback_register"),
             // "output"   => array(__CLASS__,"callback_output"),
         );
         return $tpl;
     }
     public static function set_template_dir($dir) {
         self::$handle->template_dir = $dir;
+    }
+    public static function callback_register($func,$type) {
+        list($app,$method) = explode(':', $func);
+        if(self::check_func($app)){
+            $callable = array($app.'Func',$type.($method?'_'.$method:''));
+            if(is_callable($callable)){
+                return implode('::', $callable);
+            }
+        }
     }
     public static function check_func($app) {
         $path = iPHP_APP_DIR . '/' . $app . '/' . $app . '.func.php';
@@ -188,23 +199,22 @@ class iView {
         }
         return false;
     }
-    public static function block_cache($vars, $content, $tpl) {
+    public static function block_cache($vars, &$content, $tpl) {
         $vars['id'] OR iUI::warning('cache 标签出错! 缺少"id"属性或"id"值为空.');
         $cache_time = isset($vars['time']) ? (int) $vars['time'] : -1;
         $cache_name = self::$config['template']['device'] . '/block_cache/' . $vars['id'];
-        $cache = iCache::get($cache_name);
-        if (empty($cache)) {
-            if ($content === null) {
-                return false;
-            }
-            $cache = $content;
+        $_content   = iCache::get($cache_name);
+
+        if ($_content===false) {
             iCache::set($cache_name, $content, $cache_time);
+        }else{
+            $content = $_content;
         }
         if ($vars['assign']) {
-            $tpl->assign($vars['assign'], $cache);
-            return true;
+            $tpl->assign($vars['assign'], $content);
+            return false;
         }
-        return $cache;
+        return true;
     }
     /**
      * 模板路径

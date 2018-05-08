@@ -119,9 +119,9 @@ class user {
 			WHERE `uid`='{$uid}' {$sql}
 		");
 	}
-	public static function openid($openid=0,$platform=0){
-		$uid = iDB::value("SELECT `uid` FROM `#iCMS@__user_openid` where `openid`='{$openid}' AND `platform`='{$platform}'");
-		return $uid;
+
+	public static function openid($openid=0,$platform=0,$appid=''){
+		return user_openid::uid($openid,$platform,$appid);
 	}
 	public static function get_cache($uid){
 		return iCache::get(iPHP_APP.':user:'.$uid);

@@ -648,8 +648,8 @@ CREATE TABLE `icms_user` (
   `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '用户类型',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '账号状态',
   PRIMARY KEY (`uid`),
-  KEY `username` (`username`),
-  KEY `nickname` (`nickname`)
+  KEY `nickname` (`nickname`),
+  KEY `username` (`username`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `icms_user_category` */
@@ -700,10 +700,13 @@ CREATE TABLE `icms_user_follow` (
 /*Table structure for table `icms_user_openid` */
 
 CREATE TABLE `icms_user_openid` (
-  `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `openid` varchar(255) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL,
+  `openid` varchar(255) NOT NULL DEFAULT '',
   `platform` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1:wx,2:qq,3:wb,4:tb',
-  PRIMARY KEY (`uid`)
+  `appid` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `idx_upa` (`uid`,`platform`,`appid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Table structure for table `icms_user_report` */

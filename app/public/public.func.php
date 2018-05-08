@@ -9,11 +9,15 @@
 */
 class publicFunc{
 	public static function public_ui($vars=null){
-		iView::assign("public",$vars);
+		iView::assign("public_ui",$vars);
 		iView::display("iCMS://public.ui.htm");
 	}
 	public static function public_seccode($vars=null){
 		echo publicApp::seccode();
+	}
+	public static function public_dialog($vars=null){
+		iView::assign("public_dialog",$vars);
+		iView::display("iCMS://public.dialog.htm");
 	}
 	public static function public_crontab($vars=null){
 		$url = iURL::make('app=public&do=crontab','router::api');

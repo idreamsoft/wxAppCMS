@@ -8,10 +8,7 @@
  * Credit:   Taken from the original Smarty
  *           http://smarty.php.net
  */
-function tpl_block_strip($params, $content, &$tpl)
-{
-    if($content===null) return false;
-
+function tpl_block_strip($params, &$content, &$tpl){
 	$_strip_search = array(
 		"![\t ]+$|^[\t ]+!m",		// remove leading/trailing space chars
 		'%[\r\n]+%m',			// remove CRs and newlines
@@ -20,5 +17,6 @@ function tpl_block_strip($params, $content, &$tpl)
 		'',
 		'',
 	);
-	return preg_replace($_strip_search, $_strip_replace, $content);
+	$content = preg_replace($_strip_search, $_strip_replace, $content);
+	return true;
 }

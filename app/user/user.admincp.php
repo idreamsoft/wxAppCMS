@@ -189,8 +189,17 @@ class userAdmincp{
     public function do_del($uid = null,$dialog=true){
     	$uid===null && $uid=$this->uid;
 		$uid OR iUI::alert('请选择要删除的用户');
-		iDB::query("DELETE FROM `#iCMS@__user` WHERE `uid` = '$uid'");
-        iMap::del_data($uid,iCMS_APP_USER,'prop');
+        iDB::query("DELETE FROM `#iCMS@__user` WHERE `uid` = '$uid'");
+        iDB::query("DELETE FROM `#iCMS@__user_category` WHERE `uid` = '$uid'");
+        iDB::query("DELETE FROM `#iCMS@__user_data` WHERE `uid` = '$uid'");
+        iDB::query("DELETE FROM `#iCMS@__user_follow` WHERE `uid` = '$uid'");
+        iDB::query("DELETE FROM `#iCMS@__user_openid` WHERE `uid` = '$uid'");
+        iDB::query("DELETE FROM `#iCMS@__report` WHERE `uid` = '$uid'");
+        iDB::query("DELETE FROM `#iCMS@__user` WHERE `uid` = '$uid'");
+        if(iDB::check_table('user_cdata')){
+            iDB::query("DELETE FROM `#iCMS@__user_cdata` WHERE `user_id` = '$uid'");
+        }
+        // iMap::del_data($uid,iCMS_APP_USER,'prop');
 		$dialog && iUI::success('用户删除完成','js:parent.$("#id'.$uid.'").remove();');
     }
     public static function _count(){

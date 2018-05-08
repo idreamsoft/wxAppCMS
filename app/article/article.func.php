@@ -125,8 +125,7 @@ class articleFunc{
 			//derived
 			// $where_sql = ",({$map_sql}) map {$where_sql} AND `id` = map.`iid`";
 		}
-		$offset = 0;
-		$limit = "LIMIT {$maxperpage}";
+		$offset = (int)$vars['offset'];
 		if ($vars['page']) {
 			$total_type = $vars['total_cache'] ? 'G' : null;
 			$total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__article` {$where_sql}", $total_type,iCMS::$config['cache']['page_total']);
@@ -134,9 +133,9 @@ class articleFunc{
 			$pnstyle    = isset($vars['pnstyle']) ? $vars['pnstyle'] : 0;
 			$multi      = iUI::page(array('total_type' => $total_type, 'total' => $total, 'perpage' => $maxperpage, 'unit' => iUI::lang('iCMS:page:list'), 'nowindex' => $GLOBALS['page']));
 			$offset     = $multi->offset;
-			$limit      = "LIMIT {$offset},{$maxperpage}";
 			iView::assign("article_list_total", $total);
 		}
+		$limit = "LIMIT {$offset},{$maxperpage}";
 		//随机特别处理
 		if ($vars['orderby'] == 'rand') {
 			$ids_array = iSQL::get_rand_ids('#iCMS@__article', $where_sql, $maxperpage, 'id');

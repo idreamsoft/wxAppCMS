@@ -89,10 +89,4 @@ class wxappApp extends appsApp {
         $userApp->config['post']['seccode'] = false;
         $userApp->ACTION_manage();
     }
-    //生成分享图片
-    public static function API_qrcode(){
-        $auth = $_GET['auth'];
-        list($id,$userid) = explode('#', auth_decode($auth));
-
-    }
 }

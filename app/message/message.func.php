@@ -35,7 +35,7 @@ class messageFunc{
             $s_fields  = 'id,COUNT(id) AS msg_count,`userid`, `friend`, `send_uid`, `send_name`, `receiv_uid`, `receiv_name`, `content`, `type`, `sendtime`, `readtime`';
         }
 
-        $offset = 0;
+        $offset = (int)$vars['offset'];
         $total  = iCMS::page_total_cache("SELECT {$p_fields} FROM `#iCMS@__message` {$where_sql} {$group_sql}",'nocache');
         iView::assign("message_list_total",$total);
         $multi  = iUI::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));

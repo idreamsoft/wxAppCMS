@@ -98,15 +98,14 @@ class tagFunc{
             $where_sql = ",({$map_sql}) map {$where_sql} AND `id` = map.`iid`";
         }
 
-    	$offset	= 0;
-    	$limit  = "LIMIT {$maxperpage}";
+    	$offset = (int)$vars['offset'];
     	if($vars['page']){
     		$total	= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__tag` {$where_sql}",null,iCMS::$config['cache']['page_total']);
     		$multi  = iUI::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
     		$offset = $multi->offset;
-    		$limit  = "LIMIT {$offset},{$maxperpage}";
             iView::assign("tag_list_total",$total);
     	}
+        $limit = "LIMIT {$offset},{$maxperpage}";
 
         if($vars['orderby']=='rand'){
             $ids_array = iSQL::get_rand_ids('#iCMS@__tag',$where_sql,$maxperpage,'id');

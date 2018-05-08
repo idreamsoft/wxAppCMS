@@ -195,6 +195,7 @@ class wxapp{
 
     public static function get_wxa_qrcode($param,$show=true,$remake=false){
         $json     = json_encode($param);
+
         $name     = md5($json);
         $path     = self::get_dir($name,'wxa_qrcode').'/'.$name.'.png';
         $qrurl    = iFS::fp($path, '+http');
@@ -206,7 +207,18 @@ class wxapp{
         ));
         weixin::$API_URL = 'https://api.weixin.qq.com';
         $url = weixin::url('wxa/getwxacode');
-        $response = iHttp::send($url,$json,true);
+        $response = iHttp::send($url,$json,'raw');
+        return $response;
+    }
+    public static function send_template_message($param){
+        $json = json_encode($param);
+
+        weixin::init(array(
+            'appid'     =>self::$appId,
+            'appsecret' =>self::$appSecret
+        ));
+        $url = weixin::url('message/wxopen/template/send');
+        $response = iHttp::send($url,$json);
         return $response;
     }
     public static function error_handler($html,$type=null){

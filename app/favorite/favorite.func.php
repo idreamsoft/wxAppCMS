@@ -31,7 +31,7 @@ class favoriteFunc{
 		}
 
 		$md5	= md5($where_sql.$order_sql);
-		$offset	= 0;
+		$offset = (int)$vars['offset'];
 		if($vars['page']){
 			$total	= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__favorite` {$where_sql}",null,iCMS::$config['cache']['page_total']);
 			iView::assign("fav_total",$total);
@@ -75,7 +75,7 @@ class favoriteFunc{
 		}
 
 		$md5	= md5($where_sql.$order_sql);
-		$offset	= 0;
+		$offset = (int)$vars['offset'];
 		if($vars['page']){
 			$total	= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__favorite_data` {$where_sql}",null,iCMS::$config['cache']['page_total']);
 			iView::assign("fav_data_total",$total);

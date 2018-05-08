@@ -350,7 +350,7 @@ class userApp {
 			$this->__user();
 			iView::assign('pg', $pg);
 			if ($pg == 'bind') {
-				$platform = user::openid(user::$userid);
+				$platform = user_openid::uid(user::$userid);
 				iView::assign('platform', $platform);
 			}
 			if ($pg == 'base') {
@@ -650,13 +650,7 @@ class userApp {
 
 		$user = user::login($uname, $pass);
 		if ($user === true) {
-			if ($openid) {
-				iDB::insert('user_openid',array(
-					'uid'      => user::$userid,
-					'openid'   => $openid,
-					'platform' => $platform,
-				));
-			}
+			$openid && user_openid::save(user::$userid,$openid,$platform,$appid);
 			iUI::code(1, 0, $this->forward, 'json');
 		} else {
 			if ($this->config['login']['interval']) {
@@ -756,14 +750,8 @@ class userApp {
 				'status' => $status,
 			)
 		);
+		$openid && user_openid::save($uid,$openid,$type,$appid);
 
-		if ($openid) {
-			iDB::insert('user_openid',array(
-				'uid'      => $uid,
-				'openid'   => $openid,
-				'platform' => $type,
-			));
-		}
 		if ($avatar) {
 			$avatarData = iHttp::remote($avatar);
 			if ($avatarData) {
@@ -1077,7 +1065,7 @@ class userApp {
 				$open->callback();
 			}
 
-			$userid = user::openid($open->openid, $platform);
+			$userid = user_openid::uid($open->openid, $platform);
 			if ($userid) {
 				$user = user::get($userid, false);
 				user::set_cookie($user->username, $user->password, array(

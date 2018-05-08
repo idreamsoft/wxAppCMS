@@ -36,16 +36,17 @@ function compile_custom_block($function, $modifiers, $arguments, &$_result, &$ob
 			}else{
 				$_result = "<?php \$block_args = array(".implode(',', (array)$_args).");";
 			}
-			$_result .= '$block_content = '.$function . '($block_args, null, $this); ';
-			$_result .= 'if(!$block_content){';
+			// $_result .= '$block_content = '.$function . '($block_args, null, $this); ';
+			// $_result .= 'if(!$block_content){';
 			$_result .= 'ob_start(); ?>';
 		}else{
 			$_result .= '<?php $block_content = ob_get_contents(); ob_end_clean(); ';
-			$_result .= '$block_content = '.$function . '($block_args, $block_content, $this);';
+			$_result .= '$block_flag = '.$function . '($block_args, $block_content, $this);';
 			$modifiers && $_result .= '$block_content = ' . $object->_parse_modifier('$block_content', $modifiers) . '; ';
-			$_result .= '}?>';
-			$_result .= '<?php if($block_content!==true){ echo $block_content;} ?>';
-			$_result .= '<?php unset($block_args,$block_content);?>';
+			$_result .= '?>';
+			// $_result .= '}? >';
+			$_result .= '<?php if($block_flag===true){ echo $block_content;} ?>';
+			$_result .= '<?php unset($block_args,$block_content,$block_flag);?>';
 		}
 		return true;
 	}else{

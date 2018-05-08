@@ -99,8 +99,7 @@ class commentFunc{
 			default: $order_sql = " ORDER BY `id` $by";
 		}
 		$md5	= md5($where_sql.$order_sql);
-		$offset	= 0;
-		$limit  = "LIMIT {$maxperpage}";
+		$offset = (int)$vars['offset'];
 		if($vars['page']){
 			isset($vars['total_cache']) && $_GET['total_cahce'] = true;
 			$total  = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__comment` WHERE {$where_sql}",null,iCMS::$config['cache']['page_total']);
@@ -121,13 +120,13 @@ class commentFunc{
 
 			$multi  = iUI::page($pgconf);
 			$offset = $multi->offset;
-			$limit  = "LIMIT {$offset},{$maxperpage}";
 			// if($offset>1000){
 				//$where_sql.=" AND `id` >= (SELECT `id` FROM `#iCMS@__comment` WHERE {$where_sql} {$order_sql} LIMIT {$offset},1)";
 				//$limit  = "LIMIT {$maxperpage}";
 			// }
 			iView::assign("comment_list_total",$total);
 		}
+		$limit = "LIMIT {$offset},{$maxperpage}";
 		if($vars['cache']){
 			$cache_name = iPHP_DEVICE.'/comment/'.$md5."/".(int)$offset;
 			$resource   = iCache::get($cache_name);

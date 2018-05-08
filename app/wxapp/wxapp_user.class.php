@@ -14,12 +14,20 @@ class wxapp_user {
     }
     public static function data($response){
         if($response){
-            $openid = $response->openid;
-            $userid = user::openid($openid, self::PLATFORM);
+            $openid      = $response->openid;
+            $session_key = $response->session_key;
+
+            // $crypt   = new wxapp_crypt(wxapp::$appId, $session_key);
+            // $errCode = $crypt->decrypt($_POST['encryptedData'], $_POST['iv'],$data);
+
+            if(empty($openid)){
+                return false;
+            }
+            $userid = user_openid::uid($openid,self::PLATFORM,wxapp::$appId);
             $res = array(
                 // 'session_key' =>$response->session_key,
-                'openid'      =>$openid,
-                'userid'      =>$userid,
+                'openid' =>$openid,
+                'userid' =>$userid,
             );
             if ($userid) {
                 $user = user::get($userid,false);
@@ -32,14 +40,18 @@ class wxapp_user {
             } else {
                 $rawData = json_decode(stripslashes($_POST['rawData']),true);
 
+                if(empty($rawData)){
+                    return false;
+                }
+                $rawData['nickName'] = trim($rawData['nickName']);
                 empty($rawData['nickName']) && $rawData['nickName'] = substr($openid, 0,8);
 
                 $nickname = $rawData['nickName'];
-                $username = $rawData['nickName'].'@'.wxapp::$appId;
+                $username = $rawData['nickName'].'@'.$openid;
                 $province = $rawData['province'];
                 $city     = $rawData['city'];
                 $gender   = $rawData['gender'];
-                $password = md5($openid);
+                $password = md5($openid.uniqid());
                 $regip    = iPHP::get_ip();
                 $regdate  = time();
                 $gid      = 0;
@@ -53,11 +65,7 @@ class wxapp_user {
                 $data = compact($fields);
                 $userid = iDB::insert('user', $data);
 
-                iDB::insert('user_openid',array(
-                    'uid'      => $userid,
-                    'openid'   => $openid,
-                    'platform' => self::PLATFORM,
-                ));
+                user_openid::save($userid,$openid,self::PLATFORM,wxapp::$appId);
 
                 $res['userid']   = $userid;
                 $res['username'] = $username;

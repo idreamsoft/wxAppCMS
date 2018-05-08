@@ -17,6 +17,15 @@ class iFS {
 	public static $CALLABLE = null;
 	public static $ERROR = null;
 	public static $ERROR_TYPE = false;
+	public static $EXTS = array(
+		"png", "jpg", "jpeg", "gif", "bmp", "webp", "psd", "tif",
+		"flv", "swf", "mkv", "avi", "rm", "rmvb", "mpeg", "mpg", "mp4",
+		"ogg", "ogv", "mov", "wmv", "webm", "mp3","aac","m4a", "wav", "mid", "amr",
+		"rar", "zip", "tar", "gz", "7z", "bz2", "cab", "iso",
+		"doc", "docx", "xls", "xlsx", "ppt", "pptx", "pdf", "txt", "md", "xml",
+		"apk", "ipa",
+		"html", "htm", "shtml",
+	);
 
 	public static function init($config) {
 		self::$config = $config;
@@ -543,18 +552,9 @@ class iFS {
 	    return false;
 	}
 	public static function allow_files($exts) {
-		$files = array(
-			"png", "jpg", "jpeg", "gif", "bmp", "webp", "psd", "tif",
-			"flv", "swf", "mkv", "avi", "rm", "rmvb", "mpeg", "mpg", "mp4",
-			"ogg", "ogv", "mov", "wmv", "webm", "mp3", "wav", "mid", "amr",
-			"rar", "zip", "tar", "gz", "7z", "bz2", "cab", "iso",
-			"doc", "docx", "xls", "xlsx", "ppt", "pptx", "pdf", "txt", "md", "xml",
-			"apk", "ipa",
-			"html", "htm", "shtml",
-		);
 		$exts_array = explode(',', $exts);
 		foreach ($exts_array as $key => $ext) {
-			if (!in_array($ext, $files)) {
+			if (!in_array($ext, self::$EXTS)) {
 				return false;
 			}
 		}

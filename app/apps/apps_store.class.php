@@ -8,7 +8,6 @@
 * @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
-
 class apps_store {
     const STORE_URL = "https://store.icmsdev.com/v2";
     public static $zip_name  = null;

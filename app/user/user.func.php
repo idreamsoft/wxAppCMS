@@ -83,16 +83,15 @@ class userFunc{
             $map_sql   = iSQL::select_map($map_where);
             $where_sql = ",({$map_sql}) map {$where_sql} AND `uid` = map.`iid`";
         }
-    	$offset	= 0;
-    	$limit  = "LIMIT {$maxperpage}";
+    	$offset = (int)$vars['offset'];
     	if($vars['page']){
     		$total	= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__user` {$where_sql}",null,iCMS::$config['cache']['page_total']);
     		$multi  = iUI::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:sql'),'nowindex'=>$GLOBALS['page']));
     		$offset = $multi->offset;
-    		$limit  = "LIMIT {$offset},{$maxperpage}";
             iView::assign("user_list_total",$total);
     	}
-        $hash = md5($where_sql.$order_sql.$limit);
+        $limit = "LIMIT {$offset},{$maxperpage}";
+        $hash  = md5($where_sql.$order_sql.$limit);
 
         if($map_sql || $offset){
             if($vars['cache']){

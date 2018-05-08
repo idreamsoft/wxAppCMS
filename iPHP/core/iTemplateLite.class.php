@@ -1174,6 +1174,11 @@ class iTemplateLite_Compiler extends iTemplateLite {
 
 	function _plugin_exists($function, $type){
 		$_plugins_fun = $this->_plugins[$type][$function];
+		if(empty($_plugins_fun)){
+			if($register = $this->callback('register',array($function,$type,$this))){
+				return $register;
+			}
+		}
 		if (isset($_plugins_fun) &&
 			is_array($_plugins_fun) &&
 			class_exists($_plugins_fun[0]) &&
@@ -1186,9 +1191,10 @@ class iTemplateLite_Compiler extends iTemplateLite {
 			}
 		}
 		// check for standard functions
-		if (isset($_plugins_fun) && function_exists($_plugins_fun)){
+		if (isset($_plugins_fun) && !is_array($_plugins_fun) && function_exists($_plugins_fun)){
 			return $_plugins_fun;
 		}
+
 		// check for a plugin in the plugin directory
 		$_plugins_file_name = $type . '.' . $function . '.php';
 		$pluginfile         = $this->_get_plugin_dir($_plugins_file_name);
