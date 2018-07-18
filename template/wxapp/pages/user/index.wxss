@@ -5,7 +5,7 @@ page{background-color:#f8f8f8;line-height:1.6;margin:0;}
 .userinfo-nickname { font-size: 14pt; font-weight: bold; color: #fff; }
 .weui-panel { border-top: 1px solid #e5e5e5; }
 .weui-panel .icon { width: 44rpx; height: 44rpx; margin-right: 10rpx; margin-top: 10rpx; }
-.contact button { background-color: #FFFFFF; color: #575757; line-height: 1.5; margin-top: 0px; margin-bottom: 0px; text-align: left; padding-left: 0px; padding-right: 0px; }
+.contact button {height:40rpx;width: 100%; padding: 0rpx; background-color: #FFFFFF; color: #575757; line-height: 1;font-size: 13pt; margin-top: 0px; margin-bottom: 0px; text-align: left; padding-left: 0px; padding-right: 0px; }
 .contact button::after { border: 0px; }
 .weui-cells:before { border-top: none; }
 .weui-cell__bd text { color: #575757; }

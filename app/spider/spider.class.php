@@ -19,8 +19,8 @@ class spider{
     public static $urlslast = null;
     public static $allHtml  = array();
 
-	public static $dataTest = false;
-	public static $ruleTest = false;
+    public static $dataTest  = false;
+    public static $ruleTest  = false;
 
 	public static $content_right_code = false;
 	public static $content_error_code = false;
@@ -35,7 +35,8 @@ class spider{
     public static $PROXY_URL = false;
     public static $callback = array();
 
-    public static $spider_url_ids = array();
+    public static $spider_url_ids   = array();
+    public static $spider_url_appid = 0;
 
     public static function rule($id) {
         $rs = iDB::row("SELECT * FROM `#iCMS@__spider_rule` WHERE `id`='$id' LIMIT 1;", ARRAY_A);
@@ -146,7 +147,7 @@ class spider{
         foreach ((array)spider::$spider_url_ids as $key => $suid) {
             if($indexid){
                 $data = array(
-                    'indexid' => $indexid
+                    'indexid' => $indexid,
                 );
             }else{
                 $data = array(
@@ -156,6 +157,7 @@ class spider{
                     'pubdate' => time()
                 );
             }
+            spider::$spider_url_appid && $data['appid'] = spider::$spider_url_appid;
             iDB::update('spider_url',$data,array('id'=>$suid));
         }
     }
@@ -219,9 +221,7 @@ class spider{
         $appid = $_POST['appid']?:$postArgs->app;
         $app = apps::get_app($appid);
 
-        if($_GET['indexid']){
-            self::get_data_id((int)$_GET['indexid'],$app);
-        }
+        $_GET['indexid'] && self::get_data_id((int)$_GET['indexid'],$app);
 
         $title = addslashes($_POST['title']);
         $url   = addslashes($_POST['reurl']);
@@ -245,17 +245,16 @@ class spider{
                 );
                 $suid = iDB::insert('spider_url',$spider_url_data);
             }else{
-                if($spider_url['indexid']){
-                    self::get_data_id($spider_url['indexid'],$app);
-                }
+                $spider_url['indexid'] && self::get_data_id($spider_url['indexid'],$app);
                 $suid = $spider_url['id'];
             }
         }else{
             $suid = spider::$sid;
         }
+        spider::$spider_url_appid = $app['id'];
 
         if (spider::$callback['post'] && is_callable(spider::$callback['post'])) {
-            $_POST = call_user_func_array(spider::$callback['post'],array($_POST));
+            $_POST = call_user_func_array(spider::$callback['post'],array($_POST,spider::$callback['post:data'],$suid));
             if($_POST['callback']){
                 return $_POST;
             }

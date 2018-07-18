@@ -28,6 +28,32 @@
         </block>
     </view>
 </template>
+
+<template name="pic_list">
+    <view class="pic-list">
+        <block wx:for="{{article_list}}" wx:key="{{item.id}}">
+            <view class="pic-item">
+                <navigator wx:if="{{item.id}}" url="{{item.url}}" hover-class="none">
+                   <view class="pic-item-head" wx:if="{{item.pic.url}}">
+                        <image mode="widthFix" lazy-load="true" src="{{item.pic.url}}" class="pic-item-image" />
+                    </view>
+                    <view class="pic-item-title">{{item.title}}</view>
+                    <view class="pic-item-foot">
+                        <text class="pic-item-category">{{item.category.name}}</text>
+                        <text class="pic-item-pubdate">{{item.pubdate}}</text>
+                    </view>
+                </navigator>
+            </view>
+        </block>
+        <block wx:if="{{!article_list[0].id}}">
+            <view class="clearfix"></view>
+            <view class="weui-loadmore weui-loadmore_line">
+                <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无数据</view>
+            </view>
+        </block>
+    </view>
+</template>
+
 <template name="banner">
     <block wx:if="{{banner.count>0}}">
         <swiper class="swiper-wrap" autoplay="true" interval="3000" duration="1000">

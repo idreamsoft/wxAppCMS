@@ -171,8 +171,16 @@ class formerApp{
         switch ($field['type']) {
             case 'multi_image':
                 $nkey     = $key.'_array';
-                $valArray = explode("\n", $value);
-                foreach ($valArray as $i => $val) {
+                // $valArray = unserialize($value);
+                if(preg_match('/^a:\d+:\{/', $value)){
+                    $valArray = unserialize($value);
+                }else{
+                    $valArray = json_decode($value,true);
+                }
+                if($value && empty($valArray)){
+                    $valArray = explode("\n", $value);
+                }
+                if(is_array($valArray))foreach ($valArray as $i => $val) {
                     $val && $values[$i]= filesApp::get_pic(trim($val));
                 }
             break;
@@ -192,8 +200,16 @@ class formerApp{
             break;
             case 'multi_file':
                 $nkey = $key.'_file';
-                $valArray = explode("\n", $value);
-                foreach ($valArray as $i => $val) {
+                // $valArray = unserialize($value);
+                if(preg_match('/^a:\d+:\{/', $value)){
+                    $valArray = unserialize($value);
+                }else{
+                    $valArray = json_decode($value,true);
+                }
+                if($value && empty($valArray)){
+                    $valArray = explode("\n", $value);
+                }
+                if(is_array($valArray))foreach ($valArray as $i => $val) {
                     if($val){
                         $pi   = pathinfo($val);
                         $values[$i]   = array(

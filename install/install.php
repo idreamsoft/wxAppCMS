@@ -144,7 +144,6 @@ if($_POST['action']=='install'){
     $config['router']['user']   = $router_url.'/user';
     $config['router']['404']    = $router_url.'/public/404.htm';
     $config['FS']['url']        = $router_url.'/res/';
-    $config['tag']['url']       = $router_url;
 	$config['template']['mobile']['domain'] = $router_url;
 
     foreach($config AS $n=>$v){

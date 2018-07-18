@@ -1,7 +1,7 @@
 <import src="../../iCMS/wxml/common.wxml" />
 <import src="../../iCMS/wxml/article.wxml" />
 <import src="../../iCMS/wxml/foot.wxml" />
-
+<collect-formid>
 <view class="page" hidden="{{page_hidden}}">
     <scroll-view scroll-y="true" style="height:{{scrollHeight}}px" bindscrolltoupper="refresh" bindscrolltolower="loadMore">
         <template is="banner" data="{{banner}}"/>
@@ -15,3 +15,4 @@
 </view>
 <loading class="loading" hidden="{{page_loading}}">加载中...</loading>
 <template is="navtab" />
+</collect-formid>

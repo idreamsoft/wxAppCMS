@@ -69,20 +69,23 @@ class spider_data {
             }
         }
 
-//      $http   = spider::check_content_code($html);
-//
-//      if($http['match']==false){
-//          return false;
-//      }
-//      $content        = $http['content'];
         spider::$allHtml        = array();
         $rule['__url__']        = spider::$url;
         $responses['reurl']     = spider::$url;
         $responses['__title__'] = $title;
-        foreach ((array)$dataArray AS $key => $data) {
 
+        self::set_http_config($rule);
+        self::set_watermark_config($rule);
+
+        foreach ((array)$dataArray AS $key => $data) {
             $content_html = $html;
             $dname = $data['name'];
+            if($data['data@source']){
+                $content_html = spider_tools::getDATA($responses,$data['data@source']);
+            }
+            if(empty($dname)){
+                continue;
+            }
             /**
              * [UNSET:name]
              * 注销[name]
@@ -116,6 +119,7 @@ class spider_data {
                 $content_html = $responses[$pre_dname];
                 unset($responses[$pre_dname]);
             }
+
             /**
              * [EMPTY:name]
              * 如果[name]之前抓取结果数据为空使用这个数据项替换
@@ -130,11 +134,13 @@ class spider_data {
                     continue;
                 }
             }
+
             $content = spider_content::crawl($content_html,$data,$rule,$responses);
             if($content === null){
-                $responses[$key] = null;
+                $responses[$dname] = null;
                 continue;
             }
+
             unset($content_html);
 
             if (strpos($dname,'ARRAY:')!== false){
@@ -206,11 +212,17 @@ class spider_data {
         foreach ($responses as $key => $value) {
             if(strpos($key, ':')!==false){
                 unset($responses[$key]);
+            }else{
+                if($key!='body'){
+                    $responses[$key] = str_replace('#--iCMS.PageBreak--#', ',', $responses[$key]);
+                }
             }
         }
+
         if(isset($responses['title']) && empty($responses['title'])){
             $responses['title'] = $responses['__title__'];
         }
+
         spider::$allHtml = array();
         unset($html);
 
@@ -225,25 +237,29 @@ class spider_data {
             echo "</pre>";
         }
 
-        self::set_watermark_config($rule);
-
         if (spider::$callback['data'] && is_callable(spider::$callback['data'])) {
-            $responses = call_user_func_array(spider::$callback['data'],array($responses));
+            $responses = call_user_func_array(spider::$callback['data'],array($responses,$rule));
         }
 
         return $responses;
     }
+    public static function set_http_config($rule){
+        iHttp::$CURLOPT_ENCODING       = '';
+        iHttp::$CURLOPT_REFERER        = '';
+        iHttp::$CURLOPT_TIMEOUT        = 10;
+        iHttp::$CURLOPT_CONNECTTIMEOUT = 3;
+        $rule['http']['ENCODING']      && iHttp::$CURLOPT_ENCODING        = $rule['http']['ENCODING'];
+        $rule['http']['REFERER']       && iHttp::$CURLOPT_REFERER         = $rule['http']['REFERER'];
+        $rule['http']['TIMEOUT']       && iHttp::$CURLOPT_TIMEOUT         = $rule['http']['TIMEOUT'];
+        $rule['http']['CONNECTTIMEOUT']&& iHttp::$CURLOPT_CONNECTTIMEOUT  = $rule['http']['CONNECTTIMEOUT'];
+    }
     public static function set_watermark_config($rule){
-        iHttp::$CURLOPT_ENCODING        = '';
-        iHttp::$CURLOPT_REFERER         = '';
         files::$watermark_config['pos'] = iCMS::$config['watermark']['pos'];
         files::$watermark_config['x']   = iCMS::$config['watermark']['x'];
         files::$watermark_config['y']   = iCMS::$config['watermark']['y'];
         files::$watermark_config['img'] = iCMS::$config['watermark']['img'];
         files::$watermark_enable        = iCMS::$config['watermark']['enable'];
 
-        $rule['fs']['encoding'] && iHttp::$CURLOPT_ENCODING = $rule['fs']['encoding'];
-        $rule['fs']['referer']  && iHttp::$CURLOPT_REFERER  = $rule['fs']['referer'];
         if($rule['watermark_mode']){
             files::$watermark_config['pos'] = $rule['watermark']['pos'];
             files::$watermark_config['x']   = $rule['watermark']['x'];

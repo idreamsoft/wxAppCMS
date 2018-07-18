@@ -72,7 +72,6 @@ class tag {
 
     public static function name($name){
         $name = trim($name);
-        $name = trim($name,"\0\n\r\t\x0B");
         $name = preg_replace('/<[\/\!]*?[^<>]*?>/is','',$name);
         $name = htmlspecialchars_decode($name);
         return $name;

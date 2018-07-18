@@ -1,3 +1,4 @@
+<collect-formid>
 <import src="../../../iCMS/wxml/foot.wxml" />
 <view class="page" hidden="{{page_hidden}}">
     <form bindsubmit="formSubmit" bindreset="formReset">
@@ -15,7 +16,7 @@
                         <input class="hide" name="cid" value="{{cid}}"/>
                     </view>
                     <view class="weui-cell__bd weui-cell__bd_in-select-before">
-                        <input id="title" name="title" class="weui-input" placeholder="请输入文章标题" />
+                        <input id="title" name="title" class="weui-input" placeholder="请输入标题" />
                     </view>
                 </view>
             </view>
@@ -55,7 +56,7 @@
             <view class="weui-cells weui-cells_after-title">
                 <view class="weui-cell">
                     <view class="weui-cell__bd">
-                        <textarea focus="true" class="weui-textarea" placeholder="撰写文章" maxlength="{{maxlength}}"
+                        <textarea focus="true" class="weui-textarea" placeholder="撰写内容" maxlength="{{maxlength}}"
                         bindinput="bindBodyInput"
                         bindblur="bindBodyBlur"
                         value="{{textarea}}"
@@ -80,3 +81,4 @@
     </form>
 </view>
 <loading class="loading" hidden="{{page_loading}}">加载中...</loading>
+</collect-formid>

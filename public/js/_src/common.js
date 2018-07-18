@@ -21,80 +21,73 @@ iCMS.define("common", function() {
         favorite: function(a,callback) {
             if (!USER.CHECK.LOGIN()) return;
 
-            var me = this;
-            var tpl ='<a class="favo-list-item-link r5 " href="javascript:;" data-fid="<%=id%>">'
-                +'<span class="favo-list-item-title"><%=title%></span>'
-                +'<span class="meta gray">'
-                    +'<span class="num"><%=count%></span> 篇文章'
-                    +'<span class="bull">•</span> <%=follow%> 人关注'
-                +'</span>'
-                +'</a>'
-                +'<div class="clearfix mt10"></div>';
+            var me    = this;
+            var $this = $(a);
+            var $box  = $("#iCMS-FAVORITE-TPL"),tpl = $box.html();
+            var $wrap = document.getElementById("iCMS-FAVORITE-DIALOG");
+            $wrap.innerHTML = $wrap.innerHTML.replace('data-src', 'src');
 
-            var $this = $(a),
-            box       = document.getElementById("iCMS-FAVORITE-DIALOG");
-            box.innerHTML = box.innerHTML.replace('data-src', 'src');
-            var dialog    = UI.dialog({
-                title: '添加到收藏夹',content:box,
+            var dialog = UI.dialog({
+                title: $box.data("title")||'添加到收藏夹',content:$wrap,
                 quickClose: false,width:"auto",height:"auto"
             });
 
-            $('.cancel', box).click(function(event) {
+            $('.cancel', $wrap).click(function(event) {
                 event.preventDefault();
                 dialog.remove();
             });
-            $('.create,.cancel_create', box).click(function(event) {
+            $('.create,.cancel_create', $wrap).click(function(event) {
                 event.preventDefault();
                 if($(this).hasClass('create')){
-                    dialog.title("创建新收藏夹");
+                    dialog.title($box.data("create-title")||"创建新收藏夹");
                 }else{
-                    dialog.title("添加到收藏夹");
+                    dialog.title($box.data("title")||"添加到收藏夹");
                 }
-                $(".favorite_create",box).toggle();
-                $(".favorite_list",box).toggle();
+                $(".favorite_create",$wrap).toggle();
+                $(".favorite_list",$wrap).toggle();
             });
 
-            $('[name="create"]', box).click(function(event){
+            $('[name="create"]', $wrap).click(function(event){
                 event.preventDefault();
                 var data = {
                     'action':'create',
-                    'title':$('[name="title"]',box).val(),
-                    'description':$('[name="description"]',box).val(),
-                    'mode':$('[name="mode"]:checked',box).val()
+                    'title':$('[name="title"]',$wrap).val(),
+                    'description':$('[name="description"]',$wrap).val(),
+                    'mode':$('[name="mode"]:checked',$wrap).val()
                 }
                 if(data.title==""){
-                    $('[name="title"]',box).focus();
-                    $('.favorite_create_error',box).text('请填写标题').show();
+                    $('[name="title"]',$wrap).focus();
+                    $('.favorite_create_error',$wrap).text('请填写标题').show();
                     return false;
                 }
                 $.post(API.url('favorite'), data, function(c) {
                     if(c.code){
                         var item = $.parseTmpl(tpl,{
                             'id':c.forward,'title':data.title,
-                            'count':0,'follow':0
+                            'count':0,'follow':0,'favorite':false
                         });
-                        $(".favorite_list_content",box).append(item);
-                        $('[name="title"]',box).val('');
-                        $('[name="description"]',box).val('');
-                        $(".favorite_create",box).toggle();
-                        $(".favorite_list",box).toggle();
+                        $(".favorite_list_content",$wrap).append(item);
+                        $('[name="title"]',$wrap).val('');
+                        $('[name="description"]',$wrap).val('');
+                        $(".favorite_create",$wrap).toggle();
+                        $(".favorite_list",$wrap).toggle();
                         dialog.reset();
                     }else{
-                        $('.favorite_create_error',box).text(c.msg).show();
+                        $('.favorite_create_error',$wrap).text(c.msg).show();
                     }
                 }, 'json');
             });
 
-            $.get(API.url('favorite',"&do=list"),function(json) {
+            $.post(API.url('favorite',"&do=list"),API.param(a),function(json) {
                 var item ='';
                 $.each(json, function(i,val){
                     item+=$.parseTmpl(tpl,val);
                 });
-                $(".favorite_list_content",box).html(item);
+                $(".favorite_list_content",$wrap).html(item);
                 dialog.reset();
             },'json');
 
-            $(box).on("click", '.favo-list-item-link', function(event) {
+            $($wrap).on("click", '.favo-list-item-link', function(event) {
                 //console.log(this);
                 var $this = $(this),
                 data = API.param(a),

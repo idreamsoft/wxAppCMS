@@ -169,6 +169,7 @@ class databaseAdmincp {
 	 * @return [type] [description]
 	 */
 	public function do_recovery() {
+		iUI::alert('请使用其它mysql管理软件恢复');
 		$this->bakdir OR iUI::alert('请选择要恢复的备份卷');
 		$backupdir = iPHP_APP_CACHE . '/backup/' . $this->bakdir;
 		$step = (int) $_GET['step'];

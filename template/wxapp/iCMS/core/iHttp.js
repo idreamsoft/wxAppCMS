@@ -32,11 +32,18 @@ function success_resolve(res,resolve,reject,method) {
                 show_modal('系统出错',res.data.msg+'请截图发给客服,谢谢');
             }
             fail_reject(res.data, reject, method);
+        } else if (res.data.code == "-98") {
+            if(res.data.forward) wx.redirectTo({url: res.data.forward});
+            fail_reject(res.data, reject, method);
         } else if (res.data.code == "-99") {
-            wx.clearStorage();
-            wx.reLaunch({
-              url: '/pages/index/index?error='+res.data.error
-            })
+            var reLaunch_count = wx.getStorageSync('reLaunch_count')||0;
+            if(reLaunch_count<5){
+                wx.clearStorageSync();
+                wx.setStorageSync('reLaunch_count', ++reLaunch_count);
+                wx.reLaunch({
+                  url: '/pages/index/index?error='+res.data.forward
+                })
+            }
             fail_reject(res.data, reject, method);
         } else {
             resolve(res.data);

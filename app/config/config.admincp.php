@@ -8,7 +8,11 @@
 * @licence https://www.icmsdev.com/LICENSE.html
 */
 class configAdmincp extends config {
-    public function __construct() {}
+    public static $appid = null;
+
+    public function __construct() {
+        self::$appid     = iCMS_APP_CONFIG;
+    }
     /**
      * [配置管理]
      */
@@ -17,6 +21,7 @@ class configAdmincp extends config {
         $redis    = extension_loaded('redis');
         $memcache = extension_loaded('memcached');
         menu::$url = __ADMINCP__.'='.admincp::$APP_NAME;
+        iPHP::callback(array("apps_meta","get"),array(self::$appid,1));
     	include admincp::view("config");
     }
     /**
@@ -46,6 +51,7 @@ class configAdmincp extends config {
     	foreach($config AS $n=>$v){
     		$this->set($v,$n,0);
     	}
+        iPHP::callback(array("apps_meta","save"),array(self::$appid,1));
     	config::cache();
     	iUI::success('更新完成','js:1');
     }

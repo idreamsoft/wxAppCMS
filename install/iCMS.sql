@@ -624,10 +624,10 @@ CREATE TABLE `icms_tag_meta` (
 CREATE TABLE `icms_user` (
   `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `gid` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT '用户组ID',
-  `pid` varchar(255) NOT NULL DEFAULT '' COMMENT '属性ID',
-  `username` varchar(255) NOT NULL DEFAULT '' COMMENT '用户名/email',
-  `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '昵称',
-  `password` char(32) NOT NULL DEFAULT '' COMMENT '密码',
+  `pid` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '属性ID',
+  `username` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '用户名/email',
+  `nickname` varchar(128) NOT NULL DEFAULT '' COMMENT '昵称',
+  `password` char(32) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '密码',
   `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别',
   `fans` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '粉丝数',
   `follow` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关注数',
@@ -635,22 +635,22 @@ CREATE TABLE `icms_user` (
   `article` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文章数',
   `favorite` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏数',
   `credit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
-  `regip` varchar(20) NOT NULL DEFAULT '' COMMENT '注册IP',
+  `regip` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '注册IP',
   `regdate` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册日期',
-  `lastloginip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后登陆IP',
+  `lastloginip` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '最后登陆IP',
   `lastlogintime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登陆时间',
   `hits` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '总点击数',
   `hits_today` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当天点击数',
   `hits_yday` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '昨天点击数',
   `hits_week` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '周点击',
   `hits_month` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '月点击',
-  `setting` varchar(1024) NOT NULL DEFAULT '' COMMENT '其它设置',
+  `setting` varchar(1024) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '其它设置',
   `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '用户类型',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '账号状态',
   PRIMARY KEY (`uid`),
   KEY `nickname` (`nickname`),
   KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `icms_user_category` */
 
@@ -702,9 +702,9 @@ CREATE TABLE `icms_user_follow` (
 CREATE TABLE `icms_user_openid` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) unsigned NOT NULL,
-  `openid` varchar(255) NOT NULL DEFAULT '',
+  `openid` varchar(128) NOT NULL DEFAULT '',
   `platform` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1:wx,2:qq,3:wb,4:tb',
-  `appid` varchar(255) NOT NULL DEFAULT '',
+  `appid` varchar(64) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `idx_upa` (`uid`,`platform`,`appid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -783,19 +783,38 @@ CREATE TABLE `icms_weixin_event` (
 CREATE TABLE `icms_wxapp` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `cid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类',
-  `appid` varchar(255) NOT NULL DEFAULT '' COMMENT 'appID',
-  `appsecret` varchar(255) NOT NULL DEFAULT '' COMMENT 'appsecret',
-  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '名称',
-  `account` varchar(255) NOT NULL DEFAULT '' COMMENT '小程序号',
+  `appid` varchar(128) NOT NULL DEFAULT '' COMMENT 'appID',
+  `appsecret` varchar(128) NOT NULL DEFAULT '' COMMENT 'appsecret',
+  `name` varchar(128) NOT NULL DEFAULT '' COMMENT '名称',
+  `app` varchar(128) DEFAULT NULL,
+  `account` varchar(128) NOT NULL DEFAULT '' COMMENT '小程序号',
   `description` varchar(500) NOT NULL DEFAULT '' COMMENT '小程序简介',
   `qrcode` varchar(255) NOT NULL DEFAULT '' COMMENT '二维码',
   `url` varchar(255) NOT NULL DEFAULT '' COMMENT '接口地址',
-  `version` varchar(255) NOT NULL DEFAULT '' COMMENT '接口版本号',
-  `tpl` varchar(255) NOT NULL DEFAULT '' COMMENT '接口模板',
-  `index` varchar(255) NOT NULL DEFAULT '' COMMENT '接口首页模板',
+  `version` varchar(32) NOT NULL DEFAULT '' COMMENT '接口版本号',
+  `tpl` varchar(128) NOT NULL DEFAULT '' COMMENT '接口模板',
+  `index` varchar(128) NOT NULL DEFAULT '' COMMENT '接口首页模板',
   `config` text NOT NULL COMMENT '配置',
   `payment` text NOT NULL COMMENT '支付配置',
   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Table structure for table `icms_wxapp_formids` */
+
+CREATE TABLE `icms_wxapp_formids` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `appid` varchar(128) NOT NULL DEFAULT '' COMMENT '小程序appid',
+  `openid` varchar(128) NOT NULL DEFAULT '' COMMENT '用户openid',
+  `formid` varchar(128) NOT NULL DEFAULT '' COMMENT 'formid',
+  `expire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
+  `send_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发送时间',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '类型',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
+  PRIMARY KEY (`id`),
+  KEY `userid` (`userid`,`status`),
+  KEY `openid` (`openid`,`status`),
+  KEY `appid` (`appid`,`formid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

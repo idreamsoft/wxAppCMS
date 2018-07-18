@@ -25,6 +25,7 @@ class searchFunc{
     	if($vars['cache']){
             $cache_name = iPHP_DEVICE.'/search/'.md5($where_sql.$order_sql);
             $resource   = iCache::get($cache_name);
+            if(is_array($resource)) return $resource;
     	}
     	if(empty($resource)){
             $resource = iDB::all("SELECT * FROM `#iCMS@__search_log` {$where_sql} {$order_sql} LIMIT $maxperpage");

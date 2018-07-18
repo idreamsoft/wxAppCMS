@@ -45,7 +45,7 @@ class tagApp extends appsApp {
             }
         }
 
-        $tag = $this->value($tag);
+        $tag = $this->value($tag,array('page_url'=>true));
         if ($tag === false) {
             return false;
         }
@@ -100,7 +100,7 @@ class tagApp extends appsApp {
         }
         $tag['url'] OR $tag['url'] = $tag['iurl']['href'];
 
-        if(stripos($tag['url'], '.php?')===false){
+        if(stripos($tag['url'], '.php?')===false && isset($vars['page_url']) && $vars['page_url']){
             iURL::page_url($tag['iurl']);
         }
         $tag['related']  && $tag['relArray'] = explode(',', $tag['related']);
@@ -110,7 +110,7 @@ class tagApp extends appsApp {
         apps_common::comment();
         apps_common::pic();
         apps_common::hits();
-        apps_common::param();
+        apps_common::param($tag['name']);
 
         return $tag;
     }

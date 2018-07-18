@@ -59,9 +59,7 @@ class propFunc{
         if($vars['cache']){
             $cache_name = iPHP_DEVICE.'/prop/'.$hash;
             $resource = iCache::get($cache_name);
-            if($resource){
-                return $resource;
-            }
+            if(is_array($resource)) return $resource;
         }
 
         $resource = iDB::all("SELECT * FROM `#iCMS@__prop` {$where_sql} {$order_sql} {$limit}");

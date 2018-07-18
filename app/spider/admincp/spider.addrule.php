@@ -11,13 +11,14 @@ defined('iPHP') OR exit('What are you doing?');
 admincp::head();
 ?>
 <style>
-.rule_data_name { width:80px; }
-.rule_data_rule { width:600px; }
+.rule_data_name { width:90px; }
 .delprop { width:45px; }
+.chosen-container-multi .chosen-choices li.search-choice span{font-size: 14px;}
 </style>
 <script type="text/javascript">
 $(function(){
   iCMS.select('watermark_pos',"<?php echo (int)$rule['watermark']['pos'] ; ?>");
+  select_sort_change('.helper-wrap');
 
 	<?php if($_GET['tab']){?>
 		var $itab	= $("#<?php echo $_GET['app']; ?>-tab");
@@ -26,6 +27,7 @@ $(function(){
 		$("a[href='#<?php echo $_GET['app']; ?>-<?php echo $_GET['tab']; ?>']",$itab).parent().addClass("active");
 		$("#<?php echo $_GET['app']; ?>-<?php echo $_GET['tab']; ?>").addClass("active").removeClass("hide");
 	<?php }?>
+
 	$('#spider-data').on("click",".delprop",function(){
       if(confirm('确定要删除?')){
         $(this).parent().parent().parent().remove();
@@ -46,50 +48,82 @@ $(function(){
 
 	$(".addprop").click(function(){
     // var length=$("#spider-data tbody tr").length+1;
-    var length=parseInt($("#spider-data tbody tr:last").attr('key'))+1;
-		var href = $(this).attr("href");
-		var tb	= $(href),tbody=$("tbody",tb);
-		var ntr=$(".aclone",tb).clone(true).removeClass("hide aclone");
+    var length = parseInt($("#spider-data tbody tr:last").attr('data-key'))+1;
+    var href   = $(this).attr("href");
+    var tb     = $(href);
+    var tbody  = $("tbody",tb);
+    var ntr    = $(".rule_data_clone tr").clone(true);
+
     if(!length) length = 0;
-    ntr.attr('key', length);
-		$('input,textarea',ntr).removeAttr("disabled");
-		$('input,textarea',ntr).each(function(i){
-      this.id = this.id.replace('__NO__',length);
-      this.name = this.name.replace('[__NO__]','['+length+']');
+    ntr.attr('data-key', length);
+
+		$('input,textarea,td,select',ntr).each(function(i){
+      this.id = this.id.replace('__KEY__',length);
+      if(this.name) this.name = this.name.replace('[__KEY__]','['+length+']');
 		});
     $('a[data-target]',ntr).each(function(i){
       var target= $(this).attr('data-target')
-      target = target.replace('__NO__',length);
+      target = target.replace('__KEY__',length);
       $(this).attr('data-target',target);
     });
-		$('.tip',ntr).tooltip();
-    $(':checkbox,:radio',ntr).uniform()
-    .on("click",function(){
-        checkedStatus = $(this).prop("checked");
-        this.checked = checkedStatus;
-        if (checkedStatus == this.checked) {
-          $(this).closest('.checker > span').removeClass('checked');
-        }
-        if (this.checked) {
-         $(this).closest('.checker > span').addClass('checked');
-        }
-    });
-		ntr.appendTo(tbody);
+    chosen_config.width = $(".rule_data_helper").width()+'px';
+    $(".dr_chosen",ntr).chosen(chosen_config);
+    $('.dr_tip',ntr).tooltip();
+    $(':checkbox,:radio',ntr).uniform();
+    ntr.appendTo(tbody);
 		return false;
 	});
-	$(".rule_data_page").on("click",function(){
-		checkedStatus = $(this).prop("checked");
-        this.checked = checkedStatus;
-        if (checkedStatus == this.checked) {
-          $(this).closest('.checker > span').removeClass('checked');
-        }
-        if (this.checked) {
-			   $(this).closest('.checker > span').addClass('checked');
-			   alert("此数据项您选择有分页,\n\n请记得设置[分页设置]选项卡的内容!");
-        }
-	});
+$(".preg_checkbox,.dom_checkbox").on("click",function(){
+  var pp = $(this).parents('td');
+  var checkedStatus = $(this).prop("checked");
+  if(this.className=='dom_checkbox'){
+    var cb = $(".preg_checkbox",pp).prop("checked", !checkedStatus);
+  }else{
+    var cb = $(".dom_checkbox",pp).prop("checked", !checkedStatus);
+  }
+  $.uniform.update(cb);
 });
 
+	$(".rule_data_page").on("click",function(){
+		var checkedStatus = $(this).prop("checked");
+    if (checkedStatus) {
+	   alert("此数据项您选择有分页,\n\n请记得设置[分页设置]选项卡的内容!");
+    }
+	});
+  $(".rule_data_datasource").on("click",function(){
+    var pp = $(this).parents('td');
+    var checkedStatus = $(this).prop("checked");
+    if (checkedStatus) {
+      $(".data_datasource",pp).removeClass('hide');
+    }else{
+      $(".data_datasource",pp).addClass('hide');
+    }
+  });
+});
+
+function select_sort_option(e, v) {
+    var option = e.find('option[value="' + v + '"]').clone();
+    option.attr('selected', 'selected');
+    return option;
+}
+function select_sort_change($e) {
+    $('select[multiple="multiple"]',$e).each(function(index, select) {
+        var s_id = this.id;
+        $("#sort_"+s_id, $e).html('');
+        $(this).on('change', function(e, p) {
+            select_sort_value(this,e,p);
+        });
+    });
+}
+function select_sort_value(a,e,p) {
+    var s_id = a.id,select = $("#sort_"+s_id);
+    if(p['selected']){
+      select.append(select_sort_option($(a),p['selected']));
+    }
+    if(p['deselected']){
+      select.find('option[value="' + p['deselected'] + '"]').remove();
+    }
+}
 </script>
 
 <div class="iCMS-container">
@@ -100,7 +134,7 @@ $(function(){
         <li class="active"><a href="#spider-base" data-toggle="tab"><i class="fa fa-info-circle"></i> 基本设置</a></li>
         <li><a href="#spider-data" data-toggle="tab"><i class="fa fa-truck"></i> 数据项</a></li>
         <li><a href="#spider-page" data-toggle="tab"><i class="fa fa-columns"></i> 分页设置</a></li>
-        <li><a href="#spider-pic" data-toggle="tab"><i class="fa fa-cog"></i> 图片下载设置</a></li>
+        <li><a href="#spider-remote" data-toggle="tab"><i class="fa fa-cog"></i> 下载设置</a></li>
         <li><a href="#spider-proxy" data-toggle="tab"><i class="fa fa-cog"></i> 代理设置</a></li>
       </ul>
     </div>
@@ -196,16 +230,16 @@ $(function(){
               <textarea name="rule[list_urls_format]" id="list_urls_format" class="span6"><?php echo $rule['list_urls_format'] ; ?></textarea>
             </div>
             <div class="clearfloat mb10"></div>
-            <div class="input-prepend input-sp"><span class="add-on">列表规则</span>
+            <div class="input-prepend input-sp"><span class="add-on">列表区域规则</span>
               <textarea name="rule[list_area_rule]" id="list_area_rule" class="span6"><?php echo $rule['list_area_rule'] ; ?></textarea>
               <div class="btn-group btn-group-vertical"> <a class="btn" href="<%content%>" data-toggle="insertContent" data-target="#list_area_rule">内容标识</a> <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#list_area_rule">变量标识</a> </div>
             </div>
-            <div class="clearfloat"></div>
-            <div class="input-prepend input-sp"><span class="add-on">列表结果整理</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-sp"><span class="add-on">列表区域整理</span>
               <textarea name="rule[list_area_format]" id="list_area_format" class="span6"><?php echo $rule['list_area_format'] ; ?></textarea>
             </div>
             <div class="clearfloat mb10"></div>
-            <div class="input-prepend input-sp"><span class="add-on">内容链接规则</span>
+            <div class="input-prepend input-sp"><span class="add-on">列表链接规则</span>
               <textarea name="rule[list_url_rule]" id="list_url_rule" class="span6"><?php echo $rule['list_url_rule'] ; ?></textarea>
               <div class="btn-group btn-group-vertical"> <a class="btn" href="<%title%>" data-toggle="insertContent" data-target="#list_url_rule">标题</a> <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#list_url_rule">网址</a> <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#list_url_rule">变量标识</a> </div>
             </div>
@@ -214,7 +248,7 @@ $(function(){
               <input type="text" name="rule[list_url]" class="span6" id="list_url" value="<?php echo $rule['list_url'] ; ?>"/>
               <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#list_url">网址</a>
             </div>
-            <div class="clearfloat"></div>
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"><span class="add-on">网址整理</span>
               <textarea name="rule[list_url_clean]" id="list_url_clean" class="span6 tip" title="合成后整理"><?php echo $rule['list_url_clean'] ; ?></textarea>
               <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#list_url_clean">变量标识</a>
@@ -252,154 +286,153 @@ $(function(){
                 <tr>
                   <th>数据项名称</th>
                   <th>规则</th>
-                  <th>选项</th>
+                  <th>数据处理</th>
                 </tr>
               </thead>
               <tbody>
-                <?php if($rule['data'])foreach((array)$rule['data'] AS $dkey=>$data){
-              	$RDid	= 'rule_data_'.$dkey.'_rule';
+<?php
+function rule_data_rule_td($dkey,$data = array()){
+  $DR_target    = 'rule_data_'.$dkey.'_rule';
+  $DR_id        = 'data_rule_'.$dkey;
+  $DR_name      = 'rule[data]['.$dkey.']';
+  $tip_class    = ($dkey==='__KEY__')?'dr_tip':'tip';
+  $chosen_class = ($dkey==='__KEY__')?'dr_chosen':'chosen-select';
+?>
+
+  <td>
+    <div class="btn-group btn-group-vertical">
+      <input name="<?php echo $DR_name;?>[name]" type="text" class="rule_data_name" value="<?php echo $data['name'];?>"/>
+      <a class="btn btn-danger delprop"><i class="fa fa-trash-o"></i> 删除</a>
+    </div>
+  </td>
+  <td class="rule_data_rule" id="<?php echo $DR_id;?>">
+    <div class="<?php echo $data['data@source']?:'hide';?> data_datasource">
+      <div class="input-prepend">
+        <span class="add-on">数据源</span>
+        <input name="<?php echo $DR_name;?>[data@source]" type="text" class="span5 <?php echo $tip_class;?>" placeholder="默认为空" title="可填写多个数据项名称，格式[DATA@数据项1][DATA@数据项2][DATA@title]" value="<?php echo $data['data@source'];?>"/>
+      </div>
+      <div class="clearfloat mb10"></div>
+    </div>
+    <textarea name="<?php echo $DR_name;?>[rule]" class="span6" id="<?php echo $DR_target;?>"><?php echo $data['rule'];?></textarea>
+    <div class="preg_rule">
+      <a class="btn" href="<%content%>" data-toggle="insertContent" data-target="#<?php echo $DR_target;?>">插入内容标识</a>
+      <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#<?php echo $DR_target;?>">插入变量标识</a>
+    </div>
+    <div class="clearfloat mb10"></div>
+    <label class="checkbox">
+      <input type="checkbox" class="preg_checkbox" name="<?php echo $DR_name;?>[preg]" value="1"<?php if(!$data['dom']||$data['preg']){ echo ' checked="true"';};?>>
+      正则匹配
+    </label>
+    <label class="checkbox">
+      <input type="checkbox" class="dom_checkbox" name="<?php echo $DR_name;?>[dom]" value="1"<?php if($data['dom']){ echo ' checked="true"';};?>>
+      phpQuery匹配
+    </label>
+    <label class="checkbox">
+      <input class="rule_data_datasource" type="checkbox" <?php if($data['data@source']){ echo ' checked="true"';};?>>
+      设置数据源
+    </label>
+    <div class="clearfloat mb10"></div>
+    <label class="checkbox">
+      <input type="checkbox" name="<?php echo $DR_name;?>[empty]" value="1"<?php if($data['empty']){ echo ' checked="true"';};?>>
+      不允许为空
+    </label>
+    <label class="checkbox">
+      <input type="checkbox" class="rule_data_page" name="<?php echo $DR_name;?>[page]" value="1"<?php if($data['page']){ echo ' checked="true"';};?>>
+      有分页
+    </label>
+    <label class="checkbox">
+      <input type="checkbox" name="<?php echo $DR_name;?>[multi]" value="1"<?php if($data['multi']){ echo ' checked="true"';};?>>
+      匹配多条
+    </label>
+  </td>
+  <td>
+    <div class="input-prepend">
+      <span class="add-on s4">1.规则后</span>
+      <textarea name="<?php echo $DR_name;?>[cleanbefor]" class="span6 <?php echo $tip_class;?>"title="规则采集后数据整理"><?php echo $data['cleanbefor'];?></textarea>
+    </div>
+    <div class="clearfloat mb10"></div>
+    <div class="input-prepend helper-wrap">
+      <span class="add-on" style="width:55px;text-align: left;">2.处理</span>
+      <select id="<?php echo $DR_id;?>_helper" data-placeholder="选择数据处理方法..." class="rule_data_helper <?php echo $chosen_class;?> span6" multiple="multiple">
+        <optgroup label="常用处理">
+          <option value='trim'>去首尾空白</option>
+          <option value='format'>HTML格式化</option>
+          <option value='cleanhtml'>移除HTML标识</option>
+          <option value='img_absolute'>图片地址补全</option>
+          <option value='url_absolute'>URL补全</option>
+          <option value='stripslashes'>去除转义反斜线</option>
+          <option value='addslashes'>使用反斜线引用字符串</option>
+          <option value='array'>返回数组</option>
+          <option value='capture'>抓取结果</option>
+          <option value='download'>下载文件</option>
+          <option value='xml2array'>xml转Array</option>
+          <option value='filter'>启用屏蔽词过滤</option>
+        </optgroup>
+        <optgroup label="HTML转义">
+          <option value='htmlspecialchars_decode'>将特殊的 HTML 实体转换回普通字符</option>
+          <option value='htmlspecialchars'>将特殊字符转换为 HTML 实体</option>
+        </optgroup>
+        <optgroup label="分页">
+          <option value='mergepage'>合并分页</option>
+          <option value='autobreakpage'>自动分页</option>
+        </optgroup>
+        <optgroup label="解析/解码">
+          <option value='parse_str'>URL字符串解析</option>
+          <option value='json_decode'>JSON解码(JSON => Array) </option>
+          <option value='base64_decode'>base64 解码 </option>
+        </optgroup>
+        <optgroup label="生成/编码">
+          <option value='http_build_query'>Array转URL字符串</option>
+          <option value='json_encode'>JSON编码(Array => JSON) </option>
+          <option value='base64_encode'>base64 编码 </option>
+        </optgroup>
+        <optgroup label="字符串">
+          <option value='explode'>使用,将字符串组成的数组</option>
+          <option value='implode'>将数组的值转化为字符串</option>
+        </optgroup>
+      </select>
+      <select multiple="multiple" class="hide" name="<?php echo $DR_name;?>[helper][]" id="sort_<?php echo $DR_id;?>_helper"></select>
+    </div>
+    <span class="help-inline">可多选，按顺序处理</span>
+    <?php if($dkey!=='__KEY__'){?>
+    <script>
+    $(function(){
+      <?php
+        if($data['helper']){
+          $_helper = $data['helper'];
+          if(!is_array($data['helper'])){
+            $_helper = explode(',', $data['helper']);
+          }
+          $helper_json = json_encode($_helper);
+      ?>
+      // $("#<?php echo $DR_id;?>_helper").setSelectionOrder(<?php echo $helper_json;?>, true);
+      var helper_json = <?php echo $helper_json;?>;
+      var helper_id   = $("#<?php echo $DR_id;?>_helper");
+      var helper_sort = $("#sort_<?php echo $DR_id;?>_helper");
+      helper_id.setSelectionOrder(helper_json, true);
+      $.each(helper_json, function(ii, v) {
+          helper_sort.append(select_sort_option(helper_id,v));
+      });
+      <?php }?>
+    })
+    </script>
+    <?php }?>
+    <div class="clearfloat mb10"></div>
+    <div class="input-prepend">
+      <span class="add-on s4">3.发布前</span>
+      <textarea name="<?php echo $DR_name;?>[cleanafter]" class="span6 <?php echo $tip_class;?>" title="发布前数据整理"><?php echo $data['cleanafter'];?></textarea>
+    </div>
+  </td>
+<?php }?>
+              <?php
+                if($rule['data'])foreach((array)$rule['data'] AS $dkey=>$data){
+                echo '<tr data-key="'.$dkey.'">';
+                echo rule_data_rule_td($dkey,$data);
+                echo '</tr>';
+                }
               ?>
-                <tr key="<?php echo $dkey;?>">
-                  <td><div class="btn-group btn-group-vertical">
-                      <input name="rule[data][<?php echo $dkey;?>][name]" type="text" class="rule_data_name" value="<?php echo $data['name'];?>"/>
-                      <a class="btn" href="<%content%>" data-toggle="insertContent" data-target="#<?php echo $RDid;?>">内容标识</a>
-                      <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#<?php echo $RDid;?>">变量标识</a>
-                      <div class="clearfloat mb10"></div>
-                      <a class="btn btn-danger delprop"><i class="fa fa-trash-o"></i> 删除</a>
-                    </div>
-                  </td>
-                  <td class="rule_data_rule"><textarea name="rule[data][<?php echo $dkey;?>][rule]" class="span6" id="<?php echo $RDid;?>"><?php echo $data['rule'];?></textarea>
-                    <div class="clearfloat mb10"></div>
-                    <div class="input-prepend input-sp"> <span class="add-on s4">数据整理</span>
-                      <textarea name="rule[data][<?php echo $dkey;?>][cleanbefor]" class="span3 tip"title="采集后整理"><?php echo $data['cleanbefor'];?></textarea>
-                    </div>
-                    <div class="input-append input-sp">
-                      <textarea name="rule[data][<?php echo $dkey;?>][cleanafter]" class="span3 tip"title="发布前整理"><?php echo $data['cleanafter'];?></textarea>
-                      <span class="add-on s4">数据整理</span></div></td>
-                  <td><label class="checkbox">
-                      <input type="checkbox" class="rule_data_page" name="rule[data][<?php echo $dkey;?>][page]" value="1"<?php if($data['page']){ echo ' checked="true"';};?>>
-                      有分页</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][multi]" value="1"<?php if($data['multi']){ echo ' checked="true"';};?>>
-                      匹配多条</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][format]" value="1"<?php if($data['format']){ echo ' checked="true"';};?>>
-                      HTML格式化</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][cleanhtml]" value="1"<?php if($data['cleanhtml']){ echo ' checked="true"';};?>>
-                      移除HTML标识</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][mergepage]" value="1"<?php if($data['mergepage']){ echo ' checked="true"';};?>>
-                      合并分页</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][autobreakpage]" value="1"<?php if($data['autobreakpage']){ echo ' checked="true"';};?>>
-                      自动分页</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][trim]" value="1"<?php if($data['trim']){ echo ' checked="true"';};?>>
-                      去首尾空白</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][empty]" value="1"<?php if($data['empty']){ echo ' checked="true"';};?>>
-                      不允许为空</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][filter]" value="1"<?php if($data['filter']){ echo ' checked="true"';};?>>
-                      屏蔽词过滤</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][json_decode]" value="1"<?php if($data['json_decode']){ echo ' checked="true"';};?>>
-                      json解码</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][array]" value="1"<?php if($data['array']){ echo ' checked="true"';};?>>
-                      返回数组</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][capture]" value="1"<?php if($data['capture']){ echo ' checked="true"';};?>>
-                      抓取结果</label>
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][download]" value="1"<?php if($data['download']){ echo ' checked="true"';};?>>
-                      下载文件</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][dom]" value="1"<?php if($data['dom']){ echo ' checked="true"';};?>>
-                      phpQuery匹配</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][img_absolute]" value="1"<?php if($data['img_absolute']){ echo ' checked="true"';};?>>
-                      图片地址补全</label>
-                    <div class="clearfloat mb10"></div></td>
-                </tr>
-                <?php } ?>
               </tbody>
               <tfoot>
-                <tr class="hide aclone">
-                  <td><div class="btn-group btn-group-vertical">
-                      <input name="rule[data][__NO__][name]" type="text" disabled="disabled" class="rule_data_name" value=""/>
-                      <a class="btn" href="<%content%>" data-toggle="insertContent" data-target="#rule_data___NO___rule">内容标识</a>
-                      <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#rule_data___NO___rule">变量标识</a>
-                      <div class="clearfloat mb10"></div>
-                      <a class="btn btn-danger delprop"><i class="fa fa-trash-o"></i> 删除</a>
-                    </div>
-                  </td>
-                  <td class="rule_data_rule"><textarea name="rule[data][__NO__][rule]" disabled="disabled" class="span6" id="rule_data___NO___rule"></textarea>
-                    <div class="clearfloat mb10"></div>
-                    <div class="input-prepend input-sp"> <span class="add-on s4">数据整理</span>
-                      <textarea name="rule[data][__NO__][cleanbefor]" disabled="disabled" class="span3 tip"title="采集后整理"></textarea>
-                    </div>
-                    <div class="input-append input-sp">
-                      <textarea name="rule[data][__NO__][cleanafter]" disabled="disabled" class="span3 tip"title="发布前整理"></textarea>
-                      <span class="add-on s4">数据整理</span> </div></td>
-                  <td><label class="checkbox">
-                      <input type="checkbox" class="rule_data_page" name="rule[data][__NO__][page]" value="1">
-                      有分页</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][multi]" value="1">
-                      匹配多条</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][format]" value="1">
-                      HTML格式化</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][cleanhtml]" value="1">
-                      移除HTML标识</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][mergepage]" value="1">
-                      合并分页</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][autobreakpage]" value="1">
-                      自动分页</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][trim]" value="1">
-                      去首尾空白</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][empty]" value="1">
-                      不允许为空</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][filter]" value="1">
-                      屏蔽词过滤</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][json_decode]" value="1">
-                      json解码</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][array]" value="1">
-                      返回数组</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][capture]" value="1">
-                      抓取结果</label>
-                      <input type="checkbox" name="rule[data][__NO__][download]" value="1">
-                      下载文件</label>
-                    <div class="clearfloat mb10"></div>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][dom]" value="1">
-                      phpQuery匹配</label>
-                    <label class="checkbox">
-                      <input type="checkbox" name="rule[data][__NO__][img_absolute]" value="1">
-                      图片地址补全</label>
-                    <div class="clearfloat mb10"></div></td>
-                </tr>
                 <tr>
                   <td colspan="4">
                     <p class="mb10"> <span class="label label-info">摘要:description</span> <span class="label label-info">标签:tags</span> <span class="label label-info">出处:source</span> <span class="label label-info">作者:author</span> <span class="label label-info">关键字:keywords</span></p>
@@ -461,16 +494,26 @@ $(function(){
               <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#page_url">分页网址</a> <a class="btn" href="<%step%>" data-toggle="insertContent" data-target="#page_url">分页增量</a> </div>
             <div class="clearfloat mb10"></div>
           </div>
-          <div id="spider-pic" class="tab-pane">
+          <div id="spider-remote" class="tab-pane">
             <div class="input-prepend"><span class="add-on">CURLOPT_ENCODING</span>
-              <input type="text" name="rule[fs][encoding]" class="span6" id="FS_ENCODING" value="<?php echo $rule['fs']['encoding'] ; ?>"/>
+              <input type="text" name="rule[http][ENCODING]" class="span6" id="http_ENCODING" value="<?php echo $rule['http']['ENCODING'] ; ?>"/>
             </div>
             <span class="help-inline"><span class="label label-important">默认为空,如果采集乱码可以填上gzip,deflate</span></span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"><span class="add-on">CURLOPT_REFERER</span>
-              <input type="text" name="rule[fs][referer]" class="span6" id="FS_REFERER" value="<?php echo $rule['fs']['referer'] ; ?>"/>
+              <input type="text" name="rule[http][REFERER]" class="span6" id="http_REFERER" value="<?php echo $rule['http']['REFERER'] ; ?>"/>
             </div>
             <span class="help-inline"><span class="label label-important">默认为空,如果网站限制来路可填上相关来路</span></span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"><span class="add-on">CURLOPT_TIMEOUT</span>
+              <input type="text" name="rule[http][TIMEOUT]" class="span6" id="http_TIMEOUT" value="<?php echo $rule['http']['TIMEOUT'] ; ?>"/>
+            </div>
+            <span class="help-inline"><span class="label label-important">默认为10秒,数据传输的最大允许时间</span></span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"><span class="add-on">CURLOPT_CONNECTTIMEOUT</span>
+              <input type="text" name="rule[http][CONNECTTIMEOUT]" class="span6" id="http_CONNECTTIMEOUT" value="<?php echo $rule['http']['CONNECTTIMEOUT'] ; ?>"/>
+            </div>
+            <span class="help-inline"><span class="label label-important">默认为3秒,连接超时时间</span></span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">水印设置</span><span class="add-on">
               <label class="radio">
@@ -541,4 +584,9 @@ $(function(){
     </div>
   </div>
 </div>
+<table class="hide rule_data_clone">
+  <tr>
+    <?php echo rule_data_rule_td('__KEY__'); ?>
+  </tr>
+</table>
 <?php admincp::foot();?>

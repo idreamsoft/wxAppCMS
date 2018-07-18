@@ -110,8 +110,8 @@ class categoryApp{
         foreach ($keyArray as $i => $key) {
              unset($category[$key]);
         }
-        // $vars['meta'] && $category+=(array)apps_meta::data('category',$category['cid']);
-        self::router($category);
+        //// $vars['meta'] && $category+=(array)apps_meta::data('category',$category['cid']);
+        // self::router($category);
         return $category;
     }
     public static function get_cids($cid = "0",$all=true,$root_array=null) {

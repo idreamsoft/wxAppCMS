@@ -82,7 +82,7 @@ class iFileCache {
     public function clear_all($prefix=null){
         $dir = $this->_dirs.$prefix;
         $filesList = $this->file_list($dir);
-        foreach ($filesList as $key => $file) {
+        if($filesList)foreach ($filesList as $key => $file) {
             if(is_file($file)){
                 $ckey = $prefix.str_replace(array($dir,'.php'), '', $file);
                 $data = $this->get($ckey);

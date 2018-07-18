@@ -15,7 +15,7 @@ window.iCMS = {
                 return $(i, doc);
             }
         }
-        return $('[i=' + i + ']', doc);
+        return $('[i="' + i + '"]', doc);
     },
     $v: function(a, i) {
         var iv = $(a).attr('i').replace(i + ':', '');

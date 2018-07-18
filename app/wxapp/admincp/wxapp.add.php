@@ -43,11 +43,11 @@ admincp::head();
                             <div class="input-prepend">
                                 <span class="add-on">分类</span>
                                 <select name="cid" id="cid" class="span4 chosen-select">
-                                    <option value="0"> ==== 暂无所属栏目 ==== </option>
+                                    <option value="0"> ==== 暂无所属分类 ==== </option>
                                     <?php echo category::appid($this->appid,'ca')->select($rs['cid'],0,1,true);?>
                                 </select>
                             </div>
-                            <span class="help-inline">本小程序所属的栏目</span>
+                            <span class="help-inline">本小程序所属的分类</span>
                             <div class="clearfloat mb10"></div>
                             <div class="input-prepend">
                                 <span class="add-on">APPID</span>
@@ -67,35 +67,10 @@ admincp::head();
                             <span class="help-inline">小程序名称</span>
                             <div class="clearfloat mt10"></div>
                             <div class="input-prepend">
-                                <span class="add-on">接口域名</span>
-                                <input type="text" name="url" class="span6" value="<?php echo $rs['url'] ; ?>" />
-                            </div>
-                            <span class="help-inline">小程序接口域名,例:<span class="label label-info">https://www.wxappcms.com</span></span>
-                            <div class="clearfloat mb10"></div>
-                            <div class="input-prepend input-append">
-                                <span class="add-on">接口模板</span>
-                                <input type="text" name="tpl" class="span5" id="tpl" value="<?php echo $rs['tpl'] ; ?>" />
-                                <?php echo filesAdmincp::modal_btn('模板','tpl','dir');?>
-                            </div>
-                            <span class="help-inline">小程序接口默认模板,请选择接口具体版本号,例如:wxapp/api/v1.1.0</span>
-                            <div class="clearfloat mb10"></div>
-                            <div class="input-prepend">
-                                <span class="add-on">接口版本号</span>
-                                <input type="text" name="version" class="span5" id="wxapp_version" value="<?php echo $rs['version'] ; ?>" />
-                            </div>
-                            <span class="help-inline">当前最新使用版本号.以防止新旧版本交替期间接口混乱.版本号格式:v1.0.0 例:v1.1.2</span>
-                            <div class="clearfloat mb10"></div>
-                            <div class="input-prepend input-append">
-                                <span class="add-on">首页</span>
-                                <input type="text" name="index" class="span5" id="index_tpl" value="<?php echo $rs['index']?:'{iTPL}/index.htm' ; ?>" />
-                                <?php echo filesAdmincp::modal_btn('模板','index_tpl');?>
-                            </div>
-                            <span class="help-inline">小程序首页接口默认模板</span>
-                            <div class="clearfloat mt10"></div>
-                            <div class="input-prepend">
-                                <span class="add-on">小程序号</span>
+                                <span class="add-on">账号</span>
                                 <input type="text" name="account" class="span6" id="wxapp_account" value="<?php echo $rs['account'] ; ?>" />
                             </div>
+                            <span class="help-inline">小程序登陆账号,备注用</span>
                             <div class="clearfloat mb10"></div>
                             <div class="input-prepend">
                                 <span class="add-on">二维码</span>
@@ -107,6 +82,41 @@ admincp::head();
                                 <textarea name="description" id="description" class="span6" style="height: 90px;"><?php echo $rs['description'] ; ?></textarea>
                             </div>
                             <span class="help-inline">小程序的描述</span>
+<hr />
+<h3 class="title">接口配置</h3>
+<div class="clearfloat mb10"></div>
+                            <div class="input-prepend">
+                                <span class="add-on">接口域名</span>
+                                <input type="text" name="url" class="span5" value="<?php echo $rs['url'] ; ?>" />
+                            </div>
+                            <span class="help-inline">小程序接口域名,例:<span class="label label-info">https://www.wxappcms.com</span></span>
+                            <div class="clearfloat mb10"></div>
+                            <div class="input-prepend">
+                                <span class="add-on">接口应用</span>
+                                <input type="text" name="app" class="span5" id="wxapp_app" value="<?php echo $rs['app'] ; ?>" />
+                            </div>
+                            <span class="help-inline">接口绑定的应用,方便二次开发调用,默认为空,使用模板类API</span>
+                            <div class="clearfloat mb10"></div>
+                            <div class="input-prepend">
+                                <span class="add-on">接口版本</span>
+                                <input type="text" name="version" class="span5" id="wxapp_version" value="<?php echo $rs['version'] ; ?>" />
+                            </div>
+                            <span class="help-inline">版本号格式:v1.0.0 例:v1.1.2 仅作识别用</span>
+                            <div class="clearfloat mb10"></div>
+                            <div class="input-prepend input-append">
+                                <span class="add-on">接口模板</span>
+                                <input type="text" name="tpl" class="span5" id="tpl" value="<?php echo $rs['tpl'] ; ?>" />
+                                <?php echo filesAdmincp::modal_btn('模板','tpl','dir');?>
+                            </div>
+                            <span class="help-inline">小程序接口默认模板,请选择接口具体版本号,例如:wxapp/api/v1.1.0</span>
+                            <div class="clearfloat mb10"></div>
+                            <div class="input-prepend input-append">
+                                <span class="add-on">接口首页</span>
+                                <input type="text" name="index" class="span5" id="index_tpl" value="<?php echo $rs['index']?:'{iTPL}/index.htm' ; ?>" />
+                                <?php echo filesAdmincp::modal_btn('模板','index_tpl');?>
+                            </div>
+                            <span class="help-inline">小程序首页接口默认模板</span>
+
                         </div>
                         <div id="payment" class="tab-pane hide">
                             <div class="hide">

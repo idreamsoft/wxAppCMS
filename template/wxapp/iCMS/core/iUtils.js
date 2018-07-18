@@ -169,9 +169,43 @@ function get_file_md5(path) {
     var rpos = path.lastIndexOf('.')
     return path.slice(0, rpos).slice(-32);
 }
+//保持纵横比缩放图片，使图片的长边能完全显示出来。也就是说，可以完整地将图片显示出来。
+function aspectFit($a) {
+    if( $a['w']/$a['h'] > $a['tw']/$a['th']  && $a['w'] >$a['tw'] ){
+        $a['h'] = Math.round($a['h'] * ($a['tw']/$a['w']));
+        $a['w'] = $a['tw'];
+    }else if( $a['w']/$a['h'] <= $a['tw']/$a['th'] && $a['h'] >$a['th']){
+        $a['w'] = Math.round($a['w'] * ($a['th']/$a['h']));
+        $a['h'] = $a['th'];
+    }
+    return $a;
+}
+//宽度不变，高度自动变化，保持原图宽高比不变
+function widthFix($a) {
+    $a['h'] = Math.round($a['h'] * ($a['tw']/$a['w']));
+    $a['w'] = $a['tw'];
+    return $a;
+}
+function metaData($meta,that) {
+    that.metaData = {}
+    that.hideUI = {};
+    if ($meta) {
+        var metaArray = $meta;
+        for (var mak in metaArray) {
+            // console.log(mak);
+            let ma = metaArray[mak];
+            that.metaData[mak] = ma['value'];
+            if (mak.indexOf("hideUI.") !== -1) {
+                that.hideUI[ma['name']] = ma['value'] == '1' ? true : false;
+            }
+        };
+        // console.log(that.hideUI, that.metaData);
+    }
+}
+
 module.exports = {
     uuid,
     cmp,
     extend,
-    get_file_md5
+    get_file_md5,aspectFit,widthFix,metaData
 }

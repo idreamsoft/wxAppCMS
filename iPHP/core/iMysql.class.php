@@ -225,9 +225,10 @@ class iDB{
         self::query("INSERT ".($IGNORE?'IGNORE':'')." INTO ".iPHP_DB_PREFIX_TAG."{$table} (`" . implode('`,`',$fields) . "`) VALUES ('".implode("','",$data)."')");
         return self::$insert_id;
     }
-    public static function insert_multi($table,$fields,$data) {
+    public static function insert_multi($table,$data,$fields=null) {
         $datasql = array();
         foreach ((array)$data as $key => $d) {
+            $fields===null && $fields = array_keys($d);
             $datasql[]= "('".implode("','",$d)."')";
         }
         if($datasql){

@@ -130,6 +130,7 @@ class commentFunc{
 		if($vars['cache']){
 			$cache_name = iPHP_DEVICE.'/comment/'.$md5."/".(int)$offset;
 			$resource   = iCache::get($cache_name);
+			if(is_array($resource)) return $resource;
 		}
 		if(empty($resource)){
 			$resource = iDB::all("SELECT * FROM `#iCMS@__comment` WHERE {$where_sql} {$order_sql} {$limit}");

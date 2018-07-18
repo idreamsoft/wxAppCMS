@@ -32,7 +32,7 @@ if(in_array($ext, $exts)){
     if(preg_match('@.*?/coverpic/\d+/\d+/\d+.jpg@i', $path)){
         iPHP::redirect(iCMS_PUBLIC_URL.'/ui/coverpic.jpg');
     }
-    iPHP::http_status(404, $path.',404');
+    iPHP::http_status(404, $path.',rewrite 404');
 }else{
     $variable = iCMS::$config['router']['config'];
     $config = $preg = array();
@@ -73,10 +73,9 @@ if(in_array($ext, $exts)){
         // var_dump(iPHP_REQUEST_URL,$path,$preg);
     }
     //应用路由匹配
+    $ext = iCMS::$config['router']['ext'];
+    $dir = iCMS::$config['router']['dir'];
     if(empty($REQUEST_URI)){
-        $ext = iCMS::$config['router']['ext'];
-        $dir = iCMS::$config['router']['dir'];
-
         $rs    = categoryApp::get_cahce('rules');
         $rules = array();
         foreach((array)$rs AS $rule) {
@@ -119,13 +118,30 @@ if(in_array($ext, $exts)){
             }
         }
     }
+    //文章类自定义链接
+    if(empty($REQUEST_URI)){
+        if(preg_match('@'.$dir.'.*?'.preg_quote($ext).'@', $path)){
+            $clink = '['.ltrim($path,'/').']';
+            //如果太多请求 可以把检测移移出以免影响性能
+            $check = article::check($clink,0,'clink');
+            $check && $REQUEST_URI = 'article.php?clink='.$clink;
+        }
+    }
     if($REQUEST_URI){
-        $parts = pathinfo($REQUEST_URI);
-        $name = $parts['filename'];
+        $parse = parse_url($REQUEST_URI);
+        $name  = basename($parse['path'],'.php');
+        // $parts = pathinfo($parse['path']);
+        // $name = $parts['filename'];
         _GET($REQUEST_URI,$REQ);
         $name=='api'?
             iCMS::API():
             iCMS::run($name);
+    }else{
+        if(iPHP_DEBUG && iPHP_TPL_DEBUG){
+            trigger_error("未找到与链接<b>{$path}</b>相匹配的规则.",E_USER_ERROR);
+        }else{
+            iPHP::http_status(404, $path.',rewrite 404');
+        }
     }
 }
 
@@ -188,7 +204,12 @@ function rewrite($b,$k,$t){
         case 'TKEY':    $e = 'tkey=$';break;
         case 'LINK':    $e = 'clink=$';break;
         case 'TCID':    $e = 'tcid=$';break;
-        case 'P':       $e = 'page=$';break;
+        case 'P':
+            $e = 'page=$';
+            if($t=='article'){
+                $e = 'p=$';
+            }
+        break;
     }
     if($e){
         return $e.$k;

@@ -20,6 +20,9 @@ class config{
         $config['apps'] = apps::get_appsid();
         $config['iurl'] = apps::get_iurl();
         $config['router']['config'] = apps::router_cache();
+        $config['meta'] = array();
+        $data = apps_meta::data(iCMS_APP_CONFIG,1);
+        $data && $config['meta'] = $data['meta'];
         self::write($config);
     }
     public static function head($title=null,$action="config"){

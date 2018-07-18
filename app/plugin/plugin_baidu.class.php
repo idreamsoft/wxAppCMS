@@ -36,4 +36,30 @@ class plugin_baidu{
         return $json;
     }
 
+    public static function xzh($urls,$type='realtime',&$out=null) {
+        $appid = iCMS::$config['plugin']['baidu']['xzh']['appid'];
+        $token = iCMS::$config['plugin']['baidu']['xzh']['token'];
+
+        if(empty($appid)||empty($token)){
+            return false;
+        }
+        $api ='http://data.zz.baidu.com/urls?appid='.$appid.'&token='.$token;
+        $type && $api.='&type='.$type;
+        $ch = curl_init();
+        $options =  array(
+            CURLOPT_URL            => $api,
+            CURLOPT_POST           => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POSTFIELDS     => implode("\n",(array)$urls),
+            CURLOPT_HTTPHEADER     => array('Content-Type: text/plain'),
+        );
+        curl_setopt_array($ch, $options);
+        $result = curl_exec($ch);
+        $out   = json_decode($result,true);
+        if($out['error']){
+            return false;
+        }
+        return true;
+    }
+
 }

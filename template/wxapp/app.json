@@ -2,13 +2,14 @@
     "pages": [
         "pages/index/index",
         "pages/category/index",
-        "pages/article/article",
         "pages/category/category",
+        "pages/article/article",
         "pages/tag/tag",
-        "pages/user/index",
         "pages/search/index",
         "pages/search/search",
         "pages/donate/donate",
+        "pages/user/index",
+        "pages/user/login/index",
         "pages/user/publish/index",
         "pages/user/article/index",
         "pages/user/donate/index"

@@ -55,6 +55,10 @@ class userAdmincp{
     public function do_iCMS(){
         $sql = "WHERE 1=1";
         $pid = $_GET['pid'];
+
+        if($_GET['wxappid']) {
+            $sql.=" AND `username` like '%@{$_GET['wxappid']}'";
+        }
         if($_GET['keywords']) {
             $sql.=" AND CONCAT(username,nickname) REGEXP '{$_GET['keywords']}'";
         }
@@ -194,7 +198,7 @@ class userAdmincp{
         iDB::query("DELETE FROM `#iCMS@__user_data` WHERE `uid` = '$uid'");
         iDB::query("DELETE FROM `#iCMS@__user_follow` WHERE `uid` = '$uid'");
         iDB::query("DELETE FROM `#iCMS@__user_openid` WHERE `uid` = '$uid'");
-        iDB::query("DELETE FROM `#iCMS@__report` WHERE `uid` = '$uid'");
+        iDB::query("DELETE FROM `#iCMS@__user_report` WHERE `uid` = '$uid'");
         iDB::query("DELETE FROM `#iCMS@__user` WHERE `uid` = '$uid'");
         if(iDB::check_table('user_cdata')){
             iDB::query("DELETE FROM `#iCMS@__user_cdata` WHERE `user_id` = '$uid'");

@@ -1,0 +1,14 @@
+<view class="container-fluid">
+    <view class="avatar">
+        <open-data type="userAvatarUrl"></open-data>
+    </view>
+    <view class="nickname"><open-data type="userNickName"></open-data></view>
+    <view class="tip text-danger">
+        为了保证您能正常使用{{CONFIG.TITLE}},请允许获取您的公开信息(头像、昵称)
+    </view>
+    <view class="clearfix mt10"></view>
+    <form bindsubmit="formSubmit" bindreset="formReset" report-submit="true">
+        <button class="btn btn-primary btn-lg btn-block" wx:if="{{canIUse}}" open-type="getUserInfo" formType="submit" bindgetuserinfo="formSubmit">授权登录</button>
+        <view wx:else>请升级微信版本</view>
+    </form>
+</view>

@@ -1,6 +1,6 @@
 <import src="../../iCMS/wxml/tag.wxml" />
 <import src="../../iCMS/wxml/foot.wxml" />
-
+<collect-formid>
 <view class="page">
     <view class="weui-search-bar">
         <view class="weui-search-bar__form">
@@ -23,7 +23,8 @@
         <template is="tag_list" data="{{tag_list}}"/>
     </view>
     <view class="clearfix mt10"></view>
-    <template is="foot" data="{{site}}"/>
+    <template is="foot" data="{{appInfo}}"/>
 </view>
 <loading class="loading" hidden="{{page_loading}}">加载中...</loading>
 <template is="navtab" />
+</collect-formid>

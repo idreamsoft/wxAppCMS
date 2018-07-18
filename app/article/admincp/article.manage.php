@@ -247,7 +247,8 @@ $(function(){
               <td>
                 <?php echo $value['id'] ; ?>
               </td>
-              <td><div class="edit" aid="<?php echo $value['id'] ; ?>">
+              <td class="edit" aid="<?php echo $value['id'] ; ?>" title="双击可快速编辑">
+                <div>
                   <?php if($value['status']=="3"){ ?>
                   <span class="label label-important">待审核</span>
                   <?php } ?>
@@ -258,7 +259,7 @@ $(function(){
                   <a class="aTitle" href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $value['id'] ; ?>" data-toggle="modal" title="预览">
                     <?php echo $value['title'] ; ?>
                   </a>
-                 </div>
+                </div>
                 <div class="row-actions">
                   <a href="<?php echo __ADMINCP__; ?>=files&indexid=<?php echo $value['id'] ; ?>&appid=<?php echo self::$appid;?>&method=database" class="tip-bottom" title="查看文章图片库" target="_blank"><i class="fa fa-picture-o"></i></a>
                   <a href="<?php echo APP_URI; ?>&do=findpic&id=<?php echo $value['id'] ; ?>" class="tip-bottom" title="查找文章所有图片" target="_blank"><i class="fa fa-picture-o"></i></a>
@@ -334,8 +335,8 @@ $(function(){
                 </a>
               </td>
               <td>
-                <a href="<?php echo $value['url']; ?>" class="btn btn-success btn-mini" target="_blank">查看</a>
                 <?php if($value['status']=="1"){ ?>
+                  <a href="<?php echo $value['url']; ?>" class="btn btn-success btn-mini" target="_blank">查看</a>
                 <?php } ?>
                 <!-- <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $value['id'] ; ?>" class="btn btn-primary btn-mini">+章节</a> -->
                 <?php if(category::check_priv($value['cid'],'ce')){ ?>
@@ -383,7 +384,9 @@ $(function(){
                       <li class="divider"></li>
                       <?php } ?>
                       <li><a data-toggle="batch" data-action="status:2"><i class="fa fa-trash-o"></i> 移入回收站</a></li>
-                      <li><a data-toggle="batch" data-action="dels"><i class="fa fa-trash-o"></i> 永久删除</a></li>
+                      <li class="divider"></li>
+                      <li><a data-toggle="batch" data-action="quick_dels" title="只删除文章数据" class="tip-right"><i class="fa fa-trash-o"></i> (快速)永久删除</a></li>
+                      <li><a data-toggle="batch" data-action="dels" title="删除文章相关的所有数据" class="tip-right"><i class="fa fa-trash-o"></i> 永久删除</a></li>
                     </ul>
                   </div>
                 </div></td>

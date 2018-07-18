@@ -1,4 +1,8 @@
 {
     "navigationBarBackgroundColor": "#D85940",
-    "navigationBarTitleText": "赞赏"
+    "navigationBarTitleText": "赞赏",
+    "usingComponents": {
+        "collect-formid": "/iCMS/component/collect-formid"
+    }
+
 }

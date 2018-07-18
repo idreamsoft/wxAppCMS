@@ -1,15 +1,14 @@
-let $APP = getApp();
-let $wxAppCMS = $APP.wxAppCMS();
+let $iCMS = getApp().iCMS();
 let WxParse = require('../../wxParse/wxParse.js');
 
-$wxAppCMS.addData({
+$iCMS.addData({
     article: [],
     category: [],
     article_list: [],
     banner: []
 });
 
-$wxAppCMS.getData = function($id) {
+$iCMS.getData = function($id) {
     let that = this;
     let $url = this.iURL.make(
         'article', { tpl: 'article', id: $id }
@@ -19,10 +18,12 @@ $wxAppCMS.getData = function($id) {
         that.data_loading('hide');
         that.page_loading(false, true);
 
-        wx.setNavigationBarTitle({
-            title: res.article.title + ' - ' + that.$globalData.appInfo.name
-        });
+        that.title = res.article.title;
 
+        wx.setNavigationBarTitle({
+            title: res.article.title
+        });
+        that.utils.metaData(res.article.meta,res.article);
         if (res.article.user.avatar == "about:blank") {
             res.article.user.avatar = "/images/avatar.gif";
         }
@@ -36,26 +37,38 @@ $wxAppCMS.getData = function($id) {
             article_prev: res.article_prev,
             article_next: res.article_next
         });
-        $APP.CACHE['article'] = {
-            id: $id,
-            title: res.article.title,
-            user: {
-                uid: res.article.user.uid,
-                avatar: res.article.user.avatar,
-                name: res.article.user.name
-            }
-        }
+
+        let $APP = getApp();
+
+        $APP.CACHE['article'] = res.article
     });
 };
 
-$wxAppCMS.onShareAppMessage = function(res) {
+$iCMS.onShareAppMessage = function(res) {
     if (res.from === 'button') {
         // 来自页面内转发按钮
         console.log(res.target)
     }
-    return {
-        title: this.data.article.title,
-        path: '/pages/article/article?id=' + this.data.article.id,
+
+    let $session = this.$globalData.session;
+    let $data    = res.target.dataset;
+
+    let $stitle   = this.metaData['share_title']||'推荐';
+    let $title    = this.data.article.metaData['share_title']||$session.nickname + '给你'+$stitle+'了一篇不错的文章，打开看看吧！';
+    let $imageUrl = this.data.article.metaData['share_imageUrl']||this.data.article.pic.url;
+    let $path     = this.data.article.metaData['share_path']||'/pages/article/article?id=' + this.data.article.id + '&uid=' + $session.uid + '&from=share';
+
+    if ($data['title'])     $title    = $data['title'];
+    if ($data['path'])      $path     = $data['path'];
+    if ($data['imageUrl'])  $imageUrl = $data['imageUrl'];
+
+    $title = $title.replace('{name}', $session.nickname);
+    $title = $title.replace('{title}', this.data.article.title);
+    $path  = $path.replace('{id}', this.data.article.id);
+    $path  = $path.replace('{uid}', $session.uid);
+
+    let $share = {
+        title:$title,path:$path,imageUrl:$imageUrl,
         success: function(res) {
             // 转发成功
         },
@@ -65,7 +78,7 @@ $wxAppCMS.onShareAppMessage = function(res) {
     }
 }
 
-$wxAppCMS.upTap = function(e) {
+$iCMS.upTap = function(e) {
     let that = this;
     let $iid = e.currentTarget.id,
         $avg_k = 'a_v_g_' + $iid;
@@ -92,14 +105,14 @@ $wxAppCMS.upTap = function(e) {
 
 }
 
-$wxAppCMS.favoriteTap = function(e) {
+$iCMS.favoriteTap = function(e) {
     // console.log(this.$globalData);
 
     let that = this;
     let $iid = e.currentTarget.id;
     let $param = this.utils.extend({
         fid: "0",
-        uid: this.$globalData.session.userid,
+        uid: that.sessionData.userid,
         action: "add"
     }, that.data.article.param);
 
@@ -117,11 +130,9 @@ $wxAppCMS.favoriteTap = function(e) {
     });
 
 }
-$wxAppCMS.main = function(options) {
-    this.setData({
-        APP: this.$globalData.appInfo
-    });
-    this.getData(options.id);
+$iCMS.main = function(options) {
+    this.iid = options.id;
+    this.getData(this.iid);
 }
 
-$wxAppCMS.run();
+$iCMS.run();

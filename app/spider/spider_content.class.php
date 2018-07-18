@@ -10,7 +10,15 @@
 defined('iPHP') OR exit('What are you doing?');
 
 class spider_content {
-    public static $hash = null;
+    public static $hash    = null;
+    public static $content = null;
+
+    //兼容旧版
+    public static $helperMap = array(
+        'format','cleanhtml','mergepage','autobreakpage',
+        'trim','filter','json_decode','array',
+        'capture','download','img_absolute'
+    );
     /**
      * 抓取资源
      * @param  [string] $html      [抓取结果]
@@ -41,16 +49,17 @@ class spider_content {
             }
         }
         /**
-         * 在数据项里调用之前采集的数据RULE@规则id@url
+         * 在数据项里调用采集规则RULE@规则id@url@checker
          */
         if(strpos($data['rule'], 'RULE@')!==false){
-            list($_rid,$_urls) = explode('@', str_replace('RULE@', '',$data['rule']));
+            list($_rid,$_urls,$_checker) = explode('@', str_replace('RULE@', '',$data['rule']));
             empty($_urls) && $_urls = trim($html);
+            $_nocheck = ($_checker ==='false'?true:false);//是否检测采集过
             if (spider::$dataTest) {
                 print_r('<b>使用[rid:'.$_rid.']规则抓取</b>:'.$_urls);
                 echo "<hr />";
             }
-            return spider_urls::crawl('DATA@RULE',false,$_rid,$_urls);
+            return spider_urls::crawl('DATA@RULE',false,$_rid,$_urls,null,$_nocheck);
         }
         /**
          * RAND@10,0
@@ -99,13 +108,72 @@ class spider_content {
             unset($contentArray,$variable);
         }
 
-        if (spider::$dataTest) {
-            print_r('<b>['.$name.']匹配结果:</b><div style="max-height:300px;overflow-y: scroll;">'.htmlspecialchars($content).'</div>');
-            echo "<hr />";
-        }
-
+        // if (spider::$dataTest) {
+        //     print_r('<b>['.$name.']匹配结果:</b><div style="max-height:300px;overflow-y: scroll;">'.htmlspecialchars($content).'</div>');
+        //     echo "<hr />";
+        // }
         if ($data['cleanbefor']) {
             $content = spider_tools::dataClean($data['cleanbefor'], $content);
+            if (spider::$dataTest) {
+                echo "<b>1.规则后处理</b>";
+            }
+        }
+
+        if(isset($data['helper'])){
+        }else{
+            $data['helper'] = array();
+            //兼容旧版
+            foreach ($data as $kh => $vh) {
+                if(array_search($kh, self::$helperMap)!==false){
+                    $data['helper'][] = $kh;
+                }
+            }
+        }
+        if (spider::$dataTest && $data['helper']) {
+            echo "<b>2.方法处理:</b>";
+        }
+        foreach ((array)$data['helper'] as $key => $value) {
+            if (spider::$dataTest) {
+                echo $value,',';
+            }
+            $content = self::helper($content,array($value=>true),$rule);
+            if($content===null){
+                return null;
+            }
+        }
+        if ($data['cleanafter']) {
+            $content = spider_tools::dataClean($data['cleanafter'], $content);
+            if (spider::$dataTest) {
+                echo "<b>3.发布前处理</b>";
+            }
+        }
+        if (spider::$callback['content'] && is_callable(spider::$callback['content'])) {
+            $content = call_user_func_array(spider::$callback['content'],array($content,$data));
+        }
+        if (spider::$dataTest) {
+            echo "<hr/>";
+        }
+        return $content;
+    }
+    public static function helper($content,$data,$rule){
+        if ($data['stripslashes']) {
+            $content = stripslashes($content);
+        }
+        if ($data['addslashes']) {
+            $content = addslashes($content);
+        }
+        if ($data['base64_encode']) {
+            $content = base64_encode($content);
+        }
+        if ($data['base64_decode']) {
+            $content = base64_decode($content);
+        }
+        if ($data['parse_str']) {
+            parse_str($content, $output);
+            $content = $output;
+        }
+        if ($data['http_build_query'] && is_array($content)) {
+            $content = http_build_query($content);
         }
         if ($data['trim']) {
             if(is_array($content)){
@@ -113,6 +181,9 @@ class spider_content {
             }else{
                 $content = str_replace('&nbsp;','',trim($content));
             }
+        }
+        if($data['json_encode'] && is_array($content)){
+            $content = json_encode($content);
         }
         if ($data['json_decode']) {
             $content = json_decode($content,true);
@@ -127,17 +198,18 @@ class spider_content {
         if ($data['htmlspecialchars_decode']) {
             $content = htmlspecialchars_decode($content);
         }
-        if(!is_array($content)){
-            $content = stripslashes($content);
+        if ($data['htmlspecialchars']) {
+            $content = htmlspecialchars($content);
         }
-
         if ($data['cleanhtml']) {
             $content = preg_replace('/<[\/\!]*?[^<>]*?>/is', '', $content);
         }
         if ($data['format'] && $content) {
             $content = autoformat($content);
         }
-
+        if ($data['url_absolute'] && $content) {
+            $content = spider_tools::url_complement($rule['__url__'],$content);
+        }
         if ($data['img_absolute'] && $content) {
             preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is", $content, $img_match);
             if($img_match[1]){
@@ -158,16 +230,12 @@ class spider_content {
             $content && $content = iFS::http($content);
         }
 
-        if ($data['autobreakpage']) {
+        if ($data['autobreakpage'] && $content) {
             $content = spider_tools::autoBreakPage($content);
         }
-        if ($data['mergepage']) {
+        if ($data['mergepage'] && $content) {
             $content = spider_tools::mergePage($content);
         }
-        if ($data['cleanafter']) {
-            $content = spider_tools::dataClean($data['cleanafter'], $content);
-        }
-
         if ($data['filter']) {
             $fwd = iPHP::callback(array("filterApp","run"),array(&$content),false);
             if($fwd){
@@ -191,11 +259,9 @@ class spider_content {
             }
             unset($empty);
         }
-
-        if (spider::$callback['content'] && is_callable(spider::$callback['content'])) {
-            $content = call_user_func_array(spider::$callback['content'],array($content,$data));
+        if ($data['xml2array']) {
+            $content = iUtils::xmlToArray($content);
         }
-
         if($data['array']){
             if(strpos($content, '#--iCMS.PageBreak--#')!==false){
                 $content = explode('#--iCMS.PageBreak--#', $content);
@@ -204,6 +270,9 @@ class spider_content {
         }
         if($data['implode'] && is_array($content)){
             $content = implode('', $content);
+        }
+        if($data['explode'] && is_string($content)){
+            $content = explode(',', $content);
         }
         return $content;
     }
@@ -216,6 +285,9 @@ class spider_content {
             $page_area_rule = trim($rule['page_area_rule']);
             if($page_area_rule){
                 if(strpos($page_area_rule, 'DOM::')!==false){
+                    if (spider::$dataTest) {
+                        echo "<b>分页规则:</b>phpQuery<br />";
+                    }
                     iPHP::vendor('phpQuery');
                     $doc      = phpQuery::newDocumentHTML($html,'UTF-8');
                     $pq_dom   = str_replace('DOM::','', $page_area_rule);
@@ -245,6 +317,9 @@ class spider_content {
                     }
                     phpQuery::unloadDocuments($doc->getDocumentID());
                 }else{
+                    if (spider::$dataTest) {
+                        echo "<b>分页规则:</b>正则匹配<br />";
+                    }
                     $page_area_rule = spider_tools::pregTag($page_area_rule);
                     if ($page_area_rule) {
                         preg_match('|' . $page_area_rule . '|is', $html, $matches, $PREG_SET_ORDER);
@@ -264,6 +339,9 @@ class spider_content {
                     unset($page_area);
                 }
             }else{ // 逻辑方式
+                if (spider::$dataTest) {
+                    echo "<b>分页规则:</b>逻辑方式<br />";
+                }
                 if($rule['page_url_parse']=='<%url%>'){
                     $page_url = str_replace('<%url%>',$rule['__url__'],$rule['page_url']);
                 }else{
@@ -293,15 +371,13 @@ class spider_content {
             }
 
             if (spider::$dataTest) {
+                echo "<b>分页规则:</b>逻辑方式<br />";
                 echo "<b>内容页网址:</b>".$rule['__url__'] . "<br />";
                 echo "<b>分页网址提取规则:</b>".iSecurity::escapeStr($page_url_rule). "<br />";
                 echo "<b>分页合成:</b>".$rule['page_url'] . "<br />";
-                echo "<hr />";
-            }
-            if(spider::$dataTest){
                 echo "<b>分页列表:</b><pre>";
                 print_r($page_url_array);
-                echo "</pre><hr />";
+                echo "</pre>";
             }
 
             if($data['page']){
@@ -315,7 +391,7 @@ class spider_content {
                 echo "<br />";
                 echo "<b>无效分页特征码:</b>";
                 echo iSecurity::escapeStr(spider::$content_error_code);
-                echo "<hr />";
+                echo "<br />";
             }
             $rule['proxy'] && spider::$curl_proxy = $rule['proxy'];
             $rule['data_charset'] && spider::$charset = $rule['data_charset'];
@@ -330,7 +406,7 @@ class spider_content {
                 $md5 = md5($phtml);
                 if($pageurl[$md5]){
                     if (spider::$dataTest) {
-                        echo "<b>{$purl}此分页已采过</b><hr />";
+                        echo "<b>{$purl}此分页已采过</b><br />";
                     }
                     continue;
                 }
@@ -338,7 +414,7 @@ class spider_content {
                 if ($check_content_code === false) {
                     unset($check_content_code,$phtml);
                     if (spider::$dataTest) {
-                        echo "<b>找到无效分页特征码,中止其它分页采集</b><hr />";
+                        echo "<b>找到无效分页特征码,中止其它分页采集</b><br />";
                     }
                     break;
                 }
@@ -347,7 +423,7 @@ class spider_content {
                 if ($check_content_code === false) {
                     unset($check_content_code,$phtml);
                     if (spider::$dataTest) {
-                        echo "<b>未找到有效分页特征码,中止其它分页采集</b><hr />";
+                        echo "<b>未找到有效分页特征码,中止其它分页采集</b><br />";
                     }
                     break;
                 }
@@ -357,7 +433,7 @@ class spider_content {
                 $_purl    = self::$hash[$cmd5];
                 if($_purl){
                     if (spider::$dataTest) {
-                        echo "<b>发现[{$purl}]正文与[{$_purl}]相同,跳过本页采集</b><hr />";
+                        echo "<b>发现[{$purl}]正文与[{$_purl}]相同,跳过本页采集</b><br />";
                     }
                     continue;
                 }
@@ -434,8 +510,8 @@ class spider_content {
                 }
                 if (spider::$dataTest) {
                     echo "<b>多条匹配结果:</b><pre>";
-                    print_r($match_hash);
-                    echo "</pre><hr />";
+                    print_r(array_map('htmlspecialchars', $conArray));
+                    echo "</pre>";
                 }
                 $content = implode('#--iCMS.PageBreak--#', $conArray);
                 unset($conArray,$_content,$match_hash);
@@ -444,6 +520,11 @@ class spider_content {
                     $content = $doc[$content_dom]->$content_fun($content_attr);
                 }else{
                     $content = $doc[$content_dom]->$content_fun();
+                }
+                if (spider::$dataTest) {
+                    echo "<b>[".$data['name']."]匹配结果:</b><pre>";
+                    print_r(htmlspecialchars($content));
+                    echo "</pre>";
                 }
             }
 
@@ -463,32 +544,75 @@ class spider_content {
                             if($match_hash[$cmd5]){
                                 break;
                             }
-                            if ($data['trim']) {
-                                $mat['content'] = trim($mat['content']);
-                            }
+                            $mat['content'] = trim($mat['content']);
                             if(empty($mat['content'])){
                                 $cmd5 = 'empty('.$mkey.')';
                             }else{
                                 $conArray[$mkey] = $mat['content'];
                             }
                             $match_hash[$cmd5] = true;
+                            foreach ($mat as $key => $value) {
+                                if(!is_numeric($key)){
+                                    self::$content[$mkey][$key] = trim($value);
+                                }
+                            }
                         }
                         if (spider::$dataTest) {
-                            echo "<b>多条匹配结果:</b><pre>";
-                            print_r($match_hash);
-                            echo "</pre><hr />";
+                            echo "<b>[".$data['name']."]多条匹配结果:</b><pre>";
+                            print_r(iSecurity::escapeStr(self::$content));
+                            echo "</pre>";
                         }
                         $content = implode('#--iCMS.PageBreak--#', $conArray);
                         unset($conArray,$match_hash);
                     } else {
                         preg_match('|' . $data_rule . '|is', $html, $matches);
                         $content = $matches['content'];
+                        foreach ($matches as $key => $value) {
+                            if(!is_numeric($key)){
+                                self::$content[$key] = trim($value);
+                            }
+                        }
+                        if (spider::$dataTest) {
+                            echo "<b>[".$data['name']."]匹配结果:</b><pre>";
+                            print_r(iSecurity::escapeStr(self::$content));
+                            echo "</pre>";
+                        }
+                    }
+                    if(self::$content && preg_match('/<%content(\d*)%>/i', $data['cleanbefor'])){
+                        $content = self::replace_content($data['cleanbefor']);
                     }
                 } else {
                     $content = $data['rule'];
                 }
             }
         }
+        return $content;
+    }
+    public static function replace_content(&$replace){
+        //规则后:[<%content%><%content2%>]
+        $pieces  = explode("\n", $replace);
+        $content = array();
+        foreach ($pieces as $pk => $pv) {
+            if(preg_match('/\[.*?\]/i', $pv)){
+                unset($pieces[$pk]);
+                $_content = trim($pv,"[]\n\r");
+                foreach (self::$content as $ckey => $cvalue) {
+                    if(is_array($cvalue)){
+                        $_content = trim($pv,"[]\n\r");
+                        foreach ($cvalue as $ck => $cv) {
+                            $_content = str_replace("<%{$ck}%>", $cv, $_content);
+                        }
+                        $content[] = $_content;
+                    }else{
+                        $_content = str_replace("<%{$ckey}%>", $cvalue, $_content);
+                        $content  = $_content;
+                    }
+                }
+            }
+        }
+        $replace = implode("\n", $pieces);
+        is_array($content) && $content = implode("\n#--iCMS.PageBreak--#\n", $content);
+        self::$content = null;
         return $content;
     }
     public static function msg($msg,$type,$name,$rule){

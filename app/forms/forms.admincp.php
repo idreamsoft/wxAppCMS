@@ -353,6 +353,7 @@ class formsAdmincp{
     public function do_batch(){
         $idArray = (array)$_POST['id'];
         $idArray OR iUI::alert("请选择要操作的表单");
+        $idArray = array_map('intval', $idArray);
         $ids     = implode(',',$idArray);
         $batch   = $_POST['batch'];
         switch($batch){
@@ -409,7 +410,7 @@ class formsAdmincp{
       if(strpos($_POST['zipfile'], '..') !== false){
         iUI::alert('What the fuck!!');
       }
-      forms_zip::$zipFile  = trim($_POST['zipfile'],"\0\n\r\t\x0B");
+      forms_zip::$zipFile  = trim($_POST['zipfile']);
       forms_zip::$msg_mode = 'alert';
       forms_zip::install();
       iUI::success('表单安装完成','js:1');

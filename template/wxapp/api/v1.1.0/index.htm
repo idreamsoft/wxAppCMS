@@ -7,7 +7,9 @@
 <!--{include file="./article_list.json.htm"}-->
 <!--{/iCMS}-->
 ]
-,"PAGE":<!--{$iCMS.PAGE|keys:"NAV,NEXT,PREV":true|json_encode}-->
+<!--{iCMS:tag:list keys="id,url,name" row="20" orderby="hot"}-->
+,"tag_list":<!--{$tag_list|json_encode}-->
+,"PAGE":<!--{$iCMS.PAGE|keys:"NAV,NEXT,PREV":true|json_encode|default:'{}'}-->
 <!--{if $iCMS.PAGE.CURRENT<2}-->
 ,"banner":{
 <!--{iCMS:article:list

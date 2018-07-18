@@ -94,9 +94,7 @@ class categoryFunc{
 			$cache_name = iPHP_DEVICE.'/category/'.$hash;
 	        $vars['page'] && $cache_name.= "/".(int)$GLOBALS['page'];
 			$resource = iCache::get($cache_name);
-	        if($resource){
-	            return $resource;
-	        }
+	        if(is_array($resource)) return $resource;
 		}
 
 		$resource = iDB::all("SELECT `cid` FROM `#iCMS@__category` {$where_sql} {$order_sql} {$limit}");

@@ -128,6 +128,9 @@ class iHttp{
                 $uri = parse_url($url);
                 self::$CURLOPT_REFERER = $uri['scheme'] . '://' . $uri['host'];
             }
+            if(stripos($url, 'mmbiz.qpic.cn')!==false){
+                self::$CURLOPT_REFERER = 'http://weixin.qq.com';
+            }
             $options = array(
                 CURLOPT_URL                     => $url,
                 CURLOPT_REFERER                 => self::$CURLOPT_REFERER,

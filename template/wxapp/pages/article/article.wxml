@@ -3,21 +3,17 @@
 <import src="../../iCMS/wxml/article.wxml" />
 <import src="../../wxParse/wxParse.wxml"/>
 
+<collect-formid>
 <view class="page" hidden="{{page_hidden}}">
-    <view wx:if="{{article.pic.url}}" class="article-pic">
-        <image mode="aspectFill" src="{{article.pic.url}}"></image>
-    </view>
-    <view class="clearfix"></view>
     <view class="article-wrap">
         <text class="article-title">{{article.title}}</text>
         <view class="article-info">
-            <navigator class="inline mr10" url="../category/category?cid={{article.cid}}">
-            {{category.name}}
-            </navigator>
+            <text>分类：</text>
+            <navigator class="mr10" url="../category/category?cid={{article.cid}}">{{category.name}}</navigator>
             <text class="pubdate mr10">{{article.pubdate}}</text>
             <text wx:if="{{article.source}}" class="source mr10">出处：{{article.source}}</text>
-            <text wx:if="{{article.author}}" class="author mr10">作者：{{article.author}}</text>
-            <text wx:if="{{!article.author}}" class="editor">编辑：{{article.user.name}}</text>
+            <text wx:if="{{article.author && article.creative=='1'}}" class="author mr10">作者：{{article.author}}</text>
+            <text class="editor" else>@{{article.user.name}} 分享</text>
         </view>
         <view class="clearfix mt10"></view>
         <block wx:if="{{article.description}}">
@@ -29,7 +25,7 @@
         <view class="article-tags">
             <view class="tag-array" wx:for="{{article.tags_array}}" wx:for-item="tag" wx:key="id">
                 <navigator class="inline mr10 tag-name" wx:if="{{tag.id}}" url="../tag/tag?id={{tag.id}}">
-                {{tag.name}}
+                    <text class="fa fa-tag"></text> {{tag.name}}
                 </navigator>
             </view>
         </view>
@@ -39,31 +35,37 @@
         </view>
         <view class="clearfix mt10"></view>
     </view>
+    <view class="clearfix mt10"></view>
     <view class="article-action">
         <view class="flex-grow-1">
             <button size="mini" type="primary" bindtap="upTap" id="{{article.id}}">
-                <image class="icon" src="../../images/up-fff.png" />
-                <text>赞 ({{article.good}})</text>
+                <text class="fa fa-thumbs-o-up"></text>
+                <text> 赞 ({{article.good}})</text>
             </button>
         </view>
-        <block wx:if="{{APP.meta.donate}}">
+        <block wx:if="{{hideUI.donate}}">
             <view class="flex-grow-1">
                 <button type="warn" size="mini" class="donate"
                 bindtap="dataTap"
                 data-uri="donate/donate"
                 data-id="{{article.id}}"
                 >
-                    <text>打赏</text>
+                    <text> 打赏</text>
                 </button>
             </view>
         </block>
         <view class="flex-grow-1">
-            <button size="mini" open-type="share">
-                <image class="icon" src="../../images/share.png" />
-                <text>分享到</text>
+            <button size="mini" class="btn btn-secondary" open-type="share">
+                <text class="fa fa-share-alt"></text>
+                <text> 分享给</text>
             </button>
         </view>
     </view>
+    <view style="text-align: center;" wx:if="{{metaData.ad_article_b}}">
+        <view class="clearfix mt10"></view>
+        <ad unit-id="{{metaData.ad_article_b}}"></ad>
+    </view>
+    <view class="clearfix"></view>
     <view class="article_prev_next">
         <navigator class="article_prev" wx:if="{{article_prev.id}}" url="../article/article?id={{article_prev.id}}">
             <text>上一篇:{{article_prev.title}}</text>
@@ -76,10 +78,12 @@
         <view class="article_next" wx:else>下一篇:没有了</view>
     </view>
     <view class="clearfix mt10"></view>
-    <view class="sub-title">
-        <text>相关文章</text>
+    <view class="h2-title">
+        <text class="fa fa-sun-o"></text> 你可能喜欢
     </view>
     <template is="article_list" data="{{article_list}}"/>
+    <view class="clearfix mt50"></view>
 </view>
 <loading class="loading" hidden="{{page_loading}}">加载中...</loading>
 <template is="navtab" />
+</collect-formid>

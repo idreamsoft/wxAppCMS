@@ -139,6 +139,12 @@ class spider_tools {
         $title = trim($responses['title']);
         $url   = trim($responses['url']);
         $url   = str_replace('<%url%>',$url, $rule['list_url']);
+
+        preg_match_all('#<%(\w{3,20})%>#is',$url,$f_match);
+        foreach ((array)$f_match[1] as $_key => $_name) {
+            $url = str_replace($f_match[0][$_key],trim($responses[$_name]),$url);
+        }
+
         if(strpos($url, 'AUTO::')!==false && $baseUrl){
             $url = str_replace('AUTO::','',$url);
             $url = self::url_complement($baseUrl,$url);

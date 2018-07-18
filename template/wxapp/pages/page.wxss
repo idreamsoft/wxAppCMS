@@ -1,0 +1,9 @@
+navigator { color: #00A2EA; }
+.h2-title{padding-left: 20rpx;color: #00A2EA;margin-bottom: 15rpx;background-color: #eaeaea;padding:15rpx;}
+.tags{margin-top:0px;padding:16rpx;}
+.tags-title{text-align:center;height:70rpx;font-size:11pt;color:#999;}
+.tag{color:#00A2EA;border:1px solid #00A2EA;padding:8rpx 16rpx;display:inline-block;float:left;margin-right:10rpx;border-radius:20rpx;margin-bottom:10rpx;font-size:11pt;}
+
+.search-bar{text-align:center;position:absolute;top:20rpx;width:100%;}
+.search-bar .weui-search-bar__box{line-height:60rpx;width:90%;height:60rpx;background-color:rgba(255,255,255,0.5);z-index:999999;border-radius:20rpx;margin:0 auto;text-align:left;}
+.search-bar .weui-search-bar__input{color:#fff;}

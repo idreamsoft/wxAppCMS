@@ -561,22 +561,23 @@ class appsFunc{
         $hash = md5($sql);
         if ($vars['cache']) {
             $cache = iPHP_DEVICE . "/{$name}/" . $hash;
-            $array = iCache::get($cache);
+            $resource = iCache::get($cache);
+            if(is_array($resource)) return $resource;
         }
-        if (empty($array)) {
+        if (empty($resource)) {
             $rs = iDB::row("SELECT * FROM `{$table}` WHERE `status`='1' {$sql}");
             if ($rs) {
                 $category = categoryApp::get_cahce_cid($rs->cid);
-                $array = array(
+                $resource = array(
                     'id'    => $rs->id,
                     'title' => $rs->title,
                     'url'   => iURL::get($name, array((array) $rs, $category))->href,
                 );
-                isset($rs->pic) && $array['pic'] = filesApp::get_pic($rs->pic);
+                isset($rs->pic) && $resource['pic'] = filesApp::get_pic($rs->pic);
             }
-            $vars['cache'] && iCache::set($cache, $array, $this->cache['time']);
+            $vars['cache'] && iCache::set($cache, $resource, $this->cache['time']);
         }
-        return $array;
+        return $resource;
     }
 
     public static function apps_list($vars){

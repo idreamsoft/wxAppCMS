@@ -394,8 +394,8 @@ class filesAdmincp{
         $click=='dir' && $_title=$title.'目录';
         return '<a href="'.$href.'" class="btn files_modal" data-toggle="modal" title="选择'.$_title.'"><i class="fa fa-search"></i> 选择</a>';
     }
-    public static function set_opt($pic_value=null) {
-        self::$no_http = true;
+    public static function set_opt($pic_value = null, $no_http = true) {
+        self::$no_http = $no_http;
         self::$pic_value = $pic_value;
         $self = new self();
         return $self;

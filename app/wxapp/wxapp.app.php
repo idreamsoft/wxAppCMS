@@ -18,16 +18,19 @@ class wxappApp extends appsApp {
     public static $id = 0;
 
     public function __construct($config=null) {
-        // $config===null && $config = iCMS::$config['wxapp'];
-        self::$id = (int)$_GET['wxAppId'];
         parent::__construct('wxapp');
-        $this->add_method('appinfo,upload,publish,qrcode');
+        $this->add_method('appinfo,upload,publish,qrcode,saveFormIds');
+        self::$id = (int)$_GET['wxAppId'];
         wxapp::init();
     }
     public function API_appinfo(){
-        $appInfo = wxapp::get_config();
-        unset($appInfo['payment'],$appInfo['appsecret'],$appInfo['sapp']);
-        iUI::json($appInfo);
+        //获取token中的用户信息
+        $user = wxapp_token::get_user();
+        //验证小程序缓存的用户信息是否正常
+        if($user && wxapp_user::check($user['openid'])){
+            return wxapp::appinfo();
+        }
+        iUI::code(-99,'appinfo session error');
     }
     public function API_upload(){
         @set_time_limit(0);
@@ -35,11 +38,11 @@ class wxappApp extends appsApp {
         $userApp->API_uploadimage();
     }
     public function API_publish(){
-        $cid   = (int)$_POST['cid'];
-        $title = iSecurity::escapeStr($_POST['title']);
-        $body  = stripslashes($_POST['body']);
+        $cid       = (int)$_POST['cid'];
+        $title     = iSecurity::escapeStr($_POST['title']);
+        $body      = stripslashes($_POST['body']);
         $bodyArray = json_decode($body,true);
-        $body = array();
+        $body      = array();
 // file_put_contents('_POST.log', var_export($_POST,true));
 // file_put_contents('bodyArray.log', var_export($bodyArray,true));
 // exit;
@@ -69,9 +72,9 @@ class wxappApp extends appsApp {
 // print_r($body);
 // file_put_contents('body.log', var_export($body,true));
 // exit;
-        $_POST['body'] = addslashes(implode("\n", $body));
-        $_POST['pg'] = 'publish';
-        $_POST['mobile'] = wxapp_user::PLATFORM;
+        $_POST['body']     = addslashes(implode("\n", $body));
+        $_POST['mobile']   = wxapp_user::PLATFORM;
+        $_POST['pg']       = 'publish';
         $_POST['creative'] = '1';
 
         iUI::set_dialog('msgType','ARRAY');
@@ -88,5 +91,8 @@ class wxappApp extends appsApp {
         $userApp = new userApp();
         $userApp->config['post']['seccode'] = false;
         $userApp->ACTION_manage();
+    }
+    public function API_saveFormIds(){
+        wxapp_message::insert($_POST);
     }
 }

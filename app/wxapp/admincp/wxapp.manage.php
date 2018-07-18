@@ -20,6 +20,7 @@ $(function(){
   <div class="widget-box">
     <div class="widget-title"> <span class="icon"> <i class="fa fa-search"></i> </span>
       <h5>搜索</h5>
+
     </div>
     <div class="widget-content">
       <form action="<?php echo iPHP_SELF ; ?>" method="get" class="form-inline">
@@ -38,6 +39,9 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
           <input type="text" name="keywords" class="span2" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜 索</button>
+        </div>
+        <div class="pull-right">
+          <a class="btn btn-success " href="<?php echo APP_FURI; ?>&do=cache" target="iPHP_FRAME"><i class="fa fa-refresh"></i> 更新缓存</a>
         </div>
       </form>
     </div>
@@ -79,8 +83,10 @@ $(function(){
               <td><?php echo $rs[$i]['name'] ; ?></td>
               <td><?php echo $rs[$i]['url'] ; ?></td>
               <td><?php echo $rs[$i]['tpl'] ; ?></td>
-              <td>
-                <a href="<?php echo APP_URI; ?>&do=getconfig&id=<?php echo $rs[$i]['id'] ; ?>" target="iPHP_FRAME" class="btn btn-small tip-top" title="请将下载到的config.js文件复制到小程序所在文件夹"><i class="fa fa-plug"></i> 获取config.js配置</a>
+              <td style="text-align:right;">
+                <a href="<?php echo APP_URI; ?>&do=getconfig&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" data-target="#iCMS-MODAL" data-meta='{"width":"400px","height":"400px"}' title="复制小程序配置"><i class="fa fa-plug"></i> 获取config.js配置</a>
+                <!-- <a href="<?php echo APP_URI; ?>&do=user&wxappid=<?php echo $rs[$i]['appid'] ; ?>" class="btn btn-small"><i class="fa fa-users "></i> 用户</a> -->
+                <a href="<?php echo __ADMINCP__; ?>=user&wxappid=<?php echo $rs[$i]['appid'] ; ?>" class="btn btn-small"><i class="fa fa-users "></i> 用户</a>
                 <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['id'] ; ?>&act=copy" class="btn btn-small"><i class="fa fa-copy "></i> 复制</a>
                 <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>
                 <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $rs[$i]['id'] ; ?>" target="iPHP_FRAME" class="del btn btn-danger btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>

@@ -1,3 +1,6 @@
 /* reset */
+@import "/utils/bootstrap.wxss";
+@import "/utils/fontAwesome.wxss";
 @import "/utils/weui/weui.wxss";
 @import "/iCMS/core/iCMS.wxss";
+@import "/pages/page.wxss";

@@ -344,6 +344,7 @@ class tagAdmincp{
     public function do_batch(){
         $idArray = (array)$_POST['id'];
         $idArray OR iUI::alert("请选择要操作的标签");
+        $idArray = array_map('intval', $idArray);
         $ids     = implode(',',$idArray);
         $batch   = $_POST['batch'];
     	switch($batch){

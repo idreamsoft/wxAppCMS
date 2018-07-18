@@ -415,7 +415,6 @@ class apps_store {
         iHttp::$CURLOPT_HTTPHEADER     = array('AUTHORIZATION: '.self::$authcode);
 
         $queryArray  = array(
-            'iPHP_APP'     => 'wxAppCMS',
             'iCMS_VERSION' => iCMS_VERSION,
             'iCMS_RELEASE' => iCMS_RELEASE,
             'iCMS_HASH'    => iCMS_HASH,

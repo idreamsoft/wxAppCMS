@@ -55,6 +55,19 @@ defined('iPHP') OR exit('What are you doing?');
     <div class="input-prepend"> <span class="add-on">允许上传类型</span>
         <input type="text" name="config[FS][allow_ext]" class="span4" id="FS_allow_ext" value="<?php echo $config['FS']['allow_ext'] ; ?>" />
     </div>
+    <div class="clearfloat mb10"></div>
+    <div class="input-prepend"> <span class="add-on">检测文件</span>
+      <div class="switch">
+        <?php
+            if(!isset($config['FS']['check_md5'])){
+                $config['FS']['check_md5'] = true;
+            }
+        ?>
+        <input type="checkbox" data-type="switch" name="config[FS][check_md5]" id="FS_check_md5" <?php echo $config['FS']['check_md5']?'checked':''; ?>/>
+      </div>
+    </div>
+    <span class="help-inline">检测文件是否上传过,开启后同一个文件只能上传一次,如果需要重新上传请在后台文件管理里删除后,再重新上传</span>
+    <div class="clearfloat mb10"></div>
 <!--
     <hr />
     <div class="input-prepend"> <span class="add-on">远程附件</span>

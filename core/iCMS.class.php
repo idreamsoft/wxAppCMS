@@ -22,7 +22,8 @@ class iCMS {
 
         self::set_tpl_const();
         self::send_access_control();
-        self::assign_site();
+
+        iView::app_func('site',true);
     }
     /**
      * [config 对框架各系统进行配置]
@@ -69,6 +70,9 @@ class iCMS {
             'define' => array(
                 'apps' => $config['apps'],
                 'func' => 'content',
+            ),
+            'callback' => array(
+                'output' => array('iDevice','output'),
             )
         ));
         //UI
@@ -106,28 +110,6 @@ class iCMS {
         @header("Access-Control-Allow-Origin: " . iCMS_URL);
         @header('Access-Control-Allow-Headers: X-Requested-With,X_Requested_With');
     }
-    public static function assign_site(){
-        $site          = self::$config['site'];
-        $site['title'] = $site['name'];
-        $site['404']   = iPHP_URL_404;
-        $site['url']   = iCMS_URL;
-        $site['murl']  = self::$config['template']['mobile']['domain'];
-        $site['tpl']   = iView::$config['template']['dir'];
-        $site['page']  = isset($_GET['p'])?(int)$_GET['p']:(int)$_GET['page'];
-        $site['urls']  = array(
-            "template" => iCMS_URL.'/template',
-            "tpl"      => iCMS_URL.'/template/'.iView::$config['template']['dir'],
-            "public"   => iCMS_PUBLIC_URL,
-            "user"     => iCMS_USER_URL,
-            "res"      => iCMS_FS_URL,
-            "ui"       => iCMS_PUBLIC_URL.'/ui',
-            "avatar"   => iCMS_FS_URL.'avatar/',
-            "mobile"   => $site['murl'],
-            "desktop"  => self::$config['template']['desktop']['domain'],
-        );
-        iDevice::domain($site['urls']);
-        iView::assign('site',$site);
-    }
     //向下兼容[暂时保留]
     public static function check_view_html($tpl,$C,$key) {
         return appsApp::is_html($tpl,$C,$key);
@@ -138,21 +120,7 @@ class iCMS {
     }
     //分页数缓存
     public static function page_total_cache($sql, $type = null,$cachetime=3600) {
-        $total = (int) $_GET['total_num'];
-        if($type=="G"){
-            empty($total) && $total = iDB::value($sql);
-        }else{
-            $cache_key = 'page_total/'.substr(md5($sql), 8, 16);
-            if(empty($total)){
-                if (!isset($_GET['page_total_cache'])|| $type === 'nocache'||!$cachetime) {
-                    $total = iDB::value($sql);
-                    $type === null && iCache::set($cache_key,$total,$cachetime);
-                }else{
-                    $total = iCache::get($cache_key);
-                }
-            }
-        }
-        return (int)$total;
+        return iPagination::totalCache($sql, $type,$cachetime);
     }
 
     public static function set_tpl_const() {

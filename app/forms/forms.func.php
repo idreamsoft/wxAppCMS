@@ -202,8 +202,9 @@ class formsFunc{
             case "addtime": $order_sql=" ORDER BY `addtime` $by";    break;
             default:        $order_sql=" ORDER BY `id` DESC";
         }
+        $hash = md5(json_encode($vars) . $order_sql . $limit);
         if($vars['cache']){
-            $cache_name = iPHP_DEVICE.'/forms_list/'.md5($where_sql);
+            $cache_name = iPHP_DEVICE.'/forms_list/'.$hash;
             $resource   = iCache::get($cache_name);
         }
         if(empty($resource)){

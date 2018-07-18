@@ -8,6 +8,7 @@
 * @licence https://www.icmsdev.com/LICENSE.html
 */
 class tagFunc{
+    public static $last_query =null;
     public static function tag_list($vars){
         iMap::reset();
 
@@ -117,9 +118,7 @@ class tagFunc{
     		$cache_name = iPHP_DEVICE.'/tag/'.$hash;
             $vars['page'] && $cache_name.= "/".(int)$GLOBALS['page'];
     		$resource = iCache::get($cache_name);
-            if($resource){
-                return $resource;
-            }
+            if(is_array($resource)) return $resource;
     	}
         if($map_sql || $offset){
             if($vars['cache']){
@@ -139,6 +138,7 @@ class tagFunc{
         }
 
     	$resource = iDB::all("SELECT * FROM `#iCMS@__tag` {$where_sql} {$order_sql} {$limit}");
+        self::$last_query = iDB::$last_query;
     	if($resource){
             $resource = self::tag_array($vars,$resource);
             $vars['cache'] && iCache::set($cache_name,$resource,$cache_time);

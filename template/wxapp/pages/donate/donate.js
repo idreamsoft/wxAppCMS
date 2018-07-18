@@ -1,17 +1,17 @@
-let $APP = getApp();
-let $wxAppCMS = $APP.wxAppCMS();
+let $iCMS = getApp().iCMS();
 
-$wxAppCMS.addData({
+$iCMS.addData({
     moneys: [1, 2, 4, 6, 8, 10],
     article: {}
 });
 
-$wxAppCMS.payTap = function(e) {
-    var that = this;
+$iCMS.payTap = function(e) {
+    let that = this;
+    let $APP = getApp();
     let $param = this.get_dataset(e);
     let $article = $APP.CACHE['article'];
 
-    $param['avatar_url'] = this.$globalData.userInfo.avatarUrl;
+    $param['avatar_url'] = this.userData.avatarUrl;
     $param['iid'] = $article.id;
     $param['appid'] = '1';
     $param['title'] = $article.title;
@@ -41,13 +41,12 @@ $wxAppCMS.payTap = function(e) {
 
 }
 
-$wxAppCMS.main = function(options) {
+$iCMS.main = function(options) {
     this.page_loading(false, true);
-    let $appInfo = this.$globalData.appInfo;
 
-    if ($appInfo.meta['donate']) {
+    if (this.metaData['donate']) {
         this.setData({
-            moneys: $appInfo.meta['donate']['value'].split(','),
+            moneys: this.metaData['donate'].split(','),
         });
     }
 
@@ -62,4 +61,4 @@ $wxAppCMS.main = function(options) {
 
 }
 
-$wxAppCMS.run();
+$iCMS.run();

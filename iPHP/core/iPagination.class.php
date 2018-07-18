@@ -12,13 +12,13 @@ class iPagination {
     public static $config   = array();
     public static $callback = array();
 
-    public static $nav    = NULL;
-    public static $offset = NULL;
+    public static $pagenav = NULL;
+    public static $offset  = NULL;
 
     public static $total_cache = 'G';
-    public static function page($sql,$perpage=10,$nowindex=null) {
+    public static function getTotal($sql,$perpage=10,$nowindex=null) {
         $total_type = $vars['total_cache'] ? 'G' : null;
-        $total = self::total($sql,$total_type,iCMS::$config['cache']['page_total']);
+        $total = self::totalCache($sql,$total_type,iCMS::$config['cache']['page_total']);
         return self::make(array(
             'total_type' => $total_type,
             'total'      => $total,
@@ -27,7 +27,7 @@ class iPagination {
         ));
     }
     //分页数缓存
-    public static function total($sql, $type = null,$cachetime=3600) {
+    public static function totalCache($sql, $type = null,$cachetime=3600) {
         $total = (int) $_GET['total_num'];
         if($type=="G"){
             empty($total) && $total = iDB::value($sql);
@@ -45,7 +45,7 @@ class iPagination {
         return (int)$total;
     }
     //动态翻页函数
-    public static function nav($total, $perpage = 20, $unit = "条记录", $url = '', $target = '') {
+    public static function pagenav($total, $perpage = 20, $unit = "条记录", $url = '', $target = '') {
         $pageconf = array(
             'url'        => $url,
             'target'     => $target,
@@ -59,16 +59,16 @@ class iPagination {
 
         $iPages = new iPages($pageconf);
         self::$offset = $iPages->offset;
-        self::$nav = '<ul>' .
-        self::$nav.= $iPages->show(3);
-        self::$nav.= "<li> <span class=\"muted\">{$total}{$unit} {$perpage}{$unit}/页 共{$iPages->totalpage}页</span></li>";
+        self::$pagenav = '<ul>' .
+        self::$pagenav.= $iPages->show(3);
+        self::$pagenav.= "<li> <span class=\"muted\">{$total}{$unit} {$perpage}{$unit}/页 共{$iPages->totalpage}页</span></li>";
         if ($iPages->totalpage > 200) {
             $url = $iPages->get_url(1);
-            self::$nav.= "<li> <span class=\"muted\">跳到 <input type=\"text\" id=\"pageselect\" style=\"width:24px;height:12px;margin-bottom: 0px;line-height: 12px;\" /> 页 <input class=\"btn btn-small\" type=\"button\" onClick=\"window.location='{$url}&page='+$('#pageselect').val();\" value=\"跳转\" style=\"height: 22px;line-height: 18px;\"/></span></li>";
+            self::$pagenav.= "<li> <span class=\"muted\">跳到 <input type=\"text\" id=\"pageselect\" style=\"width:24px;height:12px;margin-bottom: 0px;line-height: 12px;\" /> 页 <input class=\"btn btn-small\" type=\"button\" onClick=\"window.location='{$url}&page='+$('#pageselect').val();\" value=\"跳转\" style=\"height: 22px;line-height: 18px;\"/></span></li>";
         } else {
-            self::$nav.= "<li> <span class=\"muted\">跳到" . $iPages->select() . "页</span></li>";
+            self::$pagenav.= "<li> <span class=\"muted\">跳到" . $iPages->select() . "页</span></li>";
         }
-        self::$nav.= '</ul>';
+        self::$pagenav.= '</ul>';
     }
     //模板翻页函数
     public static function make($conf) {
@@ -76,15 +76,15 @@ class iPagination {
         empty($conf['unit']) && $conf['unit'] = iUI::lang(iPHP_APP . ':page:list');
 
         $iPages = new iPages($conf);
-        if ($iPages->totalpage > 1) {
+        // if ($iPages->totalpage > 1) {
             $iPages->nowindex<1 && $iPages->nowindex =1;
             $pagenav = $conf['pagenav'] ? strtoupper($conf['pagenav']) : 'NAV';
             $pnstyle = $conf['pnstyle'] ? $conf['pnstyle'] : 0;
             iView::set_iVARS(array(
                 'PAGES' => $iPages,
                 'PAGE'  => array(
+                    $pagenav  => ($iPages->totalpage > 1)?$iPages->show($pnstyle):'',
                     'COUNT'   => $conf['total'],
-                    $pagenav  => $iPages->show($pnstyle),
                     'TOTAL'   => $iPages->totalpage,
                     'CURRENT' => $iPages->nowindex,
                     'PN'      => $iPages->nowindex,
@@ -93,9 +93,10 @@ class iPagination {
                     'LAST'    => ($iPages->nowindex>=$iPages->totalpage),
                 )
             ));
-        }
+        // }
         return $iPages;
     }
+    //模板静态分页配置
     public static function url($iurl){
         if(isset($GLOBALS['iPage'])) return;
 
@@ -107,6 +108,7 @@ class iPagination {
             'ext'    =>$iurl['ext']
         );
     }
+    //内容分页
     public static function content($content,$page,$total,$count,$mode=null,$chapterArray=null){
         $pageArray = array();
         $pageurl = $content['iurl']['pageurl'];

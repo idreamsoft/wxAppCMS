@@ -79,11 +79,12 @@ function checkLogin() {
 function login() {
     let $LOGIN_CODE = null;
     return new Promise(function(resolve, reject) {
-        return wx_login().then(res => {
+        wx_login().then(res => {
             $LOGIN_CODE = res.code;
             return wx_getUserInfo();
         }).then(data => {
             data.LOGIN_CODE = $LOGIN_CODE;
+            data.FORM_ID    = wx.getStorageSync('userLoginFormId');
             //登录远程服务器
             iHttp.POST(
                 iUrl.make('wxapp', 'auth'), data
@@ -100,20 +101,9 @@ function login() {
                 reject(err);
             });
         }).catch((err) => {
-            wx.showModal({
-                content: '为了保证您能正常使用' + config.TITLE + ',请允许获取您的公开信息(头像、昵称)',
-                success: function(res) {
-                    if (res.confirm) {
-                        wx.openSetting({
-                            success: (res) => {
-
-                            }
-                        });
-                    } else if (res.cancel) {
-                        login();
-                    }
-                }
-            })
+            wx.navigateTo({
+                url: '/pages/user/login/index'
+            });
             if (typeof(reject) === "function") {
                 reject(err);
             }

@@ -125,7 +125,7 @@ class iURL {
             return $C['rule'][$key];
         }
     }
-   public static function get($uri,$a=array(),$type=null) {
+    public static function get($uri,$a=array(),$type=null) {
         $i          = new stdClass();
         $default    = array();
         $category   = array();
@@ -294,15 +294,7 @@ class iURL {
         return str_replace(self::PAGE_SIGN, $page, $path);
     }
     public static function page_url($iurl){
-        if(isset($GLOBALS['iPage'])) return;
-
-        $iurl = (array)$iurl;
-        $GLOBALS['iPage']['url']  = $iurl['pageurl'];
-        $GLOBALS['iPage']['config'] = array(
-            'enable' =>true,
-            'index'  =>$iurl['href'],
-            'ext'    =>$iurl['ext']
-        );
+        return iPagination::url($iurl);
     }
     public static function make($QS=null,$url=null) {
         $url OR $url = $_SERVER["REQUEST_URI"];

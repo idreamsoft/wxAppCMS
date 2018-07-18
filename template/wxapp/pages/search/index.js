@@ -1,29 +1,29 @@
-let $wxAppCMS = getApp().wxAppCMS();
+let $iCMS = getApp().iCMS();
 
-$wxAppCMS.addData({
+$iCMS.addData({
     subTitle: '最新资讯',
     inputShowed: false,
     inputVal: null,
     tag_list: []
 });
 
-$wxAppCMS.showInput = function() {
+$iCMS.showInput = function() {
     this.setData({
         inputShowed: true
     });
 }
-$wxAppCMS.hideInput = function() {
+$iCMS.hideInput = function() {
     this.setData({
         inputVal: "",
         inputShowed: false
     });
 }
-$wxAppCMS.clearInput = function() {
+$iCMS.clearInput = function() {
     this.setData({
         inputVal: ""
     });
 }
-$wxAppCMS.searchAction = function(e) {
+$iCMS.searchAction = function(e) {
     this.setData({
         inputVal: e.detail.value
     });
@@ -32,7 +32,7 @@ $wxAppCMS.searchAction = function(e) {
     })
 }
 
-$wxAppCMS.main = function(options) {
+$iCMS.main = function(options) {
     wx.setNavigationBarTitle({
         title: '搜索 - ' + this.$globalData.appInfo.name
     });
@@ -46,9 +46,5 @@ $wxAppCMS.main = function(options) {
             tag_list: res.tag_list
         });
     });
-
-    this.setData({
-        APP: this.$globalData.appInfo
-    });
 }
-$wxAppCMS.run();
+$iCMS.run();

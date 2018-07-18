@@ -1,7 +1,7 @@
 let $APP = getApp();
-let $wxAppCMS = $APP.wxAppCMS();
+let $iCMS = $APP.iCMS();
 
-$wxAppCMS.addData({
+$iCMS.addData({
     userInfo: {},
     counter: 0,
     maxlength: 10000,
@@ -15,10 +15,10 @@ $wxAppCMS.addData({
     progress: {},
     mediaCount: 0
 });
-$wxAppCMS.bodyData = [];
+$iCMS.bodyData = [];
 
 
-$wxAppCMS.getCategory = function() {
+$iCMS.getCategory = function() {
     this.data_loading('show');
     let that = this;
     let $url = this.iURL.make(
@@ -41,7 +41,7 @@ $wxAppCMS.getCategory = function() {
         });
     });
 };
-$wxAppCMS.getSubCategoryById = function(idx) {
+$iCMS.getSubCategoryById = function(idx) {
     let category_list = wx.getStorageSync('category_list');
     let rootid = category_list.top[idx].cid;
     let tempObj = [];
@@ -54,7 +54,7 @@ $wxAppCMS.getSubCategoryById = function(idx) {
     }
     return tempObj;
 }
-$wxAppCMS.bindPickerChange = function(e) {
+$iCMS.bindPickerChange = function(e) {
     // console.log(e.detail);
     if (e.detail.column == "0") {
         let category_list = wx.getStorageSync('category_list');
@@ -68,7 +68,7 @@ $wxAppCMS.bindPickerChange = function(e) {
     }
 
 }
-$wxAppCMS.catchDelImage = function(e) {
+$iCMS.catchDelImage = function(e) {
     let $data = this.get_dataset(e);
     let rootid = $data['rootid'];
     let key = $data['key'];
@@ -81,7 +81,7 @@ $wxAppCMS.catchDelImage = function(e) {
         bodyData: this.bodyData
     });
 }
-$wxAppCMS.bindDelBody = function(e) {
+$iCMS.bindDelBody = function(e) {
     let $data = this.get_dataset(e);
     let index = $data['index'];
     this.bodyData.splice(index, 1);
@@ -92,7 +92,7 @@ $wxAppCMS.bindDelBody = function(e) {
         bodyData: this.bodyData
     });
 }
-$wxAppCMS.setBody = function(content, type) {
+$iCMS.setBody = function(content, type) {
     let that = this;
     type = type || 'text';
     let $bodyId = wx.getStorageSync('bodyId');
@@ -143,11 +143,11 @@ $wxAppCMS.setBody = function(content, type) {
     wx.setStorageSync('bodyData', this.bodyData);
 }
 
-$wxAppCMS.bindBodyBlur = function(e) {
+$iCMS.bindBodyBlur = function(e) {
     let text = e.detail.value;
     if (text) this.setBody(text);
 }
-$wxAppCMS.textTap = function(e) {
+$iCMS.textTap = function(e) {
     let bodyId = wx.getStorageSync('bodyId');
     bodyId++;
     wx.setStorageSync('bodyId', bodyId);
@@ -155,7 +155,7 @@ $wxAppCMS.textTap = function(e) {
         textarea: ''
     });
 }
-$wxAppCMS.bindBodyInput = function(e) {
+$iCMS.bindBodyInput = function(e) {
     let text = e.detail.value;
     this.setData({
         counter: text.length
@@ -186,7 +186,7 @@ function chooseVideo() {
         }
     })
 }
-$wxAppCMS.mediaTap = function(e) {
+$iCMS.mediaTap = function(e) {
     $APP.ONESELF = true;
     let that = this;
     let chooseMap = [chooseImage, chooseImage, chooseVideo];
@@ -201,23 +201,23 @@ $wxAppCMS.mediaTap = function(e) {
         }
     });
 }
-$wxAppCMS.formSubmit = function(e) {
+$iCMS.formSubmit = function(e) {
     let that = this;
     let $param = e.detail.value;
 
     console.log($param);
 
     if (!$param['title']) {
-        that.alert("请填写文章标题");
+        that.alert("请填写标题");
         return '';
     }
     if (!$param['cid'] || $param['cid'] == "0") {
-        that.alert("请选择文章栏目");
+        that.alert("请选择栏目");
         return;
     }
 
     if (!this.bodyData.length) {
-        that.alert("请填写文章内容");
+        that.alert("请填写内容");
         return;
     }
 
@@ -328,19 +328,14 @@ $wxAppCMS.formSubmit = function(e) {
         });
     }
 }
-$wxAppCMS.formReset = function() {
+$iCMS.formReset = function() {
     console.log('form发生了reset事件')
 }
-$wxAppCMS.load = function() {
+$iCMS.load = function() {
     wx.setStorageSync('bodyId', 0);
     wx.setStorageSync('bodyData', []);
 }
-$wxAppCMS.main = function() {
-    // this.page_loading(false, true);;
-    this.setData({
-        APP: this.$globalData.appInfo,
-    });
-
+$iCMS.main = function() {
     this.getCategory();
 }
-$wxAppCMS.run();
+$iCMS.run();

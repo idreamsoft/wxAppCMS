@@ -1,12 +1,11 @@
-let $wxAppCMS = getApp().wxAppCMS();
+let $iCMS = getApp().iCMS();
 
-$wxAppCMS.addData({
-    subTitle: '最新资讯',
+$iCMS.addData({
     article_list: [],
     banner: []
 });
 
-$wxAppCMS.getList = function() {
+$iCMS.getList = function() {
     if (this.data.page_last) return;
     if(this.ONESELF) return;
 
@@ -25,21 +24,41 @@ $wxAppCMS.getList = function() {
                 banner: res.banner
             });
         }
-
-        that.setData({
-            article_list: that.data.article_list.concat(res.article_list),
-            page_last: res.PAGE ? res.PAGE.LAST : false
-        });
+        if (res.tag_list) {
+            that.setData({
+                tag_list: res.tag_list
+            });
+        }
+        if(this.data.page_no>1){
+            that.setData({
+                article_list: that.data.article_list.concat(res.article_list)
+            });
+        }else{
+            that.setData({
+                article_list: res.article_list,
+                page_last: res.PAGE ? res.PAGE.LAST : false
+            });
+        }
+        if(that.data.page_no>=res.PAGE.TOTAL){
+            that.setData({
+                page_last:true
+            });
+            return;
+        }
     });
 };
-$wxAppCMS.onShareAppMessage = function(res) {
+$iCMS.onShareAppMessage = function(res) {
     if (res.from === 'button') {
         // 来自页面内转发按钮
         console.log(res.target)
     }
+    let title = this.$globalData.appInfo.name;
+    if(that.metaData['share:index:title']){
+        title = that.metaData['share:index:title']+ ' - ' + this.$globalData.appInfo.name
+    }
     return {
-        title: this.$globalData.appInfo.title + ' - ' + this.$globalData.appInfo.name,
-        path: '/pages/index/index?uid=' + this.$globalData.session.userid,
+        title: title,
+        path: '/pages/index/index?uid=' + this.sessionData.userid,
         success: function(res) {
             // 转发成功
         },
@@ -49,7 +68,7 @@ $wxAppCMS.onShareAppMessage = function(res) {
     }
 }
 
-$wxAppCMS.main = function() {
+$iCMS.main = function() {
     let that = this;
     wx.getSystemInfo({
         success(res) {
@@ -63,7 +82,5 @@ $wxAppCMS.main = function() {
     });
     this.getList();
 }
-$wxAppCMS.show = function() {
-}
 
-$wxAppCMS.run();
+$iCMS.run();

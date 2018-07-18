@@ -212,6 +212,11 @@ class category {
             }
             if($C['rule']){
                 $rule = json_decode($C['rule'],true);
+                if($rule)foreach ($rule as $key => &$value) {
+                   if($key!='index' && $key!='list'){
+                        $value = str_replace('{CDIR}', $C['dir'], $value);
+                   }
+                }
                 $rule && $rules[$C['cid']] = $rule;
             }
         }

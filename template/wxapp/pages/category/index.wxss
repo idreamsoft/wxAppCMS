@@ -1,8 +1,5 @@
 @import "../../iCMS/wxss/common.wxss";
 .subcategory{padding-left:80rpx;}
-.tags{margin-top:0px;padding:16rpx;}
-.tags-title{text-align:center;height:70rpx;font-size:11pt;color:#999;}
-.tag{color:#00a2ea;border:1px solid #a0d1e5;padding:8rpx 16rpx;display:inline-block;float:left;margin-right:10rpx;border-radius:20rpx;margin-bottom:10rpx;font-size:11pt;}
 .weui-navbar{background-color: #fff;}
 .weui-item-wrap{overflow-x: scroll;overflow-y:visible; display:flex;flex-direction:row;width: 100%;}
 .weui-item-wrap::-webkit-scrollbar {display: none;}

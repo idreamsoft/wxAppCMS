@@ -1,0 +1,4 @@
+/* pages/user/login/index.wxss */
+.container-fluid{padding: 30rpx;}
+.avatar{width: 300rpx;height: 300rpx; margin: 0 auto;}
+.nickname{text-align: center;padding: 10rpx;font-size: 13pt;}

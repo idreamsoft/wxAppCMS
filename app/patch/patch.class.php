@@ -13,8 +13,8 @@
  * @author icmsdev
  */
 define('PATCH_DIR', iPATH . 'cache/iCMS/patch/');//临时文件夹
-define('PATCH_APP', 'wxAppCMS');
 iHttp::$CURLOPT_REFERER = ACP_HOST;
+
 class patch {
 	const PATCH_URL = "https://patch.icmsdev.com";	//自动更新服务器
 	public static $version = '';
@@ -26,17 +26,28 @@ class patch {
 	public static function init($force = false) {
 		$info = self::info($force);
 		$git_time = defined('GIT_TIME')?date("Ymd",GIT_TIME):0;
-		if ($info->app == PATCH_APP &&
+		if ($info->app == iPHP_APP &&
 			version_compare($info->version, iCMS_VERSION, '>=') &&
 			$info->release > iCMS_RELEASE &&
 			$info->release > $git_time )
 		{
 			self::$version = $info->version;
 			self::$release = $info->release;
-			self::$zipName = PATCH_APP.'.' . self::$version . '.patch.' . self::$release . '.zip';
+			self::$zipName = 'iCMS.' . self::$version . '.patch.' . self::$release . '.zip';
 			return array(self::$version, self::$release, $info->update, $info->changelog);
 		}
 	}
+	public static function setTime() {
+		$release = strtotime(iCMS_RELEASE);
+		$gitTime = GIT_TIME;
+		$_GET['iCMS_RELEASE']&& $release = strtotime($_GET['iCMS_RELEASE']);
+		$_GET['GIT_TIME']    && $gitTime = $_GET['GIT_TIME'];
+		iCache::set('patch.time',array($release,$gitTime),3600);
+	}
+	public static function getTime() {
+		return (array)iCache::get('patch.time');
+	}
+
 	public static function git($do,$commit_id=null,$type='array') {
         $commit_id===null && $commit_id = GIT_COMMIT;
 		$_GET['commit_id'] && $commit_id = $_GET['commit_id'];
@@ -44,7 +55,6 @@ class patch {
 		$path = $_GET['path'];
 
 		$url  = patch::PATCH_URL . '/git?do='.$do
-        ."&APP=".PATCH_APP
         ."&VERSION=".iCMS_VERSION
         ."&RELEASE=".iCMS_RELEASE
 		.'&commit_id=' .$commit_id
@@ -70,7 +80,6 @@ class patch {
 	}
 	public static function version($force = false) {
         $url = self::PATCH_URL."/cms.version?callback=?"
-        ."&APP=".PATCH_APP
         ."&VERSION=".iCMS_VERSION
         ."&RELEASE=".iCMS_RELEASE
         ."&GIT_COMMIT=".GIT_COMMIT;
@@ -85,7 +94,7 @@ class patch {
 		if (iFS::ex($tFilePath) && time() - iFS::mtime($tFilePath) < 3600 && !$force) {
 			$FileData = iFS::read($tFilePath);
 		} else {
-			$url = self::PATCH_URL . '/version.' . PATCH_APP . '.' . iCMS_VERSION . '.patch.' . iCMS_RELEASE . '?t=' . time();
+			$url = self::PATCH_URL . '/version.' . iPHP_APP . '.' . iCMS_VERSION . '.patch.' . iCMS_RELEASE . '?t=' . time();
 			$FileData = iHttp::remote($url);
 			iFS::write($tFilePath, $FileData);
 		}
@@ -200,16 +209,13 @@ class patch {
 	public static function get_upgrade_files() {
 		$files = array();
 		$patch_dir = iPHP_APP_DIR.'/patch/files/';
+		list($release,$gitTime) = self::getTime();
 		foreach (glob($patch_dir."*.php") as $file) {
 			$d = str_replace(array($patch_dir,'db.','fs.','.php'), '', $file);
-			$time = strtotime($d.'00');
-			$release = strtotime(iCMS_RELEASE);
-			$_GET['iCMS_RELEASE'] && $release = strtotime($_GET['iCMS_RELEASE']);
+			$time = strtotime($d.'5959');
 			if($time>$release){
-				if(defined('GIT_TIME')||isset($_GET['GIT_TIME'])){
-					$git_time = GIT_TIME;
-					$_GET['GIT_TIME'] && $git_time = $_GET['GIT_TIME'];
-					if($time>$git_time){
+				if($gitTime){
+					if($time>$gitTime){
 						$files[$d] = $file;
 					}else{
 						iFS::del($file);

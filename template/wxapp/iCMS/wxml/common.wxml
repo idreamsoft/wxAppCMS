@@ -14,3 +14,12 @@
         </swiper>
     </block>
 </template>
+
+<template name="search-bar">
+    <navigator class="search-bar" url="../search/index" hover-class="none">
+        <view class="weui-search-bar__box">
+            <icon class="weui-icon-search_in-box" type="search" size="14" color="rgb(255,255,255)"></icon>
+            <text class="weui-search-bar__input">搜索您的内容</text>
+        </view>
+    </navigator>
+</template>

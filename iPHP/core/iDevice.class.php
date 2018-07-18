@@ -77,26 +77,39 @@ class iDevice {
 
         $common['redirect'] && self::redirect();
     }
+    public static function output(&$content){
+        if(!self::$IS_IDENTITY_URL){
+            // var_dump(self::$domain,self::$router_url);
+            // var_dump($content);
+            $content = str_replace(self::$router_url, self::$domain, $content);
+        }
+    }
     public static function identity(&$array) {
         self::$IS_IDENTITY_URL OR self::router($array);
     }
-    public static function domain(&$urls=array()) {
+    public static function domain(&$domain=array()) {
+        if(self::$config['desktop']['domain']){
+            $domain['desktop'] = $domain['durl'] = self::$config['desktop']['domain'];
+        }
+        if(self::$config['mobile']['domain']){
+            $domain['mobile'] = $domain['murl'] = self::$config['mobile']['domain'];
+        }
         if(self::$config['device']){
             foreach (self::$config['device'] as $key => $value) {
                 if($value['domain']){
                     $name = trim($value['name']);
-                    $urls[$name] = $value['domain'];
+                    $domain[$name] = $value['domain'];
                 }
             }
         }
-        return $urls;
+        return $domain;
     }
     public static function router(&$router,$deep=false) {
         if(is_array($router) && $deep){
             $router = array_map(array('iDevice','router'), $router);
         }else{
             if(self::$config['callback']['router']){
-                $router = iPHP::callback(self::$config['callback']['router'],array($router));
+                iPHP::callback(self::$config['callback']['router'],array(&$router));
             }else{
                 $router = str_replace(self::$router_url, self::$domain, $router);
             }
@@ -104,10 +117,10 @@ class iDevice {
         return $router;
     }
     //所有设备网址
-    public static function urls($array) {
-        $array = (array)$array;
+    public static function urls($array=null) {
         $urls = array();
         if($array){
+            $array = (array)$array;
             $iurl = array(
                 'url' => $array['href']
             );
@@ -130,13 +143,15 @@ class iDevice {
     }
 
     private static function redirect(){
-        if(stripos(iPHP_REQUEST_URL, self::$domain) === false && !iPHP_SHELL){
+        if(defined('iPHP_DEVICE_REDIRECT')||iPHP_SHELL) return false;
+
+        if(stripos(iPHP_REQUEST_URL, self::$domain) === false){
             $redirect_url = str_replace(iPHP_REQUEST_HOST,self::$domain, iPHP_REQUEST_URL);
             header("Expires:1 January, 1970 00:00:01 GMT");
             header("Cache-Control: no-cache");
             header("Pragma: no-cache");
-            header("X-REDIRECT-REF: ".iPHP_REQUEST_URL);
             header("X-iPHP-DOMAIN: ".self::$domain);
+            header("X-REDIRECT-REF: ".iPHP_REQUEST_URL);
             header("X-REDIRECT-URL: ".$redirect_url);
             iPHP::http_status(301);
             iPHP::redirect($redirect_url);

@@ -50,7 +50,7 @@ class iView {
             "plugin"   => array(__CLASS__,"callback_plugin"),
             "block"    => array(__CLASS__,"callback_block"),
             "register" => array(__CLASS__,"callback_register"),
-            // "output"   => array(__CLASS__,"callback_output"),
+            "output"   => array(__CLASS__,"callback_output"),
         );
         return $tpl;
     }
@@ -59,22 +59,22 @@ class iView {
     }
     public static function callback_register($func,$type) {
         list($app,$method) = explode(':', $func);
-        if(self::check_func($app)){
-            $callable = array($app.'Func',$type.($method?'_'.$method:''));
-            if(is_callable($callable)){
-                return implode('::', $callable);
+        if(self::check_func_file($app)){
+            $callback = array($app.'Func',$type.($method?'_'.$method:''));
+            if(class_exists($callback[0]) && method_exists($callback[0], $callback[1])){
+                return implode('::', $callback);
             }
         }
     }
-    public static function check_func($app) {
+    public static function check_func_file($app) {
         $path = iPHP_APP_DIR . '/' . $app . '/' . $app . '.func.php';
         return is_file($path);
     }
-    // public static function callback_output(&$content,$obj) {
-    //     if(!self::$config['callback']['output']){
-    //         $content.= publicFunc::public_crontab(true);
-    //     }
-    // }
+    public static function callback_output(&$content) {
+        if(self::$config['callback']['output']){
+            iPHP::callback(self::$config['callback']['output'],array(&$content));
+        }
+    }
     /**
      * iPHP:app:method
      * iPHP:func
@@ -113,7 +113,7 @@ class iView {
             if(self::$config['define']){
                 $apps = self::$config['define']['apps'];
                 $func = self::$config['define']['func'];
-                if(!self::check_func($args['app']) && $apps[$args['app']]){
+                if(!self::check_func_file($args['app']) && $apps[$args['app']]){
                     // 判断自定义APP app/test/test.func.php 程序是否存在
                     // 程序不存在调用 contentFunc::content_list
                     $callback = array(
@@ -137,17 +137,7 @@ class iView {
             }
         }else{
             //iPHP:func app="ooxx"
-            $func_path = iPHP_TPL_FUN."/".iPHP_APP.".".$args['app'].".php";
-            // if($args['_app']){
-            //     //判断 iPHP.app.php是否存在 不存用检测,原设置_app
-            //     if(!is_file($func_path)){
-            //         $args['app'] = $args['_app'];
-            //         $func_path = iPHP_TPL_FUN."/".iPHP_APP.".".$args['_app'].".php";
-            //     }
-            // }
-            //iPHP:func >> iPHP_func
-            $callback = iPHP_APP.'_' . $args['app'];
-            function_exists($callback) OR require_once($func_path);
+            $callback = self::app_func($args['app']);
         }
         if(isset($args['vars'])){
             $vars = $args['vars'];
@@ -162,6 +152,25 @@ class iView {
             $tpl->assign($keys,call_user_func_array($callback, array($args)));
         }else{
             $tpl->assign($keys,$callback($args));
+        }
+    }
+    public static function app_func($func,$run=false,$vars=array()){
+        //iPHP:func app="ooxx"
+        $func_path = iPHP_TPL_FUN."/".iPHP_APP."/".iPHP_APP.".".$func.".php";
+        // if($args['_app']){
+        //     //判断 iPHP.app.php是否存在 不存用检测,原设置_app
+        //     if(!is_file($func_path)){
+        //         $args['app'] = $args['_app'];
+        //         $func_path = iPHP_TPL_FUN."/".iPHP_APP.".".$args['_app'].".php";
+        //     }
+        // }
+        //iPHP:func >> iPHP_func
+        $callback = iPHP_APP.'_' . $func;
+        function_exists($callback) OR require_once($func_path);
+        if($run){
+            return call_user_func_array($callback, array($vars));
+        }else{
+            return $callback;
         }
     }
     public static function callback_func_my(&$callback=null){
@@ -193,7 +202,7 @@ class iView {
         }
     }
     public static function callback_plugin($name,$tpl) {
-        $path = iPHP_TPL_FUN."/tpl.".$name;
+        $path = iPHP_TPL_FUN."/template/tpl.".$name;
         if (is_file($path)) {
             return $path;
         }
@@ -270,8 +279,12 @@ class iView {
             // return self::check_tpl($tpl, self::$config['template']['dir']);
         } elseif (strpos($tpl, '{iTPL}') !== false) {
             $flag = '{iTPL}';
-            // testApp/$tpl
+            // 模板名/$tpl
+            if ($_tpl = self::check_tpl($tpl, self::$config['template']['dir'],$flag)){
+                return $_tpl;
+            }
             if(self::$app){
+            // testApp/$tpl
                 if ($_tpl = self::check_tpl($tpl, self::$app.'App',$flag)) {
                     return $_tpl;
                 }

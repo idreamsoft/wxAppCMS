@@ -20,7 +20,8 @@ class articleApp extends appsApp {
 			$all = iDB::all("
 				SELECT `id`,`subtitle`
 				FROM `#iCMS@__article_data`
-				WHERE aid='" . (int) $id . "';
+				WHERE aid='" . (int) $id . "'
+				ORDER BY `id` ASC
 			", ARRAY_A);
 			if($all)foreach ($all as $akey => $value) {
 				$article_data[] = $value;

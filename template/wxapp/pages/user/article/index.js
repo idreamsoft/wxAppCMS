@@ -1,14 +1,10 @@
 let $APP = getApp();
-let $wxAppCMS = $APP.wxAppCMS();
+let $iCMS = $APP.iCMS();
 
-$wxAppCMS.main = function() {
-    this.setData({
-        APP: this.$globalData.appInfo,
-        userInfo: this.$globalData.userInfo
-    });
+$iCMS.main = function() {
     this.getList(0);
 }
-$wxAppCMS.getList = function() {
+$iCMS.getList = function() {
     this.data_loading('show');
 
     let that = this;
@@ -25,7 +21,7 @@ $wxAppCMS.getList = function() {
     });
 }
 
-$wxAppCMS.delTap = function(e) {
+$iCMS.delTap = function(e) {
     let $data = this.get_dataset(e);
 
     let that = this;
@@ -58,4 +54,4 @@ $wxAppCMS.delTap = function(e) {
         });
     });
 }
-$wxAppCMS.run();
+$iCMS.run();

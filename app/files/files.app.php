@@ -131,17 +131,26 @@ class filesApp {
             'src' => $src,
             'url' => iFS::fp($src,'+http'),
         );
-        if($size){
+        if($size===true){
+            $path = iFS::fp($src,'+iPATH');
+            if(is_file($path)){
+                list($width, $height) = @getimagesize($path);
+                $data['width']  = $width;
+                $data['height'] = $height;
+            }
+        }
+        if(is_array($size)){
             $data['width']  = $size['w'];
             $data['height'] = $size['h'];
         }
-        if($size && $thumb){
-            $data+= bitscale(array(
+        if($size && is_array($size) && $thumb && is_array($thumb)){
+            $array = bitscale(array(
                 "tw" => (int)$thumb['width'],
                 "th" => (int)$thumb['height'],
-                "w" => (int)$size['w'],
-                "h" => (int)$size['h'],
+                "w"  => (int)$size['w'],
+                "h"  => (int)$size['h'],
             ));
+            $data = array_merge($data,$array);
         }
         return $data;
     }

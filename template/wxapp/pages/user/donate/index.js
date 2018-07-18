@@ -1,7 +1,7 @@
 let $APP = getApp();
-let $wxAppCMS = $APP.wxAppCMS();
+let $iCMS = $APP.iCMS();
 
-$wxAppCMS.addData({
+$iCMS.addData({
     tabs: ["我发出的赞赏", "我接到的赞赏"],
     activeIndex: 0,
     sliderOffset: 0,
@@ -10,7 +10,7 @@ $wxAppCMS.addData({
     donate: [],
     receive: [],
 });
-$wxAppCMS.load = function(options) {
+$iCMS.load = function(options) {
     var that = this;
     wx.getSystemInfo({
         success: function(res) {
@@ -23,14 +23,10 @@ $wxAppCMS.load = function(options) {
         }
     });
 }
-$wxAppCMS.main = function() {
-    this.setData({
-        APP: this.$globalData.appInfo,
-        userInfo: this.$globalData.userInfo
-    });
+$iCMS.main = function() {
     this.getList(0);
 }
-$wxAppCMS.getList = function(type) {
+$iCMS.getList = function(type) {
     this.data_loading('show');
 
     let that = this;
@@ -47,11 +43,11 @@ $wxAppCMS.getList = function(type) {
     });
 }
 
-$wxAppCMS.tabClick = function(e) {
+$iCMS.tabClick = function(e) {
     this.setData({
         sliderOffset: e.currentTarget.offsetLeft,
         activeIndex: e.currentTarget.id
     });
     this.getList(e.currentTarget.id);
 }
-$wxAppCMS.run();
+$iCMS.run();

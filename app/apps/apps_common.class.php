@@ -84,14 +84,15 @@ class apps_common {
             'month'  => self::$data['hits_month'],
         );
     }
-    public static function param() {
+    public static function param($title=null) {
+        $title===null && $title = self::$data['title'];
         self::$data['param'] = array(
             "appid" => self::$data['appid'],
             "iid"   => self::$data['id'],
             "cid"   => self::$data['cid'],
             "suid"  => self::$data['userid'],
-            "title" => self::$data['title'],
             "url"   => self::$data['url'],
+            "title" => $title,
         );
     }
 

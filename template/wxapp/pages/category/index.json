@@ -1,3 +1,6 @@
 {
-    "navigationBarTitleText": "所有分类"
+    "navigationBarTitleText": "所有分类",
+    "usingComponents": {
+        "collect-formid": "/iCMS/component/collect-formid"
+    }
 }

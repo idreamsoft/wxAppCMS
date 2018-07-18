@@ -143,7 +143,9 @@ class articleFunc{
 				$map_order_sql = " ORDER BY `#iCMS@__article`.`id` $by";
 			}
 		}
-		$hash = md5($where_sql . $order_sql . $limit);
+
+		$hash = md5(json_encode($vars) . $order_sql . $limit);
+
 		if ($offset) {
 			if ($vars['cache']) {
 				$map_cache_name = iPHP_DEVICE . '/article_page/' . $hash;
@@ -168,6 +170,7 @@ class articleFunc{
 		if ($vars['cache']) {
 			$cache_name = iPHP_DEVICE . '/article/' . $hash;
 			$resource = iCache::get($cache_name);
+			if(is_array($resource)) return $resource;
 		}
 		// $func = 'article_array';
 		// if($vars['func']=="user_home"){ //暂时只有一个选项
@@ -223,6 +226,12 @@ class articleFunc{
 			$cids OR $cids = (array) $vars['cid'];
 			$cids = array_map("intval", $cids);
 			$SPH->SetFilter('cid', $cids);
+		}
+		if (isset($vars['cid!'])) {
+			$cids = $vars['sub'] ? categoryApp::get_cids($vars['cid!'], true) : (array) $vars['cid!'];
+			$cids OR $cids = (array) $vars['cid!'];
+			$cids = array_map("intval", $cids);
+			$SPH->SetFilter('cid', $cids, true);
 		}
 		if (isset($vars['startdate'])) {
 			$startime = strtotime($vars['startdate']);
@@ -304,7 +313,12 @@ class articleFunc{
 			$array = iCache::get($cache);
 		}
 		if (empty($array)) {
-			$rs = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `status`='1' {$sql}");
+			$rs = iDB::row("
+				SELECT * FROM `#iCMS@__article`
+				WHERE `id` =(
+					SELECT `id` FROM `#iCMS@__article` WHERE `status`='1' {$sql}
+				)
+			");
 			if ($rs) {
 				$category = categoryApp::get_cahce_cid($rs->cid);
 				$array = array(

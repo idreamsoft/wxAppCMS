@@ -164,18 +164,23 @@ class former {
             $field['holder'] && $attr['placeholder'] = $field['holder'];
             self::$template['class']['input'] && $attr['class'].=' '.self::$template['class']['input'];
 
-            $input = self::widget('input',$attr);
-            $input->val($value);
+            if ($type == 'multi_image' || $type == 'multi_file') {
+                unset($attr['value']);
+                $input = self::widget('input',$attr);
+            }else{
+                $input = self::widget('input',$attr);
+                $input->val($value);
+            }
 
             switch ($type) {
                 case 'multi_image':
                 case 'multi_file':
-                    unset($attr['type']);
                     // $form_group.=' input-append';
-                    $input  = self::widget('textarea',$attr)->css('height','150px');
+                    $input->attr('type','text');
+                    $input->attr('placeholder','批量上传');
+                    $input->attr('readonly','readonly');
                     if(self::$config['gateway']=='admincp'){
-                        $picbtn = filesAdmincp::pic_btn($attr['id'],null,($type=='multi_file'?'文件':'图片'),true,true);
-                        $script = self::script('$("#'.$attr['id'].'").autoTextarea({maxHeight:300});',true);
+                        $picbtn = filesAdmincp::set_opt($value, false)->pic_btn($attr['id'],null,($type=='multi_file'?'文件':'图片'),true,true);
                     }
                     $input.= $picbtn;
                 break;
@@ -184,7 +189,7 @@ class former {
                     // $form_group.=' input-append';
                     $input->attr('type','text');
                     if(self::$config['gateway']=='admincp'){
-                        $picbtn = filesAdmincp::pic_btn($attr['id'],null,($type=='file'?'文件':'图片'),true);
+                        $picbtn = filesAdmincp::set_opt($value, false)->pic_btn($attr['id'],null,($type=='file'?'文件':'图片'),true);
                     }
                     $input.= $picbtn;
                 break;
@@ -701,7 +706,11 @@ class former {
         if(!empty($fields['multiple'])){
           is_array($value) && $value = implode(',',$value);
         }
-
+        if($type=='image'){
+            if(iFS::checkHttp($value)){
+                $value  = iFS::http($value);
+            }
+        }
         //数字转换
         if(in_array($field, array('BIGINT','INT','MEDIUMINT','SMALLINT','TINYINT'))){
           $value = (int)$value;
@@ -775,6 +784,11 @@ class former {
               unset($field_post[$key]);
             }
 
+            if(in_array($fields['type'], array('multi_image','multi_file'))){
+                if (is_array($value)) {
+                    $field_post[$key] = $value = json_encode($value);
+                }
+            }
             if(in_array($fields['type'], array('category','multi_category'))){
                 $imap_array[$key] = array('category',$value);
             }

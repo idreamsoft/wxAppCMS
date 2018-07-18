@@ -1,0 +1,22 @@
+:host {
+    width: 100% !important;
+    height: 100% !important;
+    display: inline !important;
+}
+.collectForm, .collectBtn {
+    width: 100% !important;
+    height: 100% !important;
+    display: inline !important;
+    margin: 0rpx !important;
+    padding: 0rpx !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0rpx !important;
+    /*color: transparent!important;*/
+    font-weight: inherit !important;
+    text-align: inherit !important;
+    vertical-align: inherit !important;
+    line-height: inherit !important;
+    font-size: inherit !important;
+    white-space: inherit !important;
+}

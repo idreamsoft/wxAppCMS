@@ -9,7 +9,7 @@
 <!--{include file="./article_list.json.htm"}-->
 <!--{/iCMS}-->
 ]
-,"PAGE":<!--{$iCMS.PAGE|keys:"NAV,NEXT,PREV":true|json_encode}-->
+,"PAGE":<!--{$iCMS.PAGE|keys:"NAV,NEXT,PREV":true|json_encode|default:'{}'}-->
 <!--{if $iCMS.PAGE.CURRENT<2}-->
 ,"banner":{
 <!--{iCMS:article:list

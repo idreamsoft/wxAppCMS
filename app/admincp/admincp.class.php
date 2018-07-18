@@ -139,6 +139,13 @@ class admincp {
 		$method = self::$APP_METHOD;
 		$args === null && $args = self::$APP_ARGS;
 
+		if($method=='do_batch'){
+	        $bmIds = $_POST['bmIds'];
+	        if(isset($_POST['bmIds']) && $bmIds){
+	            $_POST['id'] = explode(',', $bmIds);
+	        }
+		}
+
 		if ($args) {
 			if ($args === 'object') {
 				return self::$APP_OBJ;

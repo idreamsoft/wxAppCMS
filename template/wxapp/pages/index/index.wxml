@@ -1,20 +1,28 @@
 <import src="../../iCMS/wxml/common.wxml" />
 <import src="../../iCMS/wxml/article.wxml" />
-<view class="page" hidden="{{page_hidden}}">
-    <scroll-view scroll-y="true" style="height:{{scrollHeight}}px" bindscrolltoupper="refresh" bindscrolltolower="loadMore">
-        <navigator class="search-bar" url="../search/index" hover-class="navigator-hover000">
-            <view class="weui-search-bar__box">
-                <icon class="weui-icon-search_in-box" type="search" size="14" color="rgb(255,255,255)"></icon>
-                <text class="weui-search-bar__input">搜索您的内容</text>
+<import src="../../iCMS/wxml/tag.wxml" />
+
+<collect-formid>
+    <view class="page" hidden="{{page_hidden}}">
+        <scroll-view scroll-y="true" style="height:{{scrollHeight}}px" bindscrolltoupper="refresh" bindscrolltolower="loadMore">
+            <template is="search-bar" />
+            <template is="banner" data="{{banner}}"/>
+            <view class="tags" wx:if="{{tag_list}}">
+                <view class="tags-title">─ 热门标签 ─</view>
+                <template is="tag_list" data="{{tag_list}}"/>
             </view>
-        </navigator>
-        <template is="banner" data="{{banner}}"/>
-        <view class="sub-title">{{subTitle}}</view>
-        <template is="article_list" data="{{article_list}}"/>
-    </scroll-view>
-    <view class="weui-loadmore" hidden="{{data_loading}}">
-        <view class="weui-loading"></view>
-        <view class="weui-loadmore__tips">数据加载中...</view>
+            <view style="text-align: center;" wx:if="{{metaData.ad_index}}">
+                <view class="clearfix"></view>
+                <ad unit-id="{{metaData.ad_index}}"></ad>
+            </view>
+            <view class="clearfix"></view>
+            <view class="sub-title">最新资讯</view>
+            <template is="article_list" data="{{article_list}}"/>
+        </scroll-view>
+        <view class="weui-loadmore" hidden="{{data_loading}}">
+            <view class="weui-loading"></view>
+            <view class="weui-loadmore__tips">数据加载中...</view>
+        </view>
     </view>
-</view>
-<loading class="loading" hidden="{{page_loading}}">加载中...</loading>
+    <loading class="loading" hidden="{{page_loading}}">加载中...</loading>
+</collect-formid>

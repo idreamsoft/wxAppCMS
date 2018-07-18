@@ -144,6 +144,7 @@ del { text-decoration: line-through; padding: 3px 0; background: #f5dfdf; color:
 .badge-green { background-color: rgb(76, 175, 80); }
 .badge-purple { background-color: rgb(121, 134, 203); }
 
+.hid { display: none; }
 /* former */
 .former_hide { display: none !important; }
 

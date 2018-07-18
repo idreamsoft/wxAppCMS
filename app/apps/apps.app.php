@@ -172,11 +172,13 @@ class appsApp {
     }
 
     public static function custom_data(&$data,$vars=null){
-        $meta = (array)apps_meta::data(self::$s_app,$data['id']);
-        $data = array_merge($data,$meta);
-        $app  = apps::get_app(self::$s_app);
-        $data['sapp'] = apps::get_app_lite($app);
-        $app['fields'] && formerApp::data($data['id'],$app,self::$s_app,$data,$vars,$data['category']);
+        if(is_array($data)){
+            $meta = (array)apps_meta::data(self::$s_app,$data['id']);
+            $data = array_merge($data,$meta);
+            $app  = apps::get_app(self::$s_app);
+            $data['sapp'] = apps::get_app_lite($app);
+            $app['fields'] && formerApp::data($data['id'],$app,self::$s_app,$data,$vars,$data['category']);
+        }
     }
 
     public static function hooked(&$data){

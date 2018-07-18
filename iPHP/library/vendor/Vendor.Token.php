@@ -15,7 +15,7 @@ class Vendor_Token{
     public $prefix = null;
 	public function get(){
         $timestamp = $_SERVER['REQUEST_TIME'];
-        $nonce     = substr(md5($_SERVER['HTTP_USER_AGENT']), 8,16).dechex(rand(10000,99999));
+        $nonce     = substr(md5($_SERVER['HTTP_USER_AGENT']), 8,16).dechex(mt_rand(10000,99999));
         $pieces    = array(iPHP_KEY, $timestamp, $nonce);
         sort($pieces, SORT_STRING);
         $token = sha1(implode($pieces));

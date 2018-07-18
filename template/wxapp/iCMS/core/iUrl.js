@@ -15,9 +15,16 @@ function make(app, query) {
 
     return url;
 }
-
+function path_query(path,query) {
+    let qs = encode(query);
+    if(qs){
+        path+='?'+qs;
+    }
+    return path;
+}
 function encode(param, key) {
     if (param == null) return '';
+    if (typeof param =='undefined') return '';
 
     var query = [],
         t = typeof(param);
@@ -63,5 +70,6 @@ function decode(query) {
 module.exports = {
     make,
     encode,
-    decode
+    decode,
+    path_query
 }

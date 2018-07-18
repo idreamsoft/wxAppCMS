@@ -28,7 +28,8 @@ $(function(){
         modal_callback(this);
       }else{
         if($(this).prop("checked")){
-          $(this).prop("checked", '').closest('.checker > span').removeClass('checked');
+          $(this).prop("checked", false);
+          $.uniform.update($(this));
           iCMS.alert("当前只能选择"+click_type['<?php echo $this->click;?>']);
         }
       }

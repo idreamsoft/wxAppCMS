@@ -41,16 +41,17 @@ class files {
     public static $TABLE_DATA       = null;
     public static $TABLE_MAP        = null;
     public static $check_data       = true;
+    public static $check_md5        = true;
     public static $userid           = false;
     public static $watermark_enable = true;
     public static $watermark_config = null;
     public static $cloud_enable     = true;
 
-    public static $_DATA_TABLE     = null;
-    public static $_MAP_TABLE      = null;
+    public static $_DATA_TABLE      = null;
+    public static $_MAP_TABLE       = null;
 
-    public static $PREG_IMG        = '@<img[^>]+src=(["\']?)(.*?)\\1[^>]*?>@is';
-    public static $IMG_EXT         = array('jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp');
+    public static $PREG_IMG         = '@<img[^>]+src=(["\']?)(.*?)\\1[^>]*?>@is';
+    public static $IMG_EXT          = array('jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp');
 
     public static function config($table = array()) {
         empty($table) && $table = array('files','files_map');
@@ -58,6 +59,10 @@ class files {
         list(self::$TABLE_DATA,self::$TABLE_MAP) = $table;
         self::$_DATA_TABLE = '`'.iPHP_DB_PREFIX . self::$TABLE_DATA.'`';
         self::$_MAP_TABLE  = '`'.iPHP_DB_PREFIX . self::$TABLE_MAP.'`';
+
+        if(isset(iCMS::$config['FS']['check_md5'])){
+            self::$check_md5  = iCMS::$config['FS']['check_md5'];
+        }
     }
 
     public static function init($vars=null){
@@ -192,7 +197,7 @@ class files {
         iDB::update(self::$TABLE_DATA, $data, array('id' => $fid));
     }
     public static function get($f, $v,$s='*') {
-        if (!self::$check_data) {
+        if (!self::$check_data||!self::$check_md5) {
             return;
         }
 
@@ -285,6 +290,10 @@ class files {
             return $sfp;
         }
         $size = $w.'x'.$h;
+
+        if(iCMS::$config['thumb']['size']==='ALL'){
+            return $sfp.'_'.$size.'.jpg';
+        }
 
         if(empty(iCMS::$config['thumb']['size'])){
             return $sfp;

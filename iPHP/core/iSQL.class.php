@@ -63,17 +63,23 @@ class iSQL {
             }
         }
     }
-    public static function where($where,$and=false) {
-        if ( is_array( $where ) ){
-            foreach ( $where as $c => $v ){
-                if($c[0]=='!'){
-                    $c = str_replace('!', '', $c);
-                    $wheres[] = "`$c` != '" . addslashes( $v ) . "'";
-                }else{
-                    $wheres[] = "`$c` = '" . addslashes( $v ) . "'";
+
+    public static function where($where, $and = false, $add = false) {
+        if (is_array($where)) {
+            foreach ($where as $c => $v) {
+                if ($c[0] == '!') {
+                    $c        = str_replace('!', '', $c);
+                    $wheres[] = "`$c` != '" . addslashes($v) . "'";
+                } else {
+                    $wheres[] = "`$c` = '" . addslashes($v) . "'";
                 }
             }
-            return ($and?' AND ':'').implode(' AND ', $wheres);
+            $sql = ($and ? ' AND ' : '') . implode(' AND ', $wheres);
+
+            if ($add && $sql)
+                $sql = 'WHERE ' . $sql;
+
+            return $sql;
         }
     }
 

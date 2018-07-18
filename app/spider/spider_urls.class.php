@@ -12,7 +12,7 @@ defined('iPHP') OR exit('What are you doing?');
 class spider_urls {
     public static $urls = null;
 
-    public static function crawl($work = NULL,$pid = NULL,$_rid = NULL,$_urls=null,$callback=null) {
+    public static function crawl($work = NULL,$pid = NULL,$_rid = NULL,$_urls=null,$callback=null,$_nocheck=false) {
         @set_time_limit(0);
         $pid === NULL && $pid = spider::$pid;
 
@@ -357,7 +357,10 @@ class spider_urls {
                         }
                         echo "<hr />";
                     } else {
-                        if(spider::checker($work,$pid,spider::$url,spider::$title)===true||spider::$dataTest){
+                        $_flag = spider::$dataTest;
+                        $_flag OR $_flag = $_nocheck;
+                        $_flag OR $_flag = (spider::checker($work,$pid,spider::$url,spider::$title)===true);
+                        if($_flag){
                             $suData = array(
                                 'sid'   => 0,
                                 'url'   => spider::$url,'title' => spider::$title,
@@ -367,6 +370,9 @@ class spider_urls {
                             switch ($work) {
                                 case 'DATA@RULE':
                                     $contentArray[$lkey] = spider_data::crawl($pid,$rid,spider::$url,spider::$title);
+                                    if(iPHP_SHELL){
+                                        echo "\t".spider::$url.PHP_EOL;
+                                    }
                                     // $contentArray[$lkey] = spider_urls::crawl($work,$_pid);
                                     unset($suData['sid']);
                                     $suData['title'] = addslashes($suData['title']);
@@ -375,7 +381,11 @@ class spider_urls {
                                         'status'  => '2','publish' => '2',
                                         'indexid' => '0','pubdate' => '0'
                                     );
-                                    spider::$dataTest OR $suid = iDB::insert('spider_url',$suData);
+                                    if($_nocheck||spider::$dataTest){
+
+                                    }else{
+                                        $suid = iDB::insert('spider_url',$suData);
+                                    }
                                     spider::$spider_url_ids[$lkey] = $suid;
                                 break;
                                 case 'WEB@AUTO':

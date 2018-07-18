@@ -1,6 +1,6 @@
-let $wxAppCMS = getApp().wxAppCMS();
+let $iCMS = getApp().iCMS();
 
-$wxAppCMS.addData({
+$iCMS.addData({
     cid: 0,
     article_list_loading: false,
     tag_list: [],
@@ -9,7 +9,7 @@ $wxAppCMS.addData({
     banner: []
 });
 
-$wxAppCMS.getData = function() {
+$iCMS.getData = function() {
     this.data_loading('hide');
     let that = this;
     let $url = this.iURL.make(
@@ -28,7 +28,7 @@ $wxAppCMS.getData = function() {
     });
 
 };
-$wxAppCMS.getList = function($cid) {
+$iCMS.getList = function($cid) {
     if (this.data.page_last) return;
 
     $cid = $cid || this.data.cid;
@@ -53,13 +53,13 @@ $wxAppCMS.getList = function($cid) {
 
 };
 
-$wxAppCMS.tabClick = function(e) {
+$iCMS.tabClick = function(e) {
     this.setData({
         cid: e.currentTarget.id
     });
     this.getList();
 }
-$wxAppCMS.main = function() {
+$iCMS.main = function() {
     this.getData();
 }
-$wxAppCMS.run();
+$iCMS.run();

@@ -4,8 +4,7 @@
  * Author:	Paul Lockaby <paul@paullockaby.com>, Mark Dickenson <akapanamajack@sourceforge.net>
  * Copyright:	2003,2004,2005 by Paul Lockaby, 2005,2006 Mark Dickenson
  */
-define('iTEMPLATE_PATH',dirname(strtr(__FILE__,'\\','/'))."/");
-define('iTEMPLATE_DIR', iTEMPLATE_PATH.'template/');
+define('iTEMPLATE_DIR', __DIR__.'/template');
 
 class iTemplateLite {
 	// public configuration variables
@@ -116,7 +115,7 @@ class iTemplateLite {
 				}
 			}else{
 				if (in_array($key, $this->_vars)){
-					unset($this->_vars[$index]);
+					unset($this->_vars[$key]);
 				}
 			}
 		}
@@ -125,7 +124,9 @@ class iTemplateLite {
 	function clear_all_assign(){
 		$this->_vars = array();
 	}
-
+	function get_vars($key = null){
+		return $this->get_template_vars($key);
+	}
 	function &get_template_vars($key = null){
 		if ($key == null){
 			return $this->_vars;
@@ -218,7 +219,7 @@ class iTemplateLite {
 	}
 	function internal($fn){
 		if(!function_exists($fn)){
-			require iTEMPLATE_DIR . "internal/{$fn}.php";
+			require iTEMPLATE_DIR . "/internal/{$fn}.php";
 		}
 	}
 	function display($file){
@@ -339,7 +340,7 @@ class iTemplateLite {
 		if($path){
 			return $path;
 		}
-		return iTEMPLATE_DIR.$this->plugins_dir.'/'.$name;
+		return iTEMPLATE_DIR.'/'.$this->plugins_dir.'/'.$name;
 	}
 
 	function _destroy_dir($file){
@@ -464,7 +465,7 @@ class iTemplateLite_Compiler extends iTemplateLite {
 	}
 
 	function _compile_file($tfile){
-		$tfile=='debug.tpl' && $tfile = iTEMPLATE_PATH . 'template/internal/debug.tpl';
+		$tfile=='debug.tpl' && $tfile = iTEMPLATE_DIR . '/internal/debug.tpl';
 
 		$file_contents = file_get_contents($tfile);
 		$ldq           = preg_quote($this->left_delimiter);

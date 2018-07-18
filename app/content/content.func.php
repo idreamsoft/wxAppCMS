@@ -157,7 +157,7 @@ class contentFunc {
                 $map_order_sql = " ORDER BY `".self::$table['table']."`.`id` $by";
             }
         }
-        $hash = md5($where_sql . $order_sql . $limit);
+        $hash = md5(json_encode($vars) . $order_sql . $limit);
         if ($offset) {
             if ($vars['cache']) {
                 $map_cache_name = iPHP_DEVICE . '/'.self::$app['app'].'_page/' . $hash;
@@ -182,6 +182,7 @@ class contentFunc {
         if ($vars['cache']) {
             $cache_name = iPHP_DEVICE . '/'.self::$app['app'].'/' . $hash;
             $resource = iCache::get($cache_name);
+            if(is_array($resource)) return $resource;
         }
 
         if (empty($resource)) {
@@ -270,6 +271,7 @@ class contentFunc {
                 }
                 $resource[$key] = $value;
             }
+            $vars['keys'] && iSQL::pickup_keys($resource,$vars['keys'],$vars['is_remove_keys']);
         }
         return $resource;
     }

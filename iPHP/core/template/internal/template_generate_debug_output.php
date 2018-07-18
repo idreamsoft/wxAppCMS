@@ -21,7 +21,6 @@ function template_generate_debug_output(&$object)
 
 	$object->_templatelite_debug_loop = true;
 	$object->_templatelite_debug_dir = $object->template_dir;
-	// $object->template_dir = iTEMPLATE_PATH . "template/internal/";
 	$object->fetch("debug.tpl",true);
 	$object->template_dir = $object->_templatelite_debug_dir;
 	$object->_templatelite_debug_loop = false;

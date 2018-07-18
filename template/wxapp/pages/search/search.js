@@ -1,6 +1,6 @@
-let $wxAppCMS = getApp().wxAppCMS();
+let $iCMS = getApp().iCMS();
 
-$wxAppCMS.addData({
+$iCMS.addData({
     subTitle: '最新资讯',
     q: null,
     search: [],
@@ -8,7 +8,22 @@ $wxAppCMS.addData({
     banner: []
 });
 
-$wxAppCMS.getList = function() {
+$iCMS.onShareAppMessage = function(res) {
+    var that = this;
+    if (res.from === 'button') {
+        // 来自页面内转发按钮
+        console.log(res.target)
+    }
+    let session = this.$globalData.session;
+    return {
+        title: session.nickname + '@你，我找了关于'+this.data.subTitle+'的文章！',
+        path: '/pages/search/search?q=' + this.data.q + '&uid=' + session.uid + '&from=share',
+        success: function(res) {},
+        fail: function(res) {}
+    }
+}
+
+$iCMS.getList = function() {
     if (this.data.page_last) return;
     this.data_loading('show');
 
@@ -34,7 +49,7 @@ $wxAppCMS.getList = function() {
 
 };
 
-$wxAppCMS.main = function(options) {
+$iCMS.main = function(options) {
     var that = this;
     wx.getSystemInfo({
         success(res) {
@@ -47,4 +62,4 @@ $wxAppCMS.main = function(options) {
     this.getList();
 }
 
-$wxAppCMS.run();
+$iCMS.run();

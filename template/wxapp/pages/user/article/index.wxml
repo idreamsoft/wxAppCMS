@@ -1,3 +1,4 @@
+<collect-formid>
 <view class="page" hidden="{{page_hidden}}">
     <view class="page__bd">
         <view class="weui-cells weui-cells_after-title">
@@ -35,3 +36,4 @@
     </view>
 </view>
 <loading class="loading" hidden="{{page_loading}}">加载中...</loading>
+</collect-formid>

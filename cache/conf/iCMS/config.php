@@ -337,6 +337,7 @@ return array (
     'html' => '33',
     'spider' => '34',
     'wxapp' => '100',
+    'sitehub' => '101',
   ),
   'other' => 
   array (

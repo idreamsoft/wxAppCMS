@@ -1,4 +1,7 @@
 {
     "navigationBarTitleText": "撰写文章",
-    "enablePullDownRefresh":false
+    "enablePullDownRefresh":false,
+    "usingComponents": {
+        "collect-formid": "/iCMS/component/collect-formid"
+    }
 }

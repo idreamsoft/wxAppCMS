@@ -395,7 +395,16 @@ class contentAdmincp{
         if($update){
             iUI::success($this->app['name'].'编辑完成!<br />3秒后返回'.$this->app['name'].'列表','url:'.$REFERER_URL);
         }else{
-            iUI::success($this->app['name'].'添加完成!<br />3秒后返回'.$this->app['name'].'列表','url:'.$REFERER_URL);
+            $moreBtn = array(
+                    array("text" =>"查看该".$this->app['name'],"target"=>'_blank',"url"=>$article_url,"close"=>false),
+                    array("text" =>"编辑该".$this->app['name'],"url"=>APP_URI."&do=add&id=".formerApp::$primary_id),
+                    array("text" =>"继续添加".$this->app['name'],"url"=>APP_URI."&do=add&cid=".$cid),
+                    array("text" =>"返回".$this->app['name']."列表","url"=>$REFERER_URL),
+                    array("text" =>"查看网站首页","url"=>iCMS_URL,"target"=>'_blank')
+            );
+            iUI::$dialog['modal'] = true;
+            iUI::dialog('success:#:check:#:'.$this->app['name'].'添加完成!<br />10秒后返回'.$this->app['name'].'列表'.$msg,'url:'.$REFERER_URL,10,$moreBtn);
+            // iUI::success($this->app['name'].'添加完成!<br />3秒后返回'.$this->app['name'].'列表','url:'.$REFERER_URL);
         }
     }
 
@@ -432,7 +441,7 @@ class contentAdmincp{
     //                 $json = '['.$json.']';
     //             }
 
-    //             $array  = json_decode($json,ture);
+    //             $array  = json_decode($json,true);
     //             if($array){
     //                 $array = $menu::mid($array,$sort);
     //                 $variable[] = $array;

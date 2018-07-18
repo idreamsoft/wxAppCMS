@@ -9,7 +9,7 @@
  * detail : http://weappdev.com/t/wxparse-alpha0-1-html-markdown/184
  */
 .wxParse { margin: 0 5px; font-family: Helvetica, sans-serif; font-size: 28rpx; color: #666; line-height: 1.8; }
-view { word-break: break-all; overflow: auto; }
+/*view { word-break: break-all; overflow: auto; }*/
 .wxParse-inline { display: inline; margin: 0; padding: 0; }
 
 /*//标题 */

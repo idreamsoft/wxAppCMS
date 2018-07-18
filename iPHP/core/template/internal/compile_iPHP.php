@@ -10,7 +10,7 @@
  */
 function compile_iPHP($arguments, &$object){
 	$attrs   = $object->_parse_arguments($arguments);
-	$hash    = substr(md5(uniqid(true).rand(1,1000)), -4);
+	$hash    = substr(md5(uniqid(true).mt_rand(1,1000)), -4);
 	$props   = "\$_i{$hash}";
 	$props_a = "\$_i{$hash}_a";
 	$output  = "\n<?php $props = array();\n";

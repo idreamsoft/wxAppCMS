@@ -118,8 +118,8 @@ var iFormer = {
                 break;
                 case 'multi_image':
                 case 'multi_file':
-                    $elem = this.widget('textarea');
-                    elem_type = null;
+                    // $elem = this.widget('textarea');
+                    // elem_type = null;
                 case 'text_prop':
                 case 'file':
                 case 'image':

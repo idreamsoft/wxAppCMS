@@ -29,7 +29,7 @@ class patchAdmincp{
 			if($_GET['ajax']){
 				iUI::json(array('code'=>0));
 			}else{
-				iUI::success("您使用的 wxAppCMS 版本,目前是最新版本<hr />当前版本：wxAppCMS ".iCMS_VERSION." [".iCMS_RELEASE."]",0,"5");
+				iUI::success("您使用的 iCMS 版本,目前是最新版本<hr />当前版本：iCMS ".iCMS_VERSION." [".iCMS_RELEASE."]",0,"5");
 			}
 		}else{
 	    	switch(iCMS::$config['system']['patch']){
@@ -38,14 +38,14 @@ class patchAdmincp{
 					$json      = array(
 						'code' => "1",
 						'url'  => __ADMINCP__.'=patch&do=install',
-						'msg'  => "发现iCMS最新版本<br /><span class='label label-warning'>wxAppCMS ".$this->patch[0]." [".$this->patch[1]."]</span><br />".$this->patch[3]."<hr />您当前使用的版本<br /><span class='label label-info'>iCMS ".iCMS_VERSION." [".iCMS_RELEASE."]</span><br /><br />新版本已经下载完成!! 是否现在更新?",
+						'msg'  => "发现iCMS最新版本<br /><span class='label label-warning'>iCMS ".$this->patch[0]." [".$this->patch[1]."]</span><br />".$this->patch[3]."<hr />您当前使用的版本<br /><span class='label label-info'>iCMS ".iCMS_VERSION." [".iCMS_RELEASE."]</span><br /><br />新版本已经下载完成!! 是否现在更新?",
 		    		);
 	    		break;
 	    		case "2"://不自动下载更新,有更新时提示
 		    		$json	= array(
 						'code' => "2",
 						'url'  => __ADMINCP__.'=patch&do=download',
-						'msg'  => "发现iCMS最新版本<br /><span class='label label-warning'>wxAppCMS ".$this->patch[0]." [".$this->patch[1]."]</span><br />".$this->patch[3]."<hr />您当前使用的版本<br /><span class='label label-info'>iCMS ".iCMS_VERSION." [".iCMS_RELEASE."]</span><br /><br />请马上更新您的iCMS!!!",
+						'msg'  => "发现iCMS最新版本<br /><span class='label label-warning'>iCMS ".$this->patch[0]." [".$this->patch[1]."]</span><br />".$this->patch[3]."<hr />您当前使用的版本<br /><span class='label label-info'>iCMS ".iCMS_VERSION." [".iCMS_RELEASE."]</span><br /><br />请马上更新您的iCMS!!!",
 		    		);
 	    		break;
 	    	}
@@ -70,6 +70,7 @@ class patchAdmincp{
      * [安装升级包]
      */
     public function do_install(){
+        patch::setTime();
         $this->msg  = patch::update();//更新文件
         $is_upgrade = patch::$upgrade;
 		include admincp::view("patch");

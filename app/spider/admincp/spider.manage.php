@@ -101,6 +101,7 @@ $(function(){
               <td><?php echo $rs[$i]['status']; ?>/<?php echo $rs[$i]['publish']; ?></td>
               <td>
                 <a href="<?php echo __ADMINCP__; ?>=files&indexid=<?php echo $rs[$i]['indexid'] ; ?>&method=database" class="tip-bottom" title="查看内容使用的图片" target="_blank"><i class="fa fa-picture-o"></i></a>
+                <a href="<?php echo __ADMINCP__; ?>=spider&do=addproject&pid=<?php echo $rs[$i]['pid'] ; ?>" class="btn btn-small" target="_blank"><i class="fa fa-edit"></i> 编辑方案</a>
                 <a href="<?php echo __ADMINCP__; ?>=spider&do=addrule&rid=<?php echo $rs[$i]['rid'] ; ?>" class="btn btn-small" target="_blank"><i class="fa fa-edit"></i> 编辑规则</a>
                 <?php if($rs[$i]['indexid']){?>
                 <a href="<?php echo __ADMINCP__; ?>=article&do=add&id=<?php echo $rs[$i]['indexid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑内容</a>

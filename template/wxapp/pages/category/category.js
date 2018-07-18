@@ -1,6 +1,6 @@
-let $wxAppCMS = getApp().wxAppCMS();
+let $iCMS = getApp().iCMS();
 
-$wxAppCMS.addData({
+$iCMS.addData({
     cid: 0,
     subTitle: '最新资讯',
     category: [],
@@ -8,7 +8,7 @@ $wxAppCMS.addData({
     banner: []
 });
 
-$wxAppCMS.getList = function() {
+$iCMS.getList = function() {
     if (this.data.page_last) return;
 
     this.data_loading('show');
@@ -39,7 +39,7 @@ $wxAppCMS.getList = function() {
 
 };
 
-$wxAppCMS.main = function(options) {
+$iCMS.main = function(options) {
     var that = this;
     wx.getSystemInfo({
         success(res) {
@@ -52,4 +52,4 @@ $wxAppCMS.main = function(options) {
     this.getList();
 }
 
-$wxAppCMS.run();
+$iCMS.run();

@@ -4,7 +4,7 @@
 .article-pic { width: 100%; height: 300rpx; overflow: hidden; }
 .article-pic image { width: 100%; }
 .article-wrap { display: flex; flex-direction: column; justify-content: space-between; background-color: #fff; padding: 20rpx; }
-.article-title { margin-bottom: 20rpx; font-weight: bold; font-size: 20pt; line-height: 1.2; }
+.article-title {color: #272822; margin-bottom: 20rpx; font-weight: bold; font-size: 16pt; line-height: 1.2; }
 .article-info { margin-top: 20rpx; font-size: 11pt; height: 50rpx; padding: 10rpx 0; border-top: 1px solid #E5E5E5; overflow: hidden; display: flex; }
 .article-info text { color: #888; }
 .article-desc { border-radius: 8rpx; background-color: #f0f0f0; color: #888; padding: 16rpx; margin-bottom: 8rpx; font-size: 11pt; line-height: 1.4; }

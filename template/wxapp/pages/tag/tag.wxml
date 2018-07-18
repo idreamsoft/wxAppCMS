@@ -1,13 +1,18 @@
 <import src="../../iCMS/wxml/common.wxml" />
 <import src="../../iCMS/wxml/article.wxml" />
-
+<collect-formid>
 <view class="page" hidden="{{page_hidden}}">
     <scroll-view scroll-y="true" style="height:{{scrollHeight}}px" bindscrolltoupper="refresh" bindscrolltolower="loadMore">
+        <template is="search-bar" />
         <block wx:if="{{banner.count}}">
             <template is="banner" data="{{banner}}"/>
             <view class="mt10"></view>
         </block>
         <view class="tag-container">
+            <button size="mini" class="fr btn btn-success btn-sm" open-type="share">
+                <text class="fa fa-share-alt"></text>
+                <text> 分享</text>
+            </button>
             <view class="tag-title">{{tag.name}}</view>
             <view class="tag-section">
                 <view class="tag-subtitle" wx:if="{{tag.subtitle}}">{{tag.subtitle}}</view>
@@ -17,7 +22,9 @@
                 <view class="tag-desc" wx:if="{{tag.description}}">{{tag.description}}</view>
             </view>
         </view>
-        <view class="sub-title">{{tag.name}}相关文章</view>
+        <view class="h2-title">
+            <text class="fa fa-sun-o"></text> {{tag.name}}相关文章
+        </view>
         <view class="article-list">
             <template is="article_list" data="{{article_list}}"/>
         </view>
@@ -28,3 +35,4 @@
     </view>
 </view>
 <loading class="loading" hidden="{{page_loading}}">加载中...</loading>
+</collect-formid>

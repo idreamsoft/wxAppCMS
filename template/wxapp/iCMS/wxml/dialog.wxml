@@ -1,0 +1,31 @@
+<template name="dialog">
+    <view class="modal" hidden="{{dialog.hidden}}">
+        <view class="dialog" bind:touchmove="bindDialogMove" style="{{dialog.style}}">
+            <view class="dialog-header">
+                <view class="dialog-close" bindtap="bindModalClose">×</view>
+                <view class="dialog-title">{{dialog.title}}</view>
+            </view>
+            <view class="dialog-body">
+                <view class="weui-cells">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd">
+                            <textarea class="weui-textarea" placeholder="写段感人肺腑的文字" maxlength="{{dialog.maxlength}}"
+                            bindinput="bindTextareaInput"
+                            bindfocus="bindTextareaFocus"
+                            bindblur="bindTextareaBlur"
+                            value="{{dialog.textarea}}"
+                            />
+                            <view class="weui-textarea-counter">{{dialog.counter}}/{{dialog.maxlength}}</view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="dialog-footer">
+                <view class="dialog-button">
+                    <button class="ok" bindtap="bindModalOk">确定</button>
+                    <button class="cancel" bindtap="bindModalCancel">取消</button>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>

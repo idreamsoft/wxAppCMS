@@ -5,10 +5,11 @@ var iHttp = require('iHttp.js');
 var iUser = require('iUser.js');
 var iUrl = require('iUrl.js');
 var iUI = require('iUI.js');
-
+var $APP = getApp();
 var iCMS = utils.extend(true, iUI, {
     data: {
-        APP: {},
+        appInfo: {},
+        TABS: {},
         scrollHeight: 0,
         userInfo: null,
         page_no: 1,
@@ -17,6 +18,9 @@ var iCMS = utils.extend(true, iUI, {
         data_loading: true,
         page_loading: false
     },
+    $init:false,
+    $globalData:{},
+    CONFIG: config,
     utils: utils,
     iURL: iUrl,
     iHttp: iHttp,
@@ -58,7 +62,7 @@ var iCMS = utils.extend(true, iUI, {
                     resolve(res);
                     that.getAppInfo(true);
                 }).catch(err => {
-
+                    console.log(err, 'login fail');
                 });
             });
         });
@@ -90,21 +94,21 @@ var iCMS = utils.extend(true, iUI, {
                 'signType': 'MD5',
                 'paySign': json.paySign,
                 'success': function(res) {
-                    if(res.errMsg=='requestPayment:ok'){
+                    if (res.errMsg == 'requestPayment:ok') {
                         if (typeof(resolve) === "function") {
                             resolve(res);
                         }
                     }
                 },
                 'fail': function(res) {
-                    if(res.errMsg=='requestPayment:fail cancel'){
+                    if (res.errMsg == 'requestPayment:fail cancel') {
                         wx.showToast({
-                          title: '取消支付',
-                          icon: 'none',
-                          duration: 1500
+                            title: '取消支付',
+                            icon: 'none',
+                            duration: 1500
                         });
                     }
-                    if(res.errMsg=='requestPayment:fail'){
+                    if (res.errMsg == 'requestPayment:fail') {
 
                     }
                     if (typeof(reject) === "function") {
@@ -124,20 +128,59 @@ var iCMS = utils.extend(true, iUI, {
         });
     },
     alert: function(content, callback, title) {
-        wx.showModal({
-            title: title || '系统提示',
-            showCancel: false,
-            content: content,
-            success: function(res) {
-                if (typeof(callback) === "function") {
-                    callback(res);
+        if(content){
+            wx.showModal({
+                title: title || '系统提示',
+                showCancel: false,
+                content: content,
+                success: function(res) {
+                    if (typeof(callback) === "function") {
+                        callback(res);
+                    }
                 }
-            }
-        })
+            })
+        }
+    },
+    tabsTap: function(e) {
+        var data = iUI.get_dataset(e);
+        console.log(data);
+
+        if (data['id']) {
+            this.setData({
+                'TABS.active': data['id']
+            });
+        }
+    },
+    copyTap: function(e) {
+        var get = iUI.get_dataset(e);
+        var data = get['copy'];
+        if(data){
+            wx.setClipboardData({
+              data: data,
+              success: function(res) {
+                // wx.getClipboardData({
+                //   success: function(res) {
+                //     console.log(res.data) // data
+                //   }
+                // })
+              }
+            })
+        }
     },
     dataTap: function(e) {
         var data = iUI.get_dataset(e);
-        if (data['url'] || data['path']) {
+
+        if (data['tabbar']) {
+            let url = data['tabbar'];
+            if (url.indexOf("/pages/") == -1) {
+                url = '/pages/' + url;
+            }
+            console.log(url);
+
+            wx.switchTab({
+                url: url
+            });
+        } else if (data['url'] || data['path']) {
             let url = data['url'] || data['path'];
             if (!url) {
                 this.alert("dataTap error");
@@ -160,42 +203,138 @@ var iCMS = utils.extend(true, iUI, {
     addData: function(data) {
         this.data = utils.extend(true, data, this.data);
     },
+    gotoIndex: function() {
+        wx.switchTab({
+            url: '/pages/index/index'
+        });
+    },
+    saveFormIds: function() {
+        let formIds = wx.getStorageSync('formIds');
+        if(formIds){
+            let that = this;
+            let $url = this.iURL.make(
+                'wxapp', { do: 'saveFormIds'}
+            );
+            this.POST($url,formIds).then(res => {
+                wx.setStorageSync('formIds', []);
+            }).catch(ret => {
+            });
+        }
+    },
+    pageMain: function() {
+        let that = this;
+        if (typeof(this.main) === 'function') {
+            console.log('--- pageMain ---');
+            this.$init = true;
+            this.init().then(res => {
+                that.sessionData = that.$globalData.session || {}
+                that.userData = that.$globalData.userInfo || {}
+                that.setData({
+                    session: that.$globalData.session,
+                    appInfo: that.$globalData.appInfo,
+                    userInfo: that.$globalData.userInfo
+                });
+                utils.metaData(that.$globalData.appInfo.meta,that);
+                if (that.hideUI) {
+                    that.setData({hideUI: that.hideUI});
+                }
+                if (that.metaData) {
+                    that.setData({metaData: that.metaData});
+                }
+                that.saveFormIds();
+                that.main(that.options);
+            }).catch(err => {
+                console.log('pageMain init error', err);
+            });
+        }
+    },
     getList: function() {},
     refresh: function() {},
     loadMore: function() {
         ++this.data.page_no;
         this.getList();
     },
+    getPage:function() {
+        let $pages = getCurrentPages();
+        return $pages[($pages.length - 1)];
+    },
+    getUri:function() {
+        let $page = this.getPage();
+        return iUrl.path_query($page.route,$page.options);
+    },
+    // onShareAppMessage: function() {
+    //     var that = this;
+    //     if (res.from === 'button') {
+    //         // 来自页面内转发按钮
+    //         console.log(res.target)
+    //     }
+
+    //     let session = this.$globalData.session;
+    //     return {
+    //         title: session.nickname + '给你' + that.data.shareTitle + '了一张好看的头像，打开看看吧！',
+    //         path: '/pages/open/index?id=' + this.$globalData.avatarId + '&uid=' + session.uid + '&from=share',
+    //         imageUrl: that.data.poster,
+    //         success: function(res) {
+    //             // 转发成功
+    //             wx.redirectTo({
+    //                 url: '/pages/index/index'
+    //             });
+    //         },
+    //         fail: function(res) {
+    //             // 转发失败
+    //         }
+    //     }
+    // },
     onPullDownRefresh: function() {
         wx.stopPullDownRefresh()
     },
+    onUnload: function() {
+        console.log('--- onUnload ---');
+        this.saveFormIds();
+        $APP.FLAGS['uri'] = null;
+        if (typeof(this.unload) === 'function') {
+            this.unload();
+        }
+    },
+    onHide: function() {
+        console.log('--- onHide ---');
+        this.saveFormIds();
+        $APP.FLAGS['uri']=this.getUri();
+        console.log($APP.FLAGS);
+        if (typeof(this.hide) === 'function') {
+            this.hide();
+        }
+    },
     onLoad: function(options) {
         let that = this;
+        $APP.FLAGS['uri'] = null;
+        this.setData({
+            'CONFIG':config
+        });
+        // wx.getSystemInfo({
+        //     success: function(res) {
+        //       that.$globalData.pixelRatio = res.pixelRatio;
+        //       that.$globalData.windowWidth = res.windowWidth;
+        //       that.$globalData.windowHeight = res.windowHeight;
+        //     }
+        // })
+        console.log('--- onLoad ---');
         this.options = options;
         if (typeof(this.load) === 'function') {
             this.load(options);
         }
-        this.init().then(res => {
-            that.main(options);
-        }).catch(err => {
-            console.log('init error',err);
-        });
     },
     onShow: function() {
-        let that = this;
-        // this.init().then(res => {
-        //     that.main(that.options);
-        //     if (typeof(that.show) === 'function') {
-        //         that.show();
-        //     }
-        // });
-        // let that = this;
+        console.log('--- onShow ---');
+        let $uri = this.getUri();
+        console.log($APP.FLAGS['uri'],$uri);
+        //同个页面不重载
+        if($APP.FLAGS['uri']!=$uri){
+            this.pageMain('onShow');
+        }
         if (typeof(this.show) === 'function') {
             this.show(this.options);
         }
-
-        // this.init().then(res => {
-        // });
     },
     run: function() {
         Page(this);

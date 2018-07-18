@@ -14,6 +14,7 @@ class apps {
     public static $appid   = '1';
     public static $etc     = 'etc';
     public static $array   = array();
+    public static $get_app_throw = null;
     public static $type_array = array(
         '2' => '自定义应用',
         '3' => '第三方应用',
@@ -393,6 +394,7 @@ class apps {
         }
         if(empty($rs)){
             $rs = array();
+            is_null(self::$get_app_throw) OR $throw = self::$get_app_throw;
             $throw && iPHP::error_throw('[appid:'.$appid.'] application no exist', '0005');
         }
        	return $rs;
@@ -459,7 +461,7 @@ class apps {
         return $verArray;
     }
     public static function update_count($id,$appid=0,$field,$math='+',$count=1){
-        $rs = self::get_app($appid);
+        $rs = self::get_app($appid,false);
         $tables = reset($rs['table']);
         if($tables){
             $fields = apps_db::fields($tables['table']);

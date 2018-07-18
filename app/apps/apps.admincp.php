@@ -301,6 +301,7 @@ class appsAdmincp{
     public function do_batch(){
         $idArray = (array)$_POST['id'];
         $idArray OR iUI::alert("请选择要操作的应用");
+        $idArray = array_map('intval', $idArray);
         $ids     = implode(',',$idArray);
         $batch   = $_POST['batch'];
       	switch($batch){
@@ -340,7 +341,7 @@ class appsAdmincp{
       if(strpos($_POST['zipfile'], '..') !== false){
         iUI::alert('What the fuck!!');
       }
-      apps_store::$zip_file = trim($_POST['zipfile'],"\0\n\r\t\x0B");
+      apps_store::$zip_file = trim($_POST['zipfile']);
       apps_store::$msg_mode = 'alert';
       apps_store::install_app();
       iUI::success('应用安装完成','js:1');

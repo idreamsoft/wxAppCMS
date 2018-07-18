@@ -8,15 +8,58 @@
 .sub-title text { font-size: 11pt; color: #999; }
 .article-list { width: 100%; background-color: #fff; min-height: 120rpx; }
 .article-item { display: flex; flex-direction: row; justify-content: space-between; padding: 20rpx; margin: 0; border-bottom: 1px solid #D5D5D5; }
-.article-item-left { width: 200rpx; height: 200rpx; }
+.article-item-left { width: 200rpx; height: 200rpx;overflow:visible; }
 .article-item-title { color: #000; font-weight: 400; font-size: 13pt; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8rpx; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
 .article-item-description { color: #999; font-size: 11pt; line-height: 1.8; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-.article-item-info { color: #999; margin-top: 12rpx; font-size: 11pt; }
+.article-item-info { color: #999; margin-top: 12rpx; font-size: 10pt; }
 .article-item-pubdate { float: right; }
-.article-item-right { margin-left: 10rpx; }
-.article-image { width: 180rpx; height: 190rpx; padding: 4rpx; border-radius: 10%; }
+.article-item-right { margin-left: 10rpx; width: 100%;}
+.article-image { width: 200rpx; height: 220rpx; padding: 4rpx; border-radius: 10%; }
+
+.item-list { width: 100%; background-color: #fff; min-height: 120rpx; }
+.item-list .item { display: flex; flex-direction: row;padding: 20rpx; margin: 0; border-bottom: 1px solid #D5D5D5; }
+.item-list .item .item-left { width: 200rpx; height: 200rpx;overflow:visible; }
+.item-list .item .item-title { color: #000; font-weight: 400; font-size: 13pt; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8rpx; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
+.item-list .item .item-description { color: #999; font-size: 11pt; line-height: 1.8; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.item-list .item .item-info { color: #999; margin-top: 12rpx; font-size: 10pt; }
+.item-list .item .item-pubdate { float: right; margin-left: 10rpx;}
+.item-list .item .item-right { margin-left: 10rpx;width: 100%;}
+.item-list .item .item-image { width: 200rpx; height: 220rpx; padding: 4rpx; border-radius: 10%; }
+
+
+.pic-list { width: 100%;padding: 0rpx 10rpx;}
+.pic-list .pic-item {text-align: center;width: 30%; display: inline-block; margin: 10rpx; border: 1rpx solid #bdbdbd; padding: 4rpx; border-radius: 10rpx;}
+.pic-list .pic-item .pic-item-image { width: 100%; max-height:200rpx;min-height:200rpx;border-radius: 10rpx }
+.pic-list .pic-item .pic-item-foot{display: flex; flex-direction: row; justify-content: space-between;text-align: left;color: #666;font-size: 9pt;}
+.pic-list .pic-item .pic-item-title{height: 40rpx;overflow: hidden;}
+.pic-list .pic-item .pic-item-pubdate {display: none;}
 .weui-footer {position: fixed;bottom:0;width: 100%; border-top: 1px solid #efefef; padding: 20rpx; bottom: 10rpx; }
 .footer-navtab { width: 100%; z-index: 999999; height: 90rpx; line-height: 36rpx; overflow-y: hidden; padding-top: 6rpx; border-top: 1px solid #D5D5D5; background-color: #fff; position: fixed; bottom: 0px; left: 0px; display: flex; flex-direction: row; justify-content: space-around; flex-grow: 1; align-items: baseline; }
 .footer-navtab .fnav { text-align: center; font-size: 8pt; margin: auto; }
 .footer-navtab .icon { width: 55rpx; height: 55rpx; display: block; }
 .footer-navtab navigator { color: #333; }
+
+.modal {z-index: 99999999; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: rgba(0, 0, 0, 0.5); z-index: 99999; opacity: 0; transition: opacity 400ms ease-in; pointer-events: none; display: flex; justify-content: center; align-items: center; opacity: 1; pointer-events: auto; }
+.modal .dialog { width: 85%; max-height: 700rpx; background-color: #f8f8f8; display: flex; flex-direction: column; justify-content: space-between; border-radius: 8rpx; box-shadow: 0 0 160rpx 0 rgba(0, 0, 0, 0.4); }
+.modal .dialog .dialog-header { border-bottom: 1px solid #e5e7ed; background-color: #333; position: relative; border-radius: 8rpx 8rpx 0 0; }
+.modal .dialog .dialog-header .dialog-close { top: 0px; right: 0px; padding: 12rpx 24rpx; color: #999; opacity: .4; font-weight: normal; float: right; font-size: 14pt; line-height: 1; text-shadow: 0 1rpx 0 #FFF; cursor: pointer; }
+.modal .dialog .dialog-header .dialog-title { color: #fff; text-shadow: 0 2rpx 2rpx rgba(0, 0, 0, .4); font-size: 11pt; font-weight: 700; padding: 16rpx 30rpx; }
+.modal .dialog .dialog-body { margin: 0 auto; padding: 20rpx; width: 100%; }
+.modal .dialog .dialog-footer { width: 100%; height: 90rpx; margin-bottom: 0; display: flex; flex-direction: row; justify-content: space-between; border-top: 1px solid #e5e7ed; }
+.modal .dialog .dialog-footer .dialog-button { width: 100%; text-align: center; display: flex; flex-direction: row; justify-content: space-between; }
+.modal .dialog .dialog-footer .dialog-button button::after { border-radius: 0px; border: 0rpx; border-right: 1rpx solid #E5E7ED; }
+.modal .dialog .dialog-footer .dialog-button button { flex-grow: 1;    /*background-color: #eceff4;*/ }
+.modal .dialog-body .weui-cells { margin-top: 0rpx; border: 0rpx; }
+.modal .dialog-body .weui-textarea { height: 5em; }
+.modal .dialog-button button.ok { color: green;    /*border-right: 1px solid #E5E7ED;*/ }
+ad{margin: 0 auto;width: 100%}
+/*.dialog-body .weui-cells::before {
+    border: 0rpx;
+}
+.dialog-body .weui-cells::after {
+    border: 0rpx;
+}*/
+
+/*.dialog-button button {
+    width: 50%;
+}*/

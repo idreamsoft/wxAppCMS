@@ -10,7 +10,7 @@
 	"compileType": "miniprogram",
 	"libVersion": "1.9.90",
 	"appid": "wxa91b5d9765e192a7",
-	"projectname": "wxAppCMS",
+	"projectname": "test.wxAppCMS",
 	"isGameTourist": false,
 	"condition": {
 		"search": {

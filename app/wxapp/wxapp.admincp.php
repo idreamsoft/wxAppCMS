@@ -39,6 +39,7 @@ class wxappAdmincp{
         $appsecret   = iSecurity::escapeStr($_POST['appsecret']);
 
         $name        = iSecurity::escapeStr($_POST['name']);
+        $app         = iSecurity::escapeStr($_POST['app']);
         $account     = iSecurity::escapeStr($_POST['account']);
         $qrcode      = iSecurity::escapeStr($_POST['qrcode']);
         $description = iSecurity::escapeStr($_POST['description']);
@@ -58,7 +59,7 @@ class wxappAdmincp{
         preg_match('/^v\d+\.\d+\.\d+$/', $version) OR iUI::alert('版本格式不正确');
 
         $fields = array(
-            'cid', 'appid', 'appsecret',
+            'cid', 'appid', 'appsecret','app',
             'name','account', 'qrcode','description',
             'url','version','tpl','index',
             'config', 'payment'
@@ -69,11 +70,7 @@ class wxappAdmincp{
             iDB::update('wxapp', $data, array('id'=>$id));
             $msg = "小程序更新完成!";
         }else{
-            // iDB::value("
-            //     SELECT `id` FROM `#iCMS@__wxapp`
-            //     WHERE `appid` ='$appid'
-            // ") && iUI::alert('该APPID小程序已经存在');
-            iDB::insert('wxapp',$data);
+            $id = iDB::insert('wxapp',$data);
             $msg = "小程序添加完成!";
         }
         $data['id'] = $id;
@@ -82,14 +79,13 @@ class wxappAdmincp{
         iPHP::callback(array("formerApp","save"),array($this->appid,$id));
 
         // $this->update_config_js($data);
-        // $this->cache();
+        $this->cache($id);
         iUI::success($msg,'url:'.APP_URI);
     }
     public function do_getconfig(){
-        $this->id && $data = iDB::row("SELECT * FROM `#iCMS@__wxapp` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);;
+        $this->id && $data = wxapp::value($this->id);
         list($dir,$api) = explode('/', $data['tpl']);
         $config = <<<EOT
-//配置模板
 module.exports = {
     //小程序 wxAppID
     wxAppID: '{wxAppID}',
@@ -106,23 +102,34 @@ EOT;
             array($data['id'],$data['version'],rtrim($data['url'],'/').'/',trim($data['name'])),
             $config
         );
-        $path = iPHP_APP_CACHE.'/'.md5($data['appid']).'.js';
-        iFS::write($path,$config);
-        filesApp::attachment($path,'config.js');
-        iFS::rm($path);
+        echo '<h2>请将下面内容复制到的小程序文件夹下的config.js文件里</h2>';
+        echo '<pre style="color: #383d41;
+    background-color: #e2e3e5;
+    border-color: #d6d8db;padding:10px;">';
+        echo $config;
+        echo '</pre>';
+        // $path = iPHP_APP_CACHE.'/'.md5($data['appid']).'.js';
+        // iFS::write($path,$config);
+        // filesApp::attachment($path,'config.js');
+        // iFS::rm($path);
     }
     public function do_update(){
         foreach((array)$_POST['id'] as $tk=>$id){
-            iDB::query("update `#iCMS@__wxapp` set `app` = '".$_POST['app'][$tk]."', `name` = '".$_POST['name'][$tk]."', `value` = '".$_POST['value'][$tk]."' where `id` = '$id';");
+            iDB::query("
+                UPDATE `#iCMS@__wxapp`
+                SET `app` = '".$_POST['app'][$tk]."',
+                `name` = '".$_POST['name'][$tk]."',
+                `value` = '".$_POST['value'][$tk]."'
+                WHERE `id` = '$id';
+            ");
+            $this->cache($id);
         }
-        $this->cache();
         iUI::alert('更新完成');
     }
     public function do_del($id = null,$dialog=true){
         $id===null && $id=$this->id;
         $id OR iUI::alert('请选择要删除的小程序!');
         $this->del($id);
-        $this->cache();
         $dialog && iUI::success("已经删除!",'url:'.APP_URI);
     }
     public function do_batch(){
@@ -140,10 +147,62 @@ EOT;
                 iUI::success('小程序全部删除完成!','js:1');
             break;
             case 'refresh':
-                $this->cache();
+                iUI::$break = false;
+                foreach($idArray AS $id){
+                    $this->cache($id);
+                }
+                iUI::$break = true;
                 iUI::success('小程序缓存全部更新完成!','js:1');
             break;
         }
+    }
+    public function do_cache(){
+        $rs = iDB::all("SELECT `id` FROM `#iCMS@__wxapp`");
+        $_count = count($rs);
+        for ($i=0; $i < $_count; $i++) {
+            $this->cache($rs[$i]['id']);
+        }
+        iUI::success('小程序缓存全部更新完成!','js:1');
+    }
+    public function do_user(){
+        $sql = "WHERE 1=1";
+
+        if($_GET['keywords']) {
+            $sql.=" AND CONCAT(username,nickname) REGEXP '{$_GET['keywords']}'";
+        }
+        if(isset($_GET['status']) && $_GET['status']!==''){
+            $sql.=" AND `status`='{$_GET['status']}'";
+        }
+
+        $_GET['wxappid']  && $sql.=" AND `appid`='{$_GET['wxappid']}'";
+        $_GET['openid']   && $sql.=" AND `openid`='{$_GET['openid']}'";
+        $_GET['client_ip']&& $sql.=" AND `client_ip`='{$_GET['client_ip']}'";
+        $_GET['gender']   && $sql.=" AND `gender`='{$_GET['gender']}'";
+        $_GET['province'] && $sql.=" AND `province`='{$_GET['province']}'";
+        $_GET['city']     && $sql.=" AND `city`='{$_GET['city']}'";
+        $_GET['client_ip']&& $sql.=" AND `client_ip`='{$_GET['client_ip']}'";
+
+        list($orderby,$orderby_option) = get_orderby(array(
+            'uid'        =>"UID",
+        ));
+
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
+        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__wxapp_user` {$sql}","G");
+        iUI::pagenav($total,$maxperpage,"个用户");
+        $limit  = 'LIMIT '.iUI::$offset.','.$maxperpage;
+        if($map_sql||iUI::$offset){
+            $ids_array = iDB::all("
+                SELECT `uid` FROM `#iCMS@__wxapp_user` {$sql}
+                ORDER BY {$orderby} {$limit}
+            ");
+            $ids   = iSQL::values($ids_array,'uid');
+            $ids   = $ids?$ids:'0';
+            $sql   = "WHERE `uid` IN({$ids})";
+            $limit = '';
+        }
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__wxapp_user` {$sql} ORDER BY {$orderby} {$limit}");
+        $_count = count($rs);
+        include admincp::view("wxapp.user.manage");
     }
     public function do_iCMS(){
       $this->do_manage();
@@ -176,6 +235,17 @@ EOT;
         $rs     = iDB::all("SELECT * FROM `#iCMS@__wxapp` {$sql} order by id DESC LIMIT ".iUI::$offset." , {$maxperpage}");
         $_count = count($rs);
         include admincp::view("wxapp.manage");
+    }
+    public function del($id){
+        $data = wxapp::value($id);
+        iDB::query("DELETE FROM `#iCMS@__wxapp` WHERE `id` = '$id'");
+        iCache::delete('wxapp/'.$id);
+        iCache::delete('wxapp/'.$data['appid']);
+    }
+    public function cache($id){
+        $data = wxapp::value($id);
+        iCache::set('wxapp/'.$id,$data,0);
+        iCache::set('wxapp/'.$data['appid'],$data,0);
     }
 
 }

@@ -10,7 +10,7 @@ class user_WB {
 
 	public function login(){
 	    $state = md5(uniqid(rand(), TRUE)); //CSRF protection
-	    iPHP::set_cookie("WB_STATE",auth_encode($state,'ENCODE'));
+	    iPHP::set_cookie("WB_STATE",auth_encode($state));
 	    $login_url = "https://api.weibo.com/oauth2/authorize?response_type=code&client_id="
 	        . $this->appid . "&redirect_uri=" . urlencode($this->url)
 	        . "&state=" .$state

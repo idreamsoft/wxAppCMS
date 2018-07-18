@@ -28,22 +28,22 @@ defined('iPHP') OR exit('What are you doing?');
       <input type="text" class="span4" name="mkeyword"/>
     </div>
     <div class="clearfloat mb10"></div>
-    <div class="input-prepend input-append"><span class="add-on">追加
-      <input type="radio" name="pattern" value="addto"/>
-      </span><span class="add-on">替换
-      <input type="radio" name="pattern" value="replace" checked/>
-      </span></div>
+    <div class="input-prepend input-append">
+      <span class="add-on">追加<input type="radio" name="pattern" value="addto"/></span>
+      <span class="add-on">替换<input type="radio" name="pattern" value="replace" checked/></span>
+      <span class="add-on">删除<input type="radio" name="pattern" value="delete"/></span>
+    </div>
   </div>
   <div id="tagBatch">
     <div class="input-prepend"><span class="add-on">标签</span>
       <input type="text" class="span4" name="mtag"/>
     </div>
     <div class="clearfloat mb10"></div>
-    <div class="input-prepend input-append"><span class="add-on">追加
-      <input type="radio" name="pattern" value="addto"/>
-      </span><span class="add-on">替换
-      <input type="radio" name="pattern" value="replace" checked/>
-      </span></div>
+    <div class="input-prepend input-append">
+      <span class="add-on">追加<input type="radio" name="pattern" value="addto" checked/></span>
+      <span class="add-on">替换<input type="radio" name="pattern" value="replace"/></span>
+      <span class="add-on">删除<input type="radio" name="pattern" value="delete"/></span>
+    </div>
   </div>
 </div>
 </body></html>

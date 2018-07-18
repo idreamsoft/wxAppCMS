@@ -3,6 +3,8 @@ page { height: 100%; font-size: 11pt; color: #555; background: #EFEFF4; overflow
 icon { vertical-align: middle; }
 form { width: 100%; }
 navigator { color: #0E82BF; }
+icms { width: 100% !important; height: 100% !important;}
+[hidden]{display: none;}
 
 /* margin */
 .m0 { margin: 0 !important; }
@@ -163,12 +165,13 @@ navigator { color: #0E82BF; }
 }
 .float-icon { position: fixed; z-index: 20; right: 50rpx; bottom: 50rpx; }
 .text-more { width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; word-break: break-all; }
-.navbar { z-index: 999999; position: fixed; bottom: 0; left: 0; width: 100%; height: 115rpx; background: #fff; color: #555; border-top: 1rpx solid rgba(0, 0, 0, .1); box-sizing: border-box; }
-.navbar navigator { height: 100%; width: 1%; }
-.navbar navigator > view { width: 100%; padding-top: 4px; }
-.navbar .navbar-icon { width: 64rpx; height: 64rpx; display: block; margin: 0 auto; }
-.navbar .navbar-text { font-size: 8pt; text-align: center; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-.navbar + .after-navber { padding-bottom: 115rpx; }
-.navbar ~ .float-icon, .navbar + .after-navber .float-icon { bottom: 170rpx !important; }
-.hidden,.hide { display: none; }
+.wx-navbar-wrap { z-index: 999999; position: fixed; bottom: 0; left: 0; width: 100%; height: 100rpx; background: #fff; color: #555; border-top: 1rpx solid rgba(0, 0, 0, .1); box-sizing: border-box; }
+.wx-navbar-wrap navigator { height: 100%; }
+.wx-navbar-wrap navigator > view { width: 100%; padding-top: 4px; text-align: center; }
+.wx-navbar-wrap .wx-navbar-icon { width: 52rpx; height: 52rpx; display: block; margin: 0 auto; }
+.wx-navbar-wrap .wx-navbar-text { font-size: 8pt; text-align: center; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.wx-navbar-wrap + .after-navber { padding-bottom: 100rpx; }
+.wx-navbar-wrap ~ .float-icon, .navbar + .after-navber .float-icon { bottom: 170rpx !important; }
+.hidden, .hide { display: none; }
 .no-scroll { height: 100%; overflow-y: hidden; }
+ad{margin: 0 auto;}

@@ -83,16 +83,10 @@ $(function() {
     doc.on("click", '.checkAll', function() {
         var target = $(this).attr('data-target'),
             checkedStatus = $(this).prop("checked");
-        //$('input:checkbox',$(target)).prop("checked",checkedStatus);
         $(".checkAll").prop("checked", checkedStatus);
         $('input:checkbox', $(target)).each(function() {
             this.checked = checkedStatus;
-            if (checkedStatus == this.checked) {
-                $(this).closest('.checker > span').removeClass('checked');
-            }
-            if (this.checked) {
-                $(this).closest('.checker > span').addClass('checked');
-            }
+            $.uniform.update($(this));
         });
     });
     doc.on("change", '[data-toggle="select_insert"]', function() {
@@ -238,7 +232,7 @@ $(function() {
 function get_category_meta(cid, el) {
     $.getJSON(window.iCMS.config.API, { 'app': 'category', 'do': 'config_meta', 'cid': cid },
         function(json) {
-            if (!json||!json.code) return;
+            if (!json) return;
 
             var tb = $(el),
                 tbody = $("tbody", tb);
@@ -438,6 +432,7 @@ function modal_icms(el, a) {
             var im = $(this),
                 _this = this,
                 action = $('<input type="hidden" name="batch">'),
+                bmIds = $('<input type="hidden" name="bmIds">'),
                 batch_content = $('<div class="batch_content hide"></div>').appendTo(im),
                 defaults = {
                     move: function() {
@@ -482,6 +477,16 @@ function modal_icms(el, a) {
                     options[act](checkbox);
                     return;
                 }
+                if(checkbox.length>900){
+                    var bIds=[];
+                    checkbox.each(function(index, el) {
+                        var id = $(el).val();
+                        bIds.push(id);
+                        $(el).attr('disabled', true);
+                    });
+                    bmIds.val(bIds).appendTo(im);
+                }
+
                 action.val(act).appendTo(im);
                 // console.log(box,typeof box);
                 var is_chosen = false;
@@ -520,6 +525,8 @@ function modal_icms(el, a) {
                             $("select", $(box)).chosen("destroy");
                         }
                         action.val(0);
+                        bmIds.val('');
+                        checkbox.removeAttr('disabled');
                         batch_content.empty();
                     }
                 });

@@ -153,7 +153,8 @@ class iPages {
 	}
 	public function current_page($style='page_nowindex'){
 		$pnt = $this->get_title($this->nowindex);
-		return '<span class="'.$style.'">'.$this->lang['di'].$pnt.$this->lang['unit'].'</span>';
+		$title = $this->titles?$pnt:($this->lang['di'].$pnt.$this->lang['unit']);
+		return '<span class="'.$style.'">'.$title.'</span>';
 	}
 	//文字 说明
 	public function bartext($style='bartext'){
