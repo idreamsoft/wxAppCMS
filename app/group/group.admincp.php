@@ -54,10 +54,7 @@ class groupAdmincp{
 		$dialog && iUI::success('用户组删除完成','js:parent.$("#id'.$gid.'").remove();');
     }
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-    	$idArray OR iUI::alert("请选择要删除的用户组");
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+    	list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要删除的用户组");
     	switch($batch){
     		case 'dels':
 				iUI::$break	= false;

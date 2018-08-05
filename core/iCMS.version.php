@@ -7,6 +7,6 @@
 * @site https://www.icmsdev.com
 * @licence https://www.icmsdev.com/LICENSE.html
 */
-define('iCMS_VERSION', 'V7.0.9');
-define('iCMS_RELEASE', '20180707');
-define('iCMS_HASH', 'ba79a765pykKP7dnWzPuxVMjsWRzvy3gznd2wNb+kDiHJXyWQQ');
+define('iCMS_VERSION', 'V7.0.11');
+define('iCMS_RELEASE', '20180802');
+define('iCMS_HASH', 'b51db416DfjVyR9DvUQMgOH14VKwMItfLcliI3SQRZRWAlfAgZo');

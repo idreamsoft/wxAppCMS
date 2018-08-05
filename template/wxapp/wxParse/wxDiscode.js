@@ -1,5 +1,5 @@
 // HTML 支持的数学符号
-function strNumDiscode(str) {
+function strNumDiscode(str){
     str = str.replace(/&forall;/g, '∀');
     str = str.replace(/&part;/g, '∂');
     str = str.replace(/&exists;/g, '∃');
@@ -41,7 +41,7 @@ function strNumDiscode(str) {
 }
 
 //HTML 支持的希腊字母
-function strGreeceDiscode(str) {
+function strGreeceDiscode(str){
     str = str.replace(/&Alpha;/g, 'Α');
     str = str.replace(/&Beta;/g, 'Β');
     str = str.replace(/&Gamma;/g, 'Γ');
@@ -99,9 +99,9 @@ function strGreeceDiscode(str) {
     return str;
 }
 
-//
+// 
 
-function strcharacterDiscode(str) {
+function strcharacterDiscode(str){
     // 加入常用解析
     str = str.replace(/&nbsp;/g, ' ');
     str = str.replace(/&quot;/g, "'");
@@ -111,12 +111,13 @@ function strcharacterDiscode(str) {
 
     str = str.replace(/&lt;/g, '<');
     str = str.replace(/&gt;/g, '>');
+    str = str.replace(/&#8226;/g, '•');
 
     return str;
 }
 
 // HTML 支持的其他实体
-function strOtherDiscode(str) {
+function strOtherDiscode(str){
     str = str.replace(/&OElig;/g, 'Œ');
     str = str.replace(/&oelig;/g, 'œ');
     str = str.replace(/&Scaron;/g, 'Š');
@@ -170,19 +171,19 @@ function strOtherDiscode(str) {
     str = str.replace(/&hearts;/g, '♥');
 
     str = str.replace(/&diams;/g, '♦');
-
+    str = str.replace(/&#39;/g, '\'');
     return str;
 }
 
-function strMoreDiscode(str) {
-    str = str.replace(/\r\n/g, "");
-    str = str.replace(/\n/g, "");
+function strMoreDiscode(str){
+    str = str.replace(/\r\n/g,"");  
+    str = str.replace(/\n/g,"");
 
-    str = str.replace(/code/g, "wxxxcode-style");
+    str = str.replace(/code/g,"wxxxcode-style");
     return str;
 }
 
-function strDiscode(str) {
+function strDiscode(str){
     str = strNumDiscode(str);
     str = strGreeceDiscode(str);
     str = strcharacterDiscode(str);
@@ -190,18 +191,17 @@ function strDiscode(str) {
     str = strMoreDiscode(str);
     return str;
 }
-
-function urlToHttpUrl(url, rep) {
-
+function urlToHttpUrl(url,rep){
+    
     var patt1 = new RegExp("^//");
     var result = patt1.test(url);
-    if (result) {
-        url = rep + ":" + url;
+    if(result){
+        url = rep+":"+url;
     }
-    return url;
+    return  url;
 }
 
 module.exports = {
-    strDiscode: strDiscode,
-    urlToHttpUrl: urlToHttpUrl
+    strDiscode:strDiscode,
+    urlToHttpUrl:urlToHttpUrl
 }

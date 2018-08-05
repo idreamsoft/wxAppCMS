@@ -290,7 +290,7 @@ class former {
                         $attr['type']  = 'text/plain';
                         $attr['id']    = 'editor-body-'.$attr['id'];
                         $form_group    = 'editor-container';
-                        $script        = editorAdmincp::ueditor_script($attr['id']);
+                        $script        = editorAdmincp::ueditor_script($attr['id'],self::$config);
                     }
                     $input = self::widget('textarea',$attr);
                 break;
@@ -301,7 +301,7 @@ class former {
                         // $attr['id']    = 'editor-body-'.$attr['id'];
                         $form_group    = 'editor-container';
                         $form_group_id = 'editor-body-'.$attr['id'];
-                        $script        = editorAdmincp::markdown_script($form_group_id);
+                        $script        = editorAdmincp::markdown_script($form_group_id,self::$config);
                     }
                     $input = self::widget('textarea',$attr);
                 break;
@@ -445,10 +445,15 @@ class former {
         }
         return $output;
     }
+    public static function set_template_class(Array $class) {
+        self::$template['class'] = array_merge(self::$template['class'],$class);
+    }
     public static function template_class($output) {
         if(self::$template['class'])foreach (self::$template['class'] as $k => $value) {
-            $output = str_replace('{{class_'.$k.'}}', $value, $output);
+            $search[]  = '{{class_'.$k.'}}';
+            $replace[] = $value;
         }
+        $output = str_replace($search, $replace, $output);
         return $output;
     }
 
@@ -726,6 +731,14 @@ class former {
         if($type=='editor'){
             if(self::$config['gateway']=='usercp'){
                 $value = iPHP::vendor('CleanHtml', array($value));
+            }
+            isset($_POST['dellink'])    && $value = preg_replace("/<a[^>].*?>(.*?)<\/a>/si", "\\1",$value);
+            isset($_POST['iswatermark'])&& files::$watermark_enable = false;
+            if($_POST['remote']){
+                $value = filesAdmincp::remotepic($value,true);
+                $value = filesAdmincp::remotepic($value,true);
+                $value = filesAdmincp::remotepic($value,true);
+                // files::set_file_iid($body,$aid,self::$appid);
             }
         }else{
             $value = iSecurity::escapeStr($value);

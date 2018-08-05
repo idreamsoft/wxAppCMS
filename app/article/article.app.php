@@ -79,7 +79,7 @@ class articleApp extends appsApp {
 			$article['subtitle'] = $data['subtitle'];
 			unset($data);
 			$total = $count + intval(self::$config['pageno_incr']);
-			$article['page'] = iUI::page_content($article,$page,$total,$count,$category['mode'],$chapterArray);
+			$article['page'] = iPagination::content($article,$page,$total,$count,$category['mode'],$chapterArray);
 			$article['PAGES'] = $article['page']['PAGES'];unset($article['page']['PAGES']);
 			is_array($article['page']['next'])&& $next_url = $article['page']['next']['url'];
 			$pic_array[0] && $article['body'] = self::body_pics_page($pic_array,$article,$page,$total,$next_url);

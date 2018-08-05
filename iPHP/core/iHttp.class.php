@@ -28,6 +28,18 @@ class iHttp{
 
     protected static $_count  = 0;
 
+    public static function is_url($url,$strict=false) {
+        $url = trim($url);
+        if($strict){
+            return (stripos($url, 'http://') === 0 || stripos($url, 'https://') === 0);
+        }
+
+        if (stripos($url, 'http://') === false && stripos($url, 'https://') === false) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     public static function is_ajax() {
         return (
             $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"||

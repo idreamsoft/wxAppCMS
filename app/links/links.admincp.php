@@ -61,9 +61,9 @@ class linksAdmincp{
 
         list($orderby,$orderby_option) = get_orderby();
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total		= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__links` {$sql}","G");
+        $total		= iPagination::totalCache("SELECT count(*) FROM `#iCMS@__links` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个网站");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__links` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__links` {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count = count($rs);
     	include admincp::view("links.manage");
     }

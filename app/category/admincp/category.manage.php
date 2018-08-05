@@ -235,7 +235,7 @@ iCMS.select('rootid',"<?php echo $_GET['rootid'] ; ?>");
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="8"><div class="pagination pagination-right" style="float:right;"><?php echo iUI::$pagenav ; ?></div>
+              <td colspan="8"><div class="pagination pagination-right" style="float:right;"><?php echo iPagination::$pagenav ; ?></div>
                 <div class="input-prepend input-append mt20"> <span class="add-on">全选
                   <input type="checkbox" class="checkAll checkbox" data-target="#<?php echo APP_BOXID;?>" />
                   </span>

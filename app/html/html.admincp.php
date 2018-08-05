@@ -243,7 +243,7 @@ class htmlAdmincp{
             'comments'   =>"评论数",
         ));
 
-		$total     = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__article` {$whereSQL}","G");
+		$total     = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__article` {$whereSQL}","G");
 		$looptimes = ceil($total/$perpage);
 		$offset    = $this->page*$perpage;
 		$rs        = iDB::all("SELECT `id` FROM `#iCMS@__article` {$whereSQL} order by {$orderby} LIMIT {$offset},{$perpage}");

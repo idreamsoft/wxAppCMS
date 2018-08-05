@@ -76,9 +76,7 @@ class contentAdmincp{
         }
     }
     public function do_batch(){
-        $_POST['id'] OR iUI::alert("请选择要操作的".$this->app['name']);
-        $ids    = implode(',',(array)$_POST['id']);
-        $batch  = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的".$this->app['title']);
         switch($batch){
             case 'order':
                 foreach((array)$_POST['sortnum'] AS $id=>$sortnum) {
@@ -93,7 +91,7 @@ class contentAdmincp{
                 iUI::success('添加完成!','js:1');
             break;
             case 'baiduping':
-                foreach((array)$_POST['id'] AS $id) {
+                foreach($idArray AS $id) {
                     $msg.= $this->do_baiduping($id,false);
                 }
                 iUI::success($msg,'js:1');
@@ -340,14 +338,14 @@ class contentAdmincp{
             $sql     = ",({$map_sql}) map {$sql} AND `id` = map.`iid`";
         }
 
-        $total = iCMS::page_total_cache("SELECT count(*) FROM `".content::$table."` {$sql}","G");
+        $total = iPagination::totalCache("SELECT count(*) FROM `".content::$table."` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"条记录");
 
-        $limit = 'LIMIT '.iUI::$offset.','.$maxperpage;
+        $limit = 'LIMIT '.iPagination::$offset.','.$maxperpage;
 
-        if($map_sql||iUI::$offset){
-            if(iUI::$offset > 1000 && $total > 2000 && iUI::$offset >= $total/2) {
-                $_offset = $total-iUI::$offset-$maxperpage;
+        if($map_sql||iPagination::$offset){
+            if(iPagination::$offset > 1000 && $total > 2000 && iPagination::$offset >= $total/2) {
+                $_offset = $total-iPagination::$offset-$maxperpage;
                 if($_offset < 0) {
                     $_offset = 0;
                 }
@@ -393,18 +391,18 @@ class contentAdmincp{
         // }
         $REFERER_URL= APP_URI.'&do=manage';
         if($update){
-            iUI::success($this->app['name'].'编辑完成!<br />3秒后返回'.$this->app['name'].'列表','url:'.$REFERER_URL);
+            iUI::success($this->app['title'].'编辑完成!<br />3秒后返回'.$this->app['title'].'列表','url:'.$REFERER_URL);
         }else{
             $moreBtn = array(
-                    array("text" =>"查看该".$this->app['name'],"target"=>'_blank',"url"=>$article_url,"close"=>false),
-                    array("text" =>"编辑该".$this->app['name'],"url"=>APP_URI."&do=add&id=".formerApp::$primary_id),
-                    array("text" =>"继续添加".$this->app['name'],"url"=>APP_URI."&do=add&cid=".$cid),
-                    array("text" =>"返回".$this->app['name']."列表","url"=>$REFERER_URL),
+                    array("text" =>"查看该".$this->app['title'],"target"=>'_blank',"url"=>$article_url,"close"=>false),
+                    array("text" =>"编辑该".$this->app['title'],"url"=>APP_URI."&do=add&id=".formerApp::$primary_id),
+                    array("text" =>"继续添加".$this->app['title'],"url"=>APP_URI."&do=add&cid=".$cid),
+                    array("text" =>"返回".$this->app['title']."列表","url"=>$REFERER_URL),
                     array("text" =>"查看网站首页","url"=>iCMS_URL,"target"=>'_blank')
             );
             iUI::$dialog['modal'] = true;
-            iUI::dialog('success:#:check:#:'.$this->app['name'].'添加完成!<br />10秒后返回'.$this->app['name'].'列表'.$msg,'url:'.$REFERER_URL,10,$moreBtn);
-            // iUI::success($this->app['name'].'添加完成!<br />3秒后返回'.$this->app['name'].'列表','url:'.$REFERER_URL);
+            iUI::dialog('success:#:check:#:'.$this->app['title'].'添加完成!<br />10秒后返回'.$this->app['title'].'列表'.$msg,'url:'.$REFERER_URL,10,$moreBtn);
+            // iUI::success($this->app['title'].'添加完成!<br />3秒后返回'.$this->app['title'].'列表','url:'.$REFERER_URL);
         }
     }
 

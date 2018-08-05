@@ -10,6 +10,7 @@
 class databaseAdmincp {
 	public function __construct() {
 		$this->bakdir = $_GET['dir'];
+		iFS::check($this->bakdir);
 	}
 	/**
 	 * [数据库恢复页]
@@ -56,10 +57,7 @@ class databaseAdmincp {
 		include admincp::view("database.replace");
 	}
 	public function do_batch() {
-		$tableA = (array) $_POST['table'];
-		$tableA OR iUI::alert("请选择要操作的表");
-		$tables = implode(',', $tableA);
-		$batch = $_POST['batch'];
+		list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的表");
 		switch ($batch) {
 		case 'backup':
 			$this->do_savebackup();
@@ -92,6 +90,7 @@ class databaseAdmincp {
 		!$tableA && !$tablesel && iUI::alert('没有选择操作对象');
 		!$tableA && $tableA = explode("|", $tablesel);
 		!$step && $this->sizelimit /= 2;
+		iFS::check($bdir);
 
 		$bakupdata = $this->bakupdata($tableA, $this->start);
 		$bakTag = "# iCMS Backup SQL File\n# Version:iCMS " . iCMS_VERSION . "\n# Time: " . get_date(0, "Y-m-d H:i:s") . "\n# iCMS: https://www.icmsdev.com\n# --------------------------------------------------------\n\n\n";

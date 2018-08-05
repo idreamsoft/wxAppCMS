@@ -64,8 +64,9 @@ class article {
         return array($rs,$adrs);
     }
     public static function body($id=0){
-        $body = iDB::value("SELECT body FROM `#iCMS@__article_data` WHERE aid='$id'");
-        return $body;
+        $array = iDB::all("SELECT body FROM `#iCMS@__article_data` WHERE aid='$id'");
+        $pieces = array_column($array, 'body');
+        return implode('#--iCMS.PageBreak--#', $pieces);
     }
 
     public static function batch($data,$ids){

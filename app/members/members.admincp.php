@@ -61,9 +61,9 @@ class membersAdmincp{
         ));
 
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__members` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__members` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个用户");
-        $rs         = iDB::all("SELECT * FROM `#iCMS@__members` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs         = iDB::all("SELECT * FROM `#iCMS@__members` {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count		= count($rs);
     	include admincp::view("members.manage");
     }
@@ -118,10 +118,7 @@ class membersAdmincp{
         iUI::success($msg,'js:1');
     }
     public function do_batch(){
-    	$idA	= (array)$_POST['id'];
-    	$idA OR iUI::alert("请选择要操作的用户");
-    	$ids	= implode(',',(array)$_POST['id']);
-    	$batch	= $_POST['batch'];
+    	list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的用户");
     	switch($batch){
     		case 'dels':
                 iUI::$break = false;

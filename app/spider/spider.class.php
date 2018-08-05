@@ -359,6 +359,12 @@ class spider{
         }
     }
     public static function postUrl($url, $data) {
+        if(!iHttp::is_url($url,true)){
+            if (spider::$dataTest || spider::$ruleTest) {
+                echo "<b>{$url} 请求错误:非正常URL格式,因安全问题只允许提交到 http:// 或 https:// 开头的链接</b>";
+            }
+            return false;
+        }
         is_array($data) && $data = http_build_query($data);
         $options = array(
             CURLOPT_URL                  => $url,

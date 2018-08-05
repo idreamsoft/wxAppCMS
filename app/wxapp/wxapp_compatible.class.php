@@ -41,27 +41,35 @@ class wxapp_compatible{
     public static function iURL_router(&$url){
         $parse = parse_url($url);
         parse_str($parse['query'], $output);
-        if($output['app'] && $output['do']){
-            $url= '/pages/'.$output['app'].'/'.$output['do'];
-            unset($output['app'],$output['do']);
-            $url.='?'.http_build_query($output);
+        if($output['app']){
+            $url = self::qs_transform($output);
         }else{
-            $url  = str_replace('.php','',$parse['path']);
-            $url.=http_build_query($output);
+            $url = str_replace('.php','',$parse['path']);
+            $url.= http_build_query($output);
         }
     }
     public static function iURL_url(&$i){
-        self::iURL_path($i->href);
-        $i->pageurl && self::iURL_path($i->pageurl);
+        self::iurl_transform($i->href);
+        $i->pageurl && self::iurl_transform($i->pageurl);
     }
-
-    public static function iURL_path(&$url){
+    public static function iurl_transform(&$url){
         $parse = parse_url($url);
-        $fi    = iFS::name($parse['path']);
-        $name  = $fi['name'];
         $query = $parse['query'];
-        $query && $query='?'.$query;
-        $path  = "/pages/{$name}/{$name}";
-        $url   = $path.$query;
+        parse_str($query, $output);
+        if($output['app']){
+            $url  = self::qs_transform($output);
+        }else{
+            $fi   = iFS::name($parse['path']);
+            $name = $fi['name'];
+            $url  = "/pages/{$name}/{$name}";
+            $query && $url.='?'.$query;
+        }
+    }
+    public static function qs_transform($output){
+        empty($output['do']) && $output['do'] = 'content';
+        $path= '/pages/'.$output['app'].'/'.$output['do'];
+        unset($output['app'],$output['do']);
+        $path.='?'.http_build_query($output);
+        return $path;
     }
 }

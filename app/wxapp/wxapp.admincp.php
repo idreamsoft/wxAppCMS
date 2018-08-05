@@ -78,7 +78,6 @@ class wxappAdmincp{
         iPHP::callback(array("apps_meta","save"),array($this->appid,$id));
         iPHP::callback(array("formerApp","save"),array($this->appid,$id));
 
-        // $this->update_config_js($data);
         $this->cache($id);
         iUI::success($msg,'url:'.APP_URI);
     }
@@ -97,9 +96,10 @@ module.exports = {
     TITLE: '{TITLE}',
 }
 EOT;
+        $dir    = trim(iCMS::$config['router']['dir'],'/');
         $config = str_replace(
             array('{wxAppID}','{VERSION}','{HOST}','{TITLE}'),
-            array($data['id'],$data['version'],rtrim($data['url'],'/').'/',trim($data['name'])),
+            array($data['id'],$data['version'],rtrim($data['url'],'/').'/'.($dir?$dir.'/':''),trim($data['name'])),
             $config
         );
         echo '<h2>请将下面内容复制到的小程序文件夹下的config.js文件里</h2>';
@@ -108,10 +108,6 @@ EOT;
     border-color: #d6d8db;padding:10px;">';
         echo $config;
         echo '</pre>';
-        // $path = iPHP_APP_CACHE.'/'.md5($data['appid']).'.js';
-        // iFS::write($path,$config);
-        // filesApp::attachment($path,'config.js');
-        // iFS::rm($path);
     }
     public function do_update(){
         foreach((array)$_POST['id'] as $tk=>$id){
@@ -133,10 +129,7 @@ EOT;
         $dialog && iUI::success("已经删除!",'url:'.APP_URI);
     }
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-        $idArray OR iUI::alert("请选择要操作的小程序");
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的小程序");
         switch($batch){
             case 'dels':
                 iUI::$break = false;
@@ -187,10 +180,10 @@ EOT;
         ));
 
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__wxapp_user` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__wxapp_user` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个用户");
-        $limit  = 'LIMIT '.iUI::$offset.','.$maxperpage;
-        if($map_sql||iUI::$offset){
+        $limit  = 'LIMIT '.iPagination::$offset.','.$maxperpage;
+        if($map_sql||iPagination::$offset){
             $ids_array = iDB::all("
                 SELECT `uid` FROM `#iCMS@__wxapp_user` {$sql}
                 ORDER BY {$orderby} {$limit}
@@ -230,11 +223,59 @@ EOT;
         $_GET['cid']  && $uriArray['cid'] = $_GET['cid'];
 
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__wxapp` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__wxapp` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个小程序");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__wxapp` {$sql} order by id DESC LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__wxapp` {$sql} order by id DESC LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count = count($rs);
         include admincp::view("wxapp.manage");
+    }
+    public function do_tmplmsg_list(){
+        $this->id && $data = wxapp::value($this->id);
+        wxapp_api::weixin_init(array(
+            'appid'     => $data['appid'],
+            'appsecret' => $data['appsecret']
+        ));
+        weixin::$API_URL = 'https://api.weixin.qq.com/cgi-bin';
+        $url     = weixin::url('wxopen/template/list');
+        $param   = array(
+            'offset' =>0,
+            'count'  =>20
+        );
+        $json = json_encode($param);
+
+        $raw = iHttp::send($url,$json,'raw');
+        if($raw){
+            $response = json_decode($raw,true);
+        }
+        include admincp::view("tmplmsg.list");
+    }
+    public function do_tmplmsg_send(){
+        $id       = $_POST['id'];
+        $touser   = $_POST['touser'];
+        $userid   = $_POST['userid'];
+        $template = $_POST['template_id'];
+        $content  = $_POST['content'];
+        $page     = $_POST['page'];
+        $big      = $_POST['big'];
+
+        $data     = wxapp::value($id);
+        $touser OR iUI::alert('请选择发送对象!');
+        if($touser=='all'){
+            $uids = null;
+        }else{
+            $userid OR iUI::alert('请填写用户ID!');
+            $uids = explode(',', $userid);
+        }
+        @set_time_limit(0);
+        $ret = $this->send_msg_to_uid($uids,$data['appid'],$content,$template,$page,$big);
+        $ret?iUI::success('发送完成<br/>'.nl2br($ret),'js:1',100):iUI::alert('发送失败');
+    }
+    public function do_tmplmsg_content(){
+        $tid   = $_GET['template_id'];
+        $template = iCache::get('wxapp/template_list',$tid);
+        $example = explode("\n", trim($template['example']));
+        $content = explode("\n", trim($template['content']));
+        include admincp::view("tmplmsg.content");
     }
     public function del($id){
         $data = wxapp::value($id);
@@ -247,5 +288,63 @@ EOT;
         iCache::set('wxapp/'.$id,$data,0);
         iCache::set('wxapp/'.$data['appid'],$data,0);
     }
-
+    public function send_msg_to_uid($uids,$appid,$content,$template,$page,$big=''){
+        $uids && $sql = "AND `uid` IN('".implode("','", $uids)."')";
+        $all = iDB::all("
+            SELECT
+              `uid`, `openid`
+            FROM
+              `#iCMS@__user_openid`
+            WHERE `appid`='{$appid}' {$sql} ORDER BY id ASC
+        ");
+        var_dump(iDB::$last_query);
+        var_dump($all);
+        $ret = '';
+        foreach ($all as $key => $value) {
+            $uid       = $value['uid'];
+            $openid    = $value['openid'];
+            $time      = time();
+            $send_time = iDB::value("
+                SELECT
+                    `send_time`
+                FROM
+                    `#iCMS@__wxapp_formids`
+                WHERE appid = '{$appid}'
+                AND `userid` = '{$uid}'
+                AND `status` = '1'
+                ORDER BY id DESC
+            ");
+            //
+            $formid = iDB::value("
+                SELECT
+                    `formid`
+                FROM
+                    `#iCMS@__wxapp_formids`
+                WHERE appid = '{$appid}'
+                AND `userid` = '{$uid}'
+                AND expire_time > '{$time}'
+                AND `status` = '0'
+                ORDER BY id DESC
+            ");
+            if($formid){
+                $send = wxapp_message::send(array(
+                    'appid'    =>$appid,
+                    'userid'   =>$uid,
+                    'openid'   =>$openid,
+                    'template' =>$template,
+                    'page'     =>$page,
+                    'data'     =>$content,
+                    'big'      =>$big
+                ));
+                // var_dump($send);
+                if($send===true){
+                    $ret.= $uid." >>>  send".PHP_EOL;
+                }else{
+                    $ret.= $uid."errcode:{$send->errcode},errmsg:{$send->errmsg}".PHP_EOL;
+                }
+            }
+        }
+        var_dump($ret);
+        return $ret;
+    }
 }

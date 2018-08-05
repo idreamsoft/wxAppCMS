@@ -97,10 +97,10 @@ class userAdmincp{
         ));
 
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__user` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__user` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个用户");
-        $limit  = 'LIMIT '.iUI::$offset.','.$maxperpage;
-        if($map_sql||iUI::$offset){
+        $limit  = 'LIMIT '.iPagination::$offset.','.$maxperpage;
+        if($map_sql||iPagination::$offset){
             $ids_array = iDB::all("
                 SELECT `uid` FROM `#iCMS@__user` {$sql}
                 ORDER BY {$orderby} {$limit}
@@ -163,16 +163,13 @@ class userAdmincp{
         iUI::success($msg,'url:'.APP_URI);
     }
     public function do_batch(){
-    	$idA	= (array)$_POST['id'];
-    	$idA OR iUI::alert("请选择要操作的用户");
-    	$ids	= implode(',',(array)$_POST['id']);
-    	$batch	= $_POST['batch'];
+    	list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的用户");
     	switch($batch){
             case 'prop':
                 iMap::init('prop',iCMS_APP_USER,'pid');
 
                 $pid = implode(',', (array)$_POST['pid']);
-                foreach((array)$_POST['id'] AS $id) {
+                foreach($idArray AS $id) {
                     $_pid = iDB::value("SELECT `pid` FROM `#iCMS@__user` where `uid`='$id' LIMIT 1");
                     iDB::update('user',compact('pid'),array('uid'=>$id));
                     iMap::diff($pid,$_pid,$id);

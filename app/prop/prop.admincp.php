@@ -32,7 +32,7 @@ class propAdmincp{
         $app     = iSecurity::escapeStr($_POST['app']);
         $val     = iSecurity::escapeStr($_POST['val']);
         $sortnum = (int)$_POST['sortnum'];
-        $name    = $_POST['name'];
+        $name    = iSecurity::escapeStr($_POST['name']);
 
         $field OR iUI::alert('属性字段不能为空!');
         $name OR iUI::alert('属性名称不能为空!');
@@ -50,10 +50,10 @@ class propAdmincp{
             iDB::update('prop', $data, array('pid'=>$pid));
 			$msg = "属性更新完成!";
 		}else{
-            $nameArray = explode("\n",$name);
+            $nameArray = explode("\n",$_POST['name']);
             if(count($nameArray)>1){
                 foreach($nameArray AS $nkey=>$_name){
-                    $_name  = trim($_name);
+                    $_name = iSecurity::escapeStr(trim($_name));
                     if(empty($_name)) continue;
 
                     if(strpos($_name,':')!==false){
@@ -121,10 +121,7 @@ class propAdmincp{
     	$dialog && iUI::success("已经删除!",'url:'.APP_URI);
     }
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-        $idArray OR iUI::alert("请选择要操作的属性");
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的属性");
     	switch($batch){
     		case 'dels':
 				iUI::$break	= false;
@@ -161,9 +158,9 @@ class propAdmincp{
         $_GET['cid']  && $uriArray['cid'] = $_GET['cid'];
 
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total		= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__prop` {$sql}","G");
+        $total		= iPagination::totalCache("SELECT count(*) FROM `#iCMS@__prop` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个属性");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__prop` {$sql} order by pid DESC LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__prop` {$sql} order by pid DESC LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count = count($rs);
     	include admincp::view("prop.manage");
     }

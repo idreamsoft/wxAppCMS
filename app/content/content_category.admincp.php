@@ -25,7 +25,8 @@ class content_categoryAdmincp extends categoryAdmincp {
         $this->category_template = array(
             'index'     => array('首页','{iTPL}/content.index.htm'),
             'list'      => array('列表','{iTPL}/content.list.htm'),
-            $app['app'] => array($app['title'],'{iTPL}/content.htm')
+            $app['app'] => array($app['title'],'{iTPL}/content.htm'),
+            'tag'      => array('标签','{iTPL}/content.tag.htm'),
         );
 
         /**
@@ -33,7 +34,7 @@ class content_categoryAdmincp extends categoryAdmincp {
          */
         $this->category_rule+= array(
             $app['app'] => array($app['title'],'/{CDIR}/{YYYY}/{MM}{DD}/{ID}{EXT}','{ID},{0xID},{LINK}'),
-            // 'tag'       => array('标签','/{CDIR}/t-{TKEY}{EXT}','{ID},{0xID},{TKEY},{NAME},{ZH_CN}')
+            'tag'       => array('标签','/{CDIR}/t-{TKEY}{EXT}','{ID},{0xID},{TKEY},{NAME},{ZH_CN}')
         );
         /**
          *  URL规则选项

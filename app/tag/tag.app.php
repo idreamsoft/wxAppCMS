@@ -79,11 +79,19 @@ class tagApp extends appsApp {
                 $tag['cid'] = $cidArray[0];
             }
 
-            $category        = categoryApp::category($tag['cid'],false);
+            $category = categoryApp::category($tag['cid'],false);
+            if($category['app']['type']=="2"){
+                //自定义应用模板信息
+                iPHP::callback(array("contentFunc","interfaced"),array($category['app']));
+            }
             $tag['category'] = categoryApp::get_lite($category);
         }
         if($tag['tcid']){
-            $tag_category        = categoryApp::category($tag['tcid'],false);
+            $tag_category = categoryApp::category($tag['tcid'],false);
+            if($tag_category['app']['type']=="2"){
+                //自定义应用模板信息
+                iPHP::callback(array("contentFunc","interfaced"),array($tag_category['app']));
+            }
             $tag['tag_category'] = categoryApp::get_lite($tag_category);
         }
 

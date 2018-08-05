@@ -88,12 +88,12 @@ class tagAdmincp{
             'comments'   =>"评论数",
         ));
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total		= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__tag` {$sql}","G");
+        $total		= iPagination::totalCache("SELECT count(*) FROM `#iCMS@__tag` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个标签");
-        $limit  = 'LIMIT '.iUI::$offset.','.$maxperpage;
-        if($map_sql||iUI::$offset){
-            if(iUI::$offset > 1000 && $total > 2000 && iUI::$offset >= $total/2) {
-                $_offset = $total-iUI::$offset-$maxperpage;
+        $limit  = 'LIMIT '.iPagination::$offset.','.$maxperpage;
+        if($map_sql||iPagination::$offset){
+            if(iPagination::$offset > 1000 && $total > 2000 && iPagination::$offset >= $total/2) {
+                $_offset = $total-iPagination::$offset-$maxperpage;
                 if($_offset < 0) {
                     $_offset = 0;
                 }
@@ -342,11 +342,7 @@ class tagAdmincp{
     	$dialog && iUI::success("标签删除成功",'js:parent.$("#id'.$id.'").remove();');
     }
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-        $idArray OR iUI::alert("请选择要操作的标签");
-        $idArray = array_map('intval', $idArray);
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的标签");
     	switch($batch){
             case 'keywords':
                 $rs = iDB::all("SELECT * FROM `#iCMS@__tag` where `id` IN ($ids)");
@@ -401,7 +397,7 @@ class tagAdmincp{
     		case 'prop':
                 iMap::init('prop',$this->appid,'pid');
                 $pid = implode(',', (array)$_POST['pid']);
-                foreach((array)$_POST['id'] AS $id) {
+                foreach($idArray AS $id) {
                     $_pid = iDB::value("SELECT pid FROM `#iCMS@__tag` WHERE `id`='$id'");;
                     iDB::update("tag",compact('pid'),compact('id'));
                     iMap::diff($pid,$_pid,$id);
@@ -455,6 +451,17 @@ class tagAdmincp{
         $sql && iDB::query("UPDATE `#iCMS@__tag` SET {$sql} WHERE `id` IN ($ids)");
 		iUI::success('操作成功!','js:1');
 	}
+    public function do_api_extract(){
+        $title   = html2text($_POST['title']);
+        $content = html2text($_POST['content']);
+        $words   = self::api_extract($title,$content);
+        echo $words;
+    }
+    public static function api_extract($title=null,$content=null){
+        $array    = compact('title','content');
+        $response = apps_store::api_post('tag.extract',$array);
+        return $response;
+    }
     public static function _count(){
         return iDB::value("SELECT count(*) FROM `#iCMS@__tag`");
     }

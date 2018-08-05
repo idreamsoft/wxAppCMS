@@ -258,14 +258,16 @@ class editorAdmincp{
 			));
 		}
     }
-    public static function ueditor_script($id){
+    public static function ueditor_script($id,$config=array()){
+        $app = $config['app']['app'];
+        empty($app) && $app = 'content';
         ob_start();
         include admincp::view("ueditor.script","editor");
         $output = ob_get_contents();
         ob_end_clean();
         return $output;
     }
-    public static function markdown_script($id){
+    public static function markdown_script($id,$config=array()){
         ob_start();
         include admincp::view("markdown.script","editor");
         $output = ob_get_contents();

@@ -9,11 +9,12 @@ class wxapp_api {
         return $dir.'/'.$dir1.'/'.$dir2;
     }
 
-    public static function weixin_init(){
-        weixin::init(array(
+    public static function weixin_init($config=null){
+        $config===null && $config = array(
             'appid'     => wxapp::$appId,
             'appsecret' => wxapp::$appSecret
-        ));
+        );
+        weixin::init($config);
     }
     /**
      * [get_session 获取session]

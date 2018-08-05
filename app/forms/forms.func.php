@@ -113,8 +113,8 @@ class formsFunc{
 
         $offset = (int)$vars['offset'];
         if($vars['page']){
-            $total  = iCMS::page_total_cache("SELECT count(*) FROM `{$table}` {$where_sql}",null,iCMS::$config['cache']['page_total']);
-            $multi  = iUI::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+            $total  = iPagination::totalCache("SELECT count(*) FROM `{$table}` {$where_sql}",null,iCMS::$config['cache']['page_total']);
+            $multi  = iPagination::make(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
             $offset = $multi->offset;
             iView::assign("forms_list_total",$total);
         }

@@ -97,9 +97,7 @@ class articleAdmincp{
         }
     }
     public function do_batch(){
-    	$_POST['id'] OR iUI::alert("请选择要操作的文章");
-        $ids   = implode(',',(array)$_POST['id']);
-        $batch = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的文章");
     	switch($batch){
     		case 'order':
 		        foreach((array)$_POST['sortnum'] AS $id=>$sortnum) {
@@ -332,8 +330,15 @@ class articleAdmincp{
      * [查找正文图片]
      * @return [type] [description]
      */
-    public function do_findpic(){
-        $content = article::body($this->id);
+    public function do_findpic($id=null){
+        $id===null && $id=$this->id;
+        $rs = $this->getContentPics($id);
+        $_count = count($rs);
+        include admincp::view("files.manage","files");
+    }
+    public static function getContentPics($id=null){
+        $content  = article::body($id);
+        $picArray = array();
         if($content){
             $content = stripslashes($content);
             $array   = files::preg_img($content);
@@ -347,8 +352,9 @@ class articleAdmincp{
                     $rpath    = iFS::fp($value,'http2iPATH');
                    if($filepath){
                         $pf   = pathinfo($filepath);
-                        $rs[] = array(
+                        $picArray[] = array(
                             'id'       => 'path@'.$filepath,
+                            'rootpath' => $rpath,
                             'path'     => rtrim($pf['dirname'],'/').'/',
                             'filename' => $pf['filename'],
                             'size'     => @filesize($rpath),
@@ -357,12 +363,11 @@ class articleAdmincp{
                         );
                     }
                 }
-                // echo "<hr />";
             }
-            $_count = count($rs);
         }
-        include admincp::view("files.manage","files");
+        return $picArray;
     }
+
     /**
      * [正文预览]
      * @return [type] [description]
@@ -512,14 +517,14 @@ class articleAdmincp{
             $sql     = ",({$map_sql}) map {$sql} AND `id` = map.`iid`";
         }
 
-        $total = iCMS::page_total_cache(article::count_sql($sql),"G");
+        $total = iPagination::totalCache(article::count_sql($sql),"G");
         iUI::pagenav($total,$maxperpage,"篇文章");
 
-        $limit = 'LIMIT '.iUI::$offset.','.$maxperpage;
+        $limit = 'LIMIT '.iPagination::$offset.','.$maxperpage;
 
-        if($map_sql||iUI::$offset){
-            if(iUI::$offset > 1000 && $total > 2000 && iUI::$offset >= $total/2) {
-                $_offset = $total-iUI::$offset-$maxperpage;
+        if($map_sql||iPagination::$offset){
+            if(iPagination::$offset > 1000 && $total > 2000 && iPagination::$offset >= $total/2) {
+                $_offset = $total-iPagination::$offset-$maxperpage;
                 if($_offset < 0) {
                     $_offset = 0;
                 }
@@ -822,6 +827,7 @@ class articleAdmincp{
         commentAdmincp::delete($id,self::$appid);
         $msg.= self::del_msg('评论数据删除');
         article::del($id);
+
         article::del_data($id);
         $msg.= self::del_msg($id.' 文章删除');
         categoryAdmincp::update_count($art['cid'],'-');

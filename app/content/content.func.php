@@ -142,10 +142,10 @@ class contentFunc {
         $offset = (int)$vars['offset'];
         if ($vars['page']) {
             $total_type = $vars['total_cache'] ? 'G' : null;
-            $total      = iCMS::page_total_cache("SELECT count(*) FROM ".self::$table['table']." {$where_sql}", $total_type,iCMS::$config['cache']['page_total']);
+            $total      = iPagination::totalCache("SELECT count(*) FROM ".self::$table['table']." {$where_sql}", $total_type,iCMS::$config['cache']['page_total']);
             $pagenav    = isset($vars['pagenav']) ? $vars['pagenav'] : "pagenav";
             $pnstyle    = isset($vars['pnstyle']) ? $vars['pnstyle'] : 0;
-            $multi      = iUI::page(array('total_type' => $total_type, 'total' => $total, 'perpage' => $maxperpage, 'unit' => iUI::lang('iCMS:page:list'), 'nowindex' => $GLOBALS['page']));
+            $multi      = iPagination::make(array('total_type' => $total_type, 'total' => $total, 'perpage' => $maxperpage, 'unit' => iUI::lang('iCMS:page:list'), 'nowindex' => $GLOBALS['page']));
             $offset     = $multi->offset;
             iView::assign(self::$app['app']."_list_total", $total);
         }

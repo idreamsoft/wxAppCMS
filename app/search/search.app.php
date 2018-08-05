@@ -30,7 +30,7 @@ class searchApp {
         $tpl===false && $tpl = '{iTPL}/search.htm';
         return appsApp::render($search,$tpl,'search');
     }
-    public function iurl($q,$query=null,$page=true) {
+    public static function iurl($q,$query=null,$page=true) {
         $query===null && $query = array('app'=>'search','q'=>$q);
         $iURL           =  new stdClass();
         $iURL->url      = iURL::make($query,'router::api');

@@ -47,14 +47,13 @@ class tagFunc{
             $map_where+= iMap::where($vars['pids']);
         }
 
-
         if(!isset($vars['cids']) && isset($vars['cid'])){
-            $cid = explode(',',$vars['cid']);
+            $cid = is_array($vars['cid'])?$vars['cid']:explode(',',$vars['cid']);
             $vars['sub'] && $cid+=categoryApp::get_cids($cid,true);
             $where_sql.= iSQL::in($cid,'cid');
         }
         if(isset($vars['cids']) && !isset($vars['cid'])){
-            $cids = explode(',',$vars['cids']);
+            $cids = is_array($vars['cids'])?$vars['cids']:explode(',',$vars['cids']);
             $vars['sub'] && $cids+=categoryApp::get_cids($vars['cids'],true);
 
             if($cids){
@@ -63,7 +62,7 @@ class tagFunc{
             }
         }
         if(isset($vars['cid!'])){
-            $ncids    = explode(',',$vars['cid!']);
+            $ncids = is_array($vars['cid!'])?$vars['cid!']:explode(',',$vars['cid!']);
             $vars['sub'] && $ncids+=categoryApp::get_cids($ncids,true);
             $where_sql.= iSQL::in($ncids,'cid','not');
         }
@@ -101,8 +100,8 @@ class tagFunc{
 
     	$offset = (int)$vars['offset'];
     	if($vars['page']){
-    		$total	= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__tag` {$where_sql}",null,iCMS::$config['cache']['page_total']);
-    		$multi  = iUI::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+    		$total	= iPagination::totalCache("SELECT count(*) FROM `#iCMS@__tag` {$where_sql}",null,iCMS::$config['cache']['page_total']);
+    		$multi  = iPagination::make(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
     		$offset = $multi->offset;
             iView::assign("tag_list_total",$total);
     	}

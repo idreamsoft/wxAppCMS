@@ -54,7 +54,7 @@ class appsApp {
         return $this->do_iCMS($a);
     }
     public function do_search($a = null) {
-        $app = iPHP::app("search");
+        $app = new searchApp();
         return $app->search('{iTPL}/'.$this->_app.'.search.htm');
     }
     public function API_iCMS() {
@@ -165,7 +165,7 @@ class appsApp {
             iView::assign('category', $data['category']);
             unset($data['category']);
         }
-        $data['sapp'] && iView::assign('sapp', apps::get_app_lite($data['sapp']));//自身应用信息
+        $data['sapp'] && iView::assign('SAPP', apps::get_app_lite($data['sapp']));//自身应用信息
         iView::assign($name, $data);
         $view = iView::render($view_tpl,$p);
         if($view) return array($view,$data);

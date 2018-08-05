@@ -99,10 +99,7 @@ class weixinAdmincp{
         $dialog && iUI::success("已经删除!",'url:'.APP_URI);
     }
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-        $idArray OR iUI::alert("请选择要操作的项目");
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的项目");
         switch($batch){
             case 'dels':
                 iUI::$break = false;
@@ -145,9 +142,9 @@ class weixinAdmincp{
         $_GET['cid']  && $uriArray['cid'] = $_GET['cid'];
 
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__weixin` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__weixin` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个公众号");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__weixin` {$sql} order by id DESC LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__weixin` {$sql} order by id DESC LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count = count($rs);
         include admincp::view("weixin.manage");
     }
@@ -234,9 +231,9 @@ class weixinAdmincp{
 
         list($orderby,$orderby_option) = get_orderby();
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__weixin_event` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__weixin_event` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个事件");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__weixin_event` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__weixin_event` {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
         // var_dump(iDB::$last_query);
         $_count = count($rs);
 

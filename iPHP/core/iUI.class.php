@@ -320,6 +320,15 @@ class iUI extends iPagination{
     public static function page_content($content,$page,$total,$count,$mode=null,$chapterArray=null){
         return iPagination::content($content,$page,$total,$count,$mode,$chapterArray);
     }
+    public static function get_batch_args($msg=null,$field='id') {
+        $msg OR $msg = "请选择要删除的项目";
+        $idArray = (array) $_POST[$field];
+        $idArray OR iUI::alert($msg);
+        $idArray = array_map('intval', $idArray);
+        $ids     = implode(',', $idArray);
+        $batch   = $_POST['batch'];
+        return array($idArray,$ids,$batch);
+    }
     public static function permission($p = '', $ret = 'alert') {
     	$msg = "您没有[$p]的访问权限!";
     	if(iPHP_SHELL){

@@ -21,11 +21,11 @@
     }, {
         "caption": "-"
     }, {
-        "caption": "添加{name}",
+        "caption": "添加{title}",
         "href": "{app}&do=add",
         "icon": "edit"
     }, {
-        "caption": "{name}管理",
+        "caption": "{title}管理",
         "href": "{app}&do=manage",
         "icon": "list-alt"
     }, {
@@ -39,21 +39,21 @@
     }, {
         "caption": "-"
     }, {
-        "caption": "用户{name}管理",
+        "caption": "用户{title}管理",
         "href": "{app}&do=user",
         "icon": "check-circle"
     }, {
-        "caption": "审核用户{name}",
+        "caption": "审核用户{title}",
         "href": "{app}&do=examine",
         "icon": "minus-circle"
     }, {
-        "caption": "淘汰的{name}",
+        "caption": "淘汰的{title}",
         "href": "{app}&do=off",
         "icon": "times-circle"
     }, {
         "caption": "-"
     }, {
-        "caption": "{name}评论管理",
+        "caption": "{title}评论管理",
         "href": "comment&appname={app}&appid={appid}",
         "icon": "comments"
     }]

@@ -7,6 +7,8 @@
 * @site https://www.icmsdev.com
 * @licence https://www.icmsdev.com/LICENSE.html
 */
+defined('iCMS_APP_CONFIG') OR define('iCMS_APP_CONFIG', '11');
+
 class config{
     public static $appid = 0;
     public static $data  = array();

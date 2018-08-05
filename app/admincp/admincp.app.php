@@ -72,9 +72,9 @@ class admincpApp{
 
         list($orderby,$orderby_option) = get_orderby();
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__access_log` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__access_log` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"条记录");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__access_log` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__access_log` {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count = count($rs);
         include admincp::view("admincp.access");
     }

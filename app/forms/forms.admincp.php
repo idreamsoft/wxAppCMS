@@ -99,10 +99,10 @@ class formsAdmincp{
             $primary =>strtoupper($primary),
         ));
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `{$table}` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `{$table}` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"条记录");
 
-        $rs = iDB::all("SELECT * FROM `{$table}` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs = iDB::all("SELECT * FROM `{$table}` {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
 
         $idArray = iSQL::values($rs,$primary,'array',null,'id');
         foreach ($this->form['table'] as $key => $value) {
@@ -345,17 +345,13 @@ class formsAdmincp{
       }
       list($orderby,$orderby_option) = get_orderby();
       $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:50;
-      $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__forms` {$sql}","G");
+      $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__forms` {$sql}","G");
       iUI::pagenav($total,$maxperpage,"个表单");
-      $rs     = iDB::all("SELECT * FROM `#iCMS@__forms` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+      $rs     = iDB::all("SELECT * FROM `#iCMS@__forms` {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
     	include admincp::view("forms.manage");
     }
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-        $idArray OR iUI::alert("请选择要操作的表单");
-        $idArray = array_map('intval', $idArray);
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的表单");
         switch($batch){
           case 'data-dels':
             iUI::$break = false;

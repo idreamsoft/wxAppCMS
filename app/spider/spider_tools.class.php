@@ -602,10 +602,21 @@ class spider_tools {
     }
 
     public static function remote($url, $_count = 0) {
+        $parsed = parse_url($url);
+        $validate_ip = true;
+        preg_match('/^\d+$/', $parsed['host']) && $parsed['host'] = long2ip($parsed['host']);
+        if(preg_match('/^\d+\.\d+\.\d+\.\d+$/', $parsed['host'])){
+            $validate_ip = filter_var($parsed['host'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+        }
+        if(!in_array($parsed['scheme'],array('http','https')) || !$validate_ip|| strtolower($parsed['host'])=='localhost'){
+            if (spider::$dataTest || spider::$ruleTest) {
+                echo "<b>{$url} 请求错误:非正常URL格式,因安全问题只允许抓取 http:// 或 https:// 开头的链接或私有IP地址</b>";
+            }
+            return false;
+        }
         $url = str_replace('&amp;', '&', $url);
         if(empty(spider::$referer)){
-            $uri = parse_url($url);
-            spider::$referer = $uri['scheme'] . '://' . $uri['host'];
+            spider::$referer = $parsed['scheme'] . '://' . $parsed['host'];
         }
         self::$curl_info = array();
         $options = array(
@@ -659,7 +670,7 @@ class spider_tools {
 			    if(empty($newurl)) return false;
 
 		    	if(!strstr($newurl,'http://')){
-			    	$host	= $uri['scheme'].'://'.$uri['host'];
+			    	$host	= $parsed['scheme'].'://'.$parsed['host'];
 		    		$newurl = $host.'/'.$newurl;
 		    	}
 	        }

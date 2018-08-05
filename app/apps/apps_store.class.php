@@ -407,6 +407,27 @@ class apps_store {
         }
         return $data;
     }
+    public static function api_post($uri,$array){
+        $url = "https://api.icmsdev.com/".$uri;
+
+        iHttp::$CURLOPT_TIMEOUT        = 60;
+        iHttp::$CURLOPT_CONNECTTIMEOUT = 10;
+        iHttp::$CURLOPT_REFERER        = $_SERVER['HTTP_REFERER'];
+        iHttp::$CURLOPT_USERAGENT      = $_SERVER['HTTP_USER_AGENT'];
+        iHttp::$CURLOPT_HTTPHEADER     = array('AUTHORIZATION: '.self::$authcode);
+
+        $sys  = array(
+            'iCMS_VERSION' => iCMS_VERSION,
+            'iCMS_RELEASE' => iCMS_RELEASE,
+            'iCMS_HASH'    => iCMS_HASH,
+            'GIT_COMMIT'   => GIT_COMMIT,
+            'GIT_TIME'     => GIT_TIME,
+            'iCMS_HOST'    => $_SERVER['HTTP_HOST'],
+        );
+        $array    = array_merge($sys,$array);
+        $response = iHttp::remote($url,$array,'raw');
+        return $response;
+    }
     public static function remote($url){
         iHttp::$CURLOPT_TIMEOUT        = 60;
         iHttp::$CURLOPT_CONNECTTIMEOUT = 10;

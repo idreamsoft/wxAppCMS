@@ -46,9 +46,9 @@ class commentAdmincp{
         }
 
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total		= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__comment` {$sql}","G");
+        $total		= iPagination::totalCache("SELECT count(*) FROM `#iCMS@__comment` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"条评论");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__comment` {$sql} order by id DESC LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__comment` {$sql} order by id DESC LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count = count($rs);
     	include admincp::view("comment.manage");
     }
@@ -81,10 +81,7 @@ class commentAdmincp{
     }
 
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-        $idArray OR iUI::alert("请选择要操作的评论");
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的评论");
     	switch($batch){
     		case 'dels':
 				iUI::$break	= false;

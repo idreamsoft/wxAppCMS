@@ -286,9 +286,9 @@ class appsAdmincp{
       // }
       list($orderby,$orderby_option) = get_orderby();
       $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:50;
-      $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__apps` {$sql}","G");
+      $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__apps` {$sql}","G");
       iUI::pagenav($total,$maxperpage,"个应用");
-      $rs     = iDB::all("SELECT * FROM `#iCMS@__apps` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+      $rs     = iDB::all("SELECT * FROM `#iCMS@__apps` {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
       $_count = count($rs);
 
       //分组
@@ -299,14 +299,9 @@ class appsAdmincp{
     }
 
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-        $idArray OR iUI::alert("请选择要操作的应用");
-        $idArray = array_map('intval', $idArray);
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的应用");
       	switch($batch){
   		  }
-
 	  }
     public function do_cache(){
       apps::cache();

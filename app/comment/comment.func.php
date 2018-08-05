@@ -102,7 +102,7 @@ class commentFunc{
 		$offset = (int)$vars['offset'];
 		if($vars['page']){
 			isset($vars['total_cache']) && $_GET['total_cahce'] = true;
-			$total  = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__comment` WHERE {$where_sql}",null,iCMS::$config['cache']['page_total']);
+			$total  = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__comment` WHERE {$where_sql}",null,iCMS::$config['cache']['page_total']);
 			$pgconf = array(
 				'total'     => $total,
 				'perpage'   => $maxperpage,
@@ -118,7 +118,7 @@ class commentFunc{
 
 			isset($vars['total_cache']) && $pgconf['total_type'] = $vars['total_cache'];
 
-			$multi  = iUI::page($pgconf);
+			$multi  = iPagination::make($pgconf);
 			$offset = $multi->offset;
 			// if($offset>1000){
 				//$where_sql.=" AND `id` >= (SELECT `id` FROM `#iCMS@__comment` WHERE {$where_sql} {$order_sql} LIMIT {$offset},1)";

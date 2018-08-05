@@ -61,7 +61,7 @@ class iWAF {
 		return iPHP_WAF_CSRF_TOKEN;
 	}
 	public static function CSRF_check(){
-		$token = $_GET['CSRF_TOKEN']?$_GET['CSRF_TOKEN']:$_POST['CSRF_TOKEN'];
+		$token = $_POST['CSRF_TOKEN']?$_POST['CSRF_TOKEN']:$_GET['CSRF_TOKEN'];
 
 		if(defined('iPHP_WAF_CSRF')){
 			if(iPHP_WAF_CSRF){
@@ -72,7 +72,7 @@ class iWAF {
 			return true;
 		}
 		if($_POST){
-			if($token!==iPHP_WAF_CSRFKEY){
+			if($token!==iPHP_WAF_CSRF_TOKEN){
 				trigger_error("TOKEN error",E_USER_ERROR);
 			}
 		}

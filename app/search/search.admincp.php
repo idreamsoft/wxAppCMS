@@ -22,9 +22,9 @@ class searchAdmincp{
             'times' =>"搜索次数",
         ));
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__search_log` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__search_log` {$sql}","G");
         iUI::pagenav($total,$maxperpage,"条记录");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__search_log` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__search_log` {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count = count($rs);
     	include admincp::view("search.manage");
     }
@@ -35,10 +35,7 @@ class searchAdmincp{
 		$dialog && iUI::success('记录已经删除','js:parent.$("#id'.$id.'").remove();');
     }
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-        $idArray OR iUI::alert("请选择要操作的记录");
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的记录");
     	switch($batch){
     		case 'dels':
 				iUI::$break	= false;

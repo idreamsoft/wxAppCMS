@@ -85,8 +85,8 @@ class userFunc{
         }
     	$offset = (int)$vars['offset'];
     	if($vars['page']){
-    		$total	= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__user` {$where_sql}",null,iCMS::$config['cache']['page_total']);
-    		$multi  = iUI::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:sql'),'nowindex'=>$GLOBALS['page']));
+    		$total	= iPagination::totalCache("SELECT count(*) FROM `#iCMS@__user` {$where_sql}",null,iCMS::$config['cache']['page_total']);
+    		$multi  = iPagination::make(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:sql'),'nowindex'=>$GLOBALS['page']));
     		$offset = $multi->offset;
             iView::assign("user_list_total",$total);
     	}
@@ -165,8 +165,8 @@ class userFunc{
     	$offset	= 0;
     	$limit  = "LIMIT {$maxperpage}";
     	if($vars['page']){
-    		$total	= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__user_follow` {$where_sql}",null,iCMS::$config['cache']['page_total']);
-    		$multi  = iUI::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:sql'),'nowindex'=>$GLOBALS['page']));
+    		$total	= iPagination::totalCache("SELECT count(*) FROM `#iCMS@__user_follow` {$where_sql}",null,iCMS::$config['cache']['page_total']);
+    		$multi  = iPagination::make(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:sql'),'nowindex'=>$GLOBALS['page']));
     		$offset = $multi->offset;
     		$limit  = "LIMIT {$offset},{$maxperpage}";
             iView::assign("user_follow_total",$total);

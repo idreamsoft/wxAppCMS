@@ -89,11 +89,7 @@ class wxapp_token{
     public static function login(){
         $user = wxapp_user::login();
         if($user){
-            $vendor = iPHP::vendor('Token');
-            list($sign,$timestamp,$nonce) = $vendor->get();
-
-            $token   = auth_encode($sign.'#'.json_encode($user));
-            $nonce   = sha1($sign);
+            list($token,$nonce) = self::create($user);
             unset($user['password'],$user['username']);
             iUI::json(array(
                 'code'    => 1,
@@ -103,5 +99,12 @@ class wxapp_token{
                 'appInfo' => wxapp::appinfo(true),
             ));
         }
+    }
+    public static function create($data){
+        $vendor = iPHP::vendor('Token');
+        list($sign,$timestamp,$nonce) = $vendor->get();
+        $token   = auth_encode($sign.'#'.json_encode($data));
+        $nonce   = sha1($sign);
+        return array($token,$nonce);
     }
 }

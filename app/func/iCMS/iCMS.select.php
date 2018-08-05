@@ -27,8 +27,8 @@ function iCMS_select($vars){
 			$count_sql = preg_replace('/select(.*?)from(.*?)limit(.*?)$/is', 'SELECT count(*) FROM$2', $sql);
 			$sql       = preg_replace('/select(.*?)from(.*?)limit(.*?)$/is', 'SELECT $1 FROM$2', $sql);
 		}
-		$total	= iCMS::page_total_cache($count_sql,null,iCMS::$config['cache']['page_total']);
-		$multi  = iUI::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+		$total	= iPagination::totalCache($count_sql,null,iCMS::$config['cache']['page_total']);
+		$multi  = iPagination::make(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
 		$offset = $multi->offset;
 		$limit  = "LIMIT {$offset},{$maxperpage}";
 		iView::assign("query_total",$total);

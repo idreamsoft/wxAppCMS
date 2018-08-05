@@ -399,9 +399,33 @@ function _modal_dialog(cancel_text){
               <input type="text" name="keywords" class="span6" id="keywords" value="<?php echo $rs['keywords'] ; ?>" onkeyup="javascript:this.value=this.value.replace(/，/ig,',');"/>
             </div>
             <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">标 签</span>
+            <div class="input-prepend input-append"> <span class="add-on">标 签</span>
               <input type="text" name="tags" class="span6" id="tags" value="<?php echo $rs['tags'] ; ?>" onkeyup="javascript:this.value=this.value.replace(/，/ig,',');"/>
+              <button id="tag_extrac" data-target="#tags" class="btn" type="button" title="智能提取标签"><i class="fa fa-magic"></i></button>
             </div>
+            <script>
+            $(function(){
+                var api_url = "<?php echo __ADMINCP__; ?>=tag&do=api_extract";
+                $("#tag_extrac").click(function(event) {
+                  var that = this;
+                  var title = $("#title").val();
+                  var n=$(".editor-page:eq(0) option:first").val(),ed = iEditor.get('editor-body-'+n);
+                  <?php if(self::$config['markdown']){?>
+                  var content = ed.getMarkdown();
+                  <?php }else{?>
+                    var content = ed.getContent();
+                  <?php }?>
+                $.post(api_url,{title: title,content:content},
+                  function(data) {
+                    var target = $(that).data('target');
+                    if(data.length){
+                      $(target).val(data.join(','));
+                    }
+                  }
+                ,'json');
+              });
+            });
+            </script>
             <span class="help-inline">多个标签用,分隔</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend" style="width:100%;"><span class="add-on">摘 要</span>
@@ -561,8 +585,8 @@ function _modal_dialog(cancel_text){
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">自定链接</span>
               <input type="text" name="clink" class="span6" id="clink" value="<?php echo $rs['clink'] ; ?>"/>
-              <span class="help-inline">只能由英文字母、数字或_-组成(不支持中文),留空则自动以标题拼音填充</span>
             </div>
+            <span class="help-inline">以[]方式填写优先级最高,如:[about.html],否则将以文章规则是否设置{LINK}为准</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">外部链接</span>
               <input type="text" name="url" class="span6 tip" title="注意:文章设置外部链接后编辑器里的内容是不会被保存的哦!" id="url" value="<?php echo $rs['url'] ; ?>"/>

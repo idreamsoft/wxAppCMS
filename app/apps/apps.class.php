@@ -75,11 +75,10 @@ class apps {
         }
     }
     public static function menu_replace(&$menu,$b){
-        $_name = $b['title']?$b['title']:$b['name'];
         $json = json_encode($menu);
         $json = str_replace(
-          array('{appid}','{app}','{name}','{sort}'),
-          array($b['id'],$b['app'],$_name,$b['id']*1000),
+          array('{appid}','{app}','{name}','{title}','{sort}'),
+          array($b['id'],$b['app'],$b['name'],$b['title'],$b['id']*1000),
           $json
         );
         $menu = json_decode($json,true);

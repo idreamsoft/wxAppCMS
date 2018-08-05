@@ -36,11 +36,7 @@ class spiderAdmincp {
 		iUI::success('操作成功!', 'js:1');
 	}
 	public function do_batch() {
-		$idArray = (array) $_POST['id'];
-		$idArray OR iUI::alert("请选择要删除的项目");
-		$idArray = array_map('intval', $idArray);
-		$ids     = implode(',', $idArray);
-		$batch   = $_POST['batch'];
+		list($idArray,$ids,$batch) = iUI::get_batch_args();
 		switch ($batch) {
             case 'poid':
                 $poid = (int)$_POST['poid'];
@@ -130,9 +126,9 @@ class spiderAdmincp {
 		// $postArray = $this->post_opt(0, 'array');
 		// list($orderby,$orderby_option) = get_orderby();
 		$maxperpage = $_GET['perpage'] > 0 ? (int) $_GET['perpage'] : 100;
-		// $total = iCMS::page_total_cache( "SELECT count(*) FROM `#iCMS@__spider_error` {$sql}", "G");
+		// $total = iPagination::totalCache( "SELECT count(*) FROM `#iCMS@__spider_error` {$sql}", "G");
 		// iUI::pagenav($total, $maxperpage, "个网页");
-		// $rs = iDB::all("SELECT * FROM `#iCMS@__spider_error` {$sql} order by {$orderby} LIMIT " . iUI::$offset . " , {$maxperpage}");
+		// $rs = iDB::all("SELECT * FROM `#iCMS@__spider_error` {$sql} order by {$orderby} LIMIT " . iPagination::$offset . " , {$maxperpage}");
 		$rs = iDB::all("
 		    SELECT
 		      `pid`,`rid`,COUNT(id) AS ct,`date`
@@ -195,9 +191,9 @@ class spiderAdmincp {
 		$postArray = $this->post_opt(0, 'array');
 		list($orderby,$orderby_option) = get_orderby();
 		$maxperpage = $_GET['perpage'] > 0 ? (int) $_GET['perpage'] : 20;
-		$total = iCMS::page_total_cache( "SELECT count(*) FROM `#iCMS@__spider_url` {$sql}", "G");
+		$total = iPagination::totalCache( "SELECT count(*) FROM `#iCMS@__spider_url` {$sql}", "G");
 		iUI::pagenav($total, $maxperpage, "个网页");
-		$rs = iDB::all("SELECT * FROM `#iCMS@__spider_url` {$sql} order by {$orderby} LIMIT " . iUI::$offset . " , {$maxperpage}");
+		$rs = iDB::all("SELECT * FROM `#iCMS@__spider_url` {$sql} order by {$orderby} LIMIT " . iPagination::$offset . " , {$maxperpage}");
 		$_count = count($rs);
 		include admincp::view("spider.manage");
 	}
@@ -379,9 +375,9 @@ class spiderAdmincp {
 		}
 		list($orderby,$orderby_option) = get_orderby();
 		$maxperpage = $_GET['perpage'] > 0 ? (int) $_GET['perpage'] : 20;
-		$total = iCMS::page_total_cache( "SELECT count(*) FROM `#iCMS@__spider_rule` {$sql}", "G");
+		$total = iPagination::totalCache( "SELECT count(*) FROM `#iCMS@__spider_rule` {$sql}", "G");
 		iUI::pagenav($total, $maxperpage, "个规则");
-		$rs = iDB::all("SELECT * FROM `#iCMS@__spider_rule` {$sql} order by {$orderby} LIMIT " . iUI::$offset . " , {$maxperpage}");
+		$rs = iDB::all("SELECT * FROM `#iCMS@__spider_rule` {$sql} order by {$orderby} LIMIT " . iPagination::$offset . " , {$maxperpage}");
 		$_count = count($rs);
 		include admincp::view("spider.rule");
 	}
@@ -521,9 +517,9 @@ class spiderAdmincp {
 		}
 		list($orderby,$orderby_option) = get_orderby();
 		$maxperpage = $_GET['perpage'] > 0 ? (int) $_GET['perpage'] : 20;
-		$total = iCMS::page_total_cache( "SELECT count(*) FROM `#iCMS@__spider_post` {$sql}", "G");
+		$total = iPagination::totalCache( "SELECT count(*) FROM `#iCMS@__spider_post` {$sql}", "G");
 		iUI::pagenav($total, $maxperpage, "个模块");
-		$rs = iDB::all("SELECT * FROM `#iCMS@__spider_post` {$sql} order by {$orderby} LIMIT " . iUI::$offset . " , {$maxperpage}");
+		$rs = iDB::all("SELECT * FROM `#iCMS@__spider_post` {$sql} order by {$orderby} LIMIT " . iPagination::$offset . " , {$maxperpage}");
 		$_count = count($rs);
 		include admincp::view("spider.post");
 	}
@@ -622,9 +618,9 @@ class spiderAdmincp {
 		$postArray = $this->post_opt(0, 'array');
 		list($orderby,$orderby_option) = get_orderby();
 		$maxperpage = $_GET['perpage'] > 0 ? (int) $_GET['perpage'] : 20;
-		$total = iCMS::page_total_cache( "SELECT count(*) FROM `#iCMS@__spider_project` {$sql}", "G");
+		$total = iPagination::totalCache( "SELECT count(*) FROM `#iCMS@__spider_project` {$sql}", "G");
 		iUI::pagenav($total, $maxperpage, "个方案");
-		$rs = iDB::all("SELECT * FROM `#iCMS@__spider_project` {$sql} order by {$orderby} LIMIT " . iUI::$offset . " , {$maxperpage}");
+		$rs = iDB::all("SELECT * FROM `#iCMS@__spider_project` {$sql} order by {$orderby} LIMIT " . iPagination::$offset . " , {$maxperpage}");
 		$_count = count($rs);
 		include admincp::view("spider.project");
 	}

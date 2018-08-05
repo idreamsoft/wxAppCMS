@@ -400,7 +400,7 @@ class appsFunc{
         $count_field===null && $count_field = 'count(*)';
         $this->distinct     && $count_field = "count(DISTINCT `{$this->table}`.`{$this->primary}`)";
 
-        $total = iCMS::page_total_cache(
+        $total = iPagination::totalCache(
             "SELECT {$count_field} FROM {$this->table} {$this->where_sql}",
             $total_type,
             iCMS::$config['cache']['page_total']
@@ -416,7 +416,7 @@ class appsFunc{
             'ajax'       => isset($this->vars['page_ajax']) ? $this->vars['page_ajax'] : false,
         );
         $conf && $pgconf = array_merge($pgconf,$conf);
-        $multi = iUI::page($pgconf);
+        $multi = iPagination::make($pgconf);
         $this->offset = $multi->offset;
         $this->limit  = "LIMIT {$this->offset},{$this->rows}";
         iView::assign("{$this->name}_list_total", $total);
@@ -521,7 +521,7 @@ class appsFunc{
                 'pnstyle'    => isset($vars['pnstyle']) ? $vars['pnstyle'] : 0,
                 'ajax'       => isset($vars['page_ajax']) ? $vars['page_ajax'] : false,
             );
-            $multi  = iUI::page($pgconf);
+            $multi  = iPagination::make($pgconf);
             $offset = $multi->offset;
             iView::assign("{$name}_search_total", $total);
         }

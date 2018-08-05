@@ -107,7 +107,7 @@ hr { border-bottom:none; margin:4px 0px; }
                     </ul>
                   </div>
                 </div>
-                <div class="pagination pagination-right"><?php echo iUI::$pagenav ; ?></div>
+                <div class="pagination pagination-right"><?php echo iPagination::$pagenav ; ?></div>
               </td>
             </tr>
           </tfoot>

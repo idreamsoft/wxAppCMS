@@ -113,9 +113,9 @@ class filesAdmincp{
         ));
 
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:50;
-		$total		= iCMS::page_total_cache("SELECT count(*) FROM ".files::$_DATA_TABLE." {$sql}","G");
+		$total		= iPagination::totalCache("SELECT count(*) FROM ".files::$_DATA_TABLE." {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个文件");
-        $rs     = iDB::all("SELECT * FROM ".files::$_DATA_TABLE." {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM ".files::$_DATA_TABLE." {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count = count($rs);
         $widget = array('search'=>1,'id'=>1,'uid'=>1,'index'=>1);
     	include admincp::view("files.manage");
@@ -203,10 +203,7 @@ class filesAdmincp{
     	}
     }
     public function do_batch(){
-        $idArray = (array)$_POST['id'];
-        $idArray OR iUI::alert("请选择要删除的文件");
-        $ids     = implode(',',$idArray);
-        $batch   = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要删除的文件");
     	switch($batch){
     		case 'dels':
 				iUI::$break	= false;

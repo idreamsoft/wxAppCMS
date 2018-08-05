@@ -20,7 +20,11 @@ class categoryFunc{
 		$where_sql  = " WHERE `status`='$status'";
 		$resource   = array();
 		iMap::reset();
-		// isset($vars['appid']) OR $vars['appid'] = iCMS_APP_ARTICLE;
+
+		if(isset($vars['apps'])){
+			$apps = apps::get_app($vars['apps'],false);
+			$apps['id'] && $where_sql.= iSQL::in($apps['id'],'appid');
+		}
 
 		isset($vars['appid']) && $where_sql.= iSQL::in($vars['appid'],'appid');
 		isset($vars['mode']) && $where_sql.= iSQL::in($vars['mode'],'mode');
@@ -71,8 +75,8 @@ class categoryFunc{
 
 		$offset = (int)$vars['offset'];
 		if($vars['page']){
-			$total	= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__category` {$where_sql} ",null,iCMS::$config['cache']['page_total']);
-			$multi  = iUI::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+			$total	= iPagination::totalCache("SELECT count(*) FROM `#iCMS@__category` {$where_sql} ",null,iCMS::$config['cache']['page_total']);
+			$multi  = iPagination::make(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iUI::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
 			$offset = $multi->offset;
 			iView::assign("category_list_total",$total);
 		}

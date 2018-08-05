@@ -243,14 +243,11 @@ class categoryAdmincp {
     	iUI::success('更新完成');
     }
     public function do_batch(){
-        $_POST['id'] OR iUI::alert("请选择要操作的".$this->category_name);
-        $id_array = (array)$_POST['id'];
-        $ids      = implode(',',$id_array);
-        $batch    = $_POST['batch'];
+        list($idArray,$ids,$batch) = iUI::get_batch_args("请选择要操作的".$this->category_name);
         switch($batch){
             case 'move':
                 $tocid = (int)$_POST['tocid'];
-                foreach($id_array as $k=>$cid){
+                foreach($idArray as $k=>$cid){
                     $tocid!=$cid && iDB::query("UPDATE `#iCMS@__category` SET `rootid` ='$tocid' WHERE `cid` ='$cid'");
                 }
                 // $this->cache(true,$this->appid);
@@ -258,7 +255,7 @@ class categoryAdmincp {
             break;
             case 'merge':
                 $tocid = (int)$_POST['tocid'];
-                foreach($id_array as $k=>$cid){
+                foreach($idArray as $k=>$cid){
                     if($tocid!=$cid){
                         $this->mergecontent($tocid,$cid);
                         $this->do_del($cid,false);
@@ -279,13 +276,13 @@ class categoryAdmincp {
                 if($_POST['pattern']=='addtoafter'){
                     $sql = "`dir` = CONCAT(dir,'{$mdir}')";
                 }
-                foreach($id_array as $k=>$cid){
+                foreach($idArray as $k=>$cid){
                     $sql && iDB::query("UPDATE `#iCMS@__category` SET {$sql} WHERE `cid` ='".(int)$cid."' LIMIT 1");
                 }
                 iUI::success('目录更改完成!','js:1');
             break;
             case 'mkdir':
-                foreach($id_array as $k=>$cid){
+                foreach($idArray as $k=>$cid){
                     $name = iSecurity::escapeStr($_POST['name'][$cid]);
                     $dir  = iPinyin::get($name);
                     $this->check_dir($dir,$this->appid,null,$cid);
@@ -294,7 +291,7 @@ class categoryAdmincp {
                 iUI::success('更新完成!','js:1');
             break;
             case 'update':
-                foreach($id_array as $k=>$cid){
+                foreach($idArray as $k=>$cid){
                     $name = iSecurity::escapeStr($_POST['name'][$cid]);
                     $dir = iSecurity::escapeStr($_POST['dir'][$cid]);
                     iDB::query("
@@ -324,14 +321,14 @@ class categoryAdmincp {
                 $sql  ="`template` = '$template'";
             break;
             case 'recount':
-                foreach($id_array as $k=>$cid){
+                foreach($idArray as $k=>$cid){
                     $this->update_app_count($cid);
                 }
                 iUI::success('操作成功!','js:1');
             break;
             case 'dels':
                 iUI::$break = false;
-                foreach($id_array AS $cid){
+                foreach($idArray AS $cid){
                     category::check_priv($cid,'d','alert');
                     $this->do_del($cid,false);
                     //$this->cahce_item($cid);
@@ -400,9 +397,9 @@ class categoryAdmincp {
             'count' =>"记录数",
         ));
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:50;
-        $total      = iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__category` {$sql}","G");
+        $total      = iPagination::totalCache("SELECT count(*) FROM `#iCMS@__category` {$sql}","G");
         iUI::pagenav($total,$maxperpage);
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__category` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__category` {$sql} order by {$orderby} LIMIT ".iPagination::$offset." , {$maxperpage}");
         $_count = count($rs);
         include admincp::view($this->_view_manage,$this->_view_tpl_dir);
     }

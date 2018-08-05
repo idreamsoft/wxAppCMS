@@ -40,13 +40,13 @@ class formerApp{
                 }
 
             }
-            former::$template['class'] = array(
+            former::set_template_class(array(
                 'group'    => 'input-prepend input-append',
                 'label'    => 'add-on',
                 'label2'   => 'add-on',
                 'radio'    => 'add-on',
                 'checkbox' => 'add-on',
-            );
+            ));
             former::$config['value']   = array(
                 'userid'   => members::$userid,
                 'username' => members::$data->username,

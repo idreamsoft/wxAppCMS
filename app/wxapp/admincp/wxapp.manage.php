@@ -84,7 +84,8 @@ $(function(){
               <td><?php echo $rs[$i]['url'] ; ?></td>
               <td><?php echo $rs[$i]['tpl'] ; ?></td>
               <td style="text-align:right;">
-                <a href="<?php echo APP_URI; ?>&do=getconfig&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" data-target="#iCMS-MODAL" data-meta='{"width":"400px","height":"400px"}' title="复制小程序配置"><i class="fa fa-plug"></i> 获取config.js配置</a>
+                <a href="<?php echo APP_URI; ?>&do=getconfig&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" data-target="#iCMS-MODAL" data-meta='{"width":"400px","height":"400px"}' title="获取config.js配置"><i class="fa fa-plug"></i> 配置</a>
+                <a href="<?php echo APP_URI; ?>&do=tmplmsg_list&id=<?php echo $rs[$i]['id'] ; ?>&wxappid=<?php echo $rs[$i]['appid'] ; ?>" class="btn btn-small" data-toggle="modal" data-target="#iCMS-MODAL" data-meta='{"width":"80%","height":"720px"}' title="个人模板库"><i class="fa fa-send"></i> 消息</a>
                 <!-- <a href="<?php echo APP_URI; ?>&do=user&wxappid=<?php echo $rs[$i]['appid'] ; ?>" class="btn btn-small"><i class="fa fa-users "></i> 用户</a> -->
                 <a href="<?php echo __ADMINCP__; ?>=user&wxappid=<?php echo $rs[$i]['appid'] ; ?>" class="btn btn-small"><i class="fa fa-users "></i> 用户</a>
                 <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['id'] ; ?>&act=copy" class="btn btn-small"><i class="fa fa-copy "></i> 复制</a>
@@ -95,7 +96,7 @@ $(function(){
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="9"><div class="pagination pagination-right" style="float:right;"><?php echo iUI::$pagenav ; ?></div>
+              <td colspan="9"><div class="pagination pagination-right" style="float:right;"><?php echo iPagination::$pagenav ; ?></div>
                 <div class="input-prepend input-append mt20"> <span class="add-on">全选
                   <input type="checkbox" class="checkAll checkbox" data-target="#<?php echo APP_BOXID;?>" />
                   </span>

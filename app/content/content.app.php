@@ -35,7 +35,7 @@ class contentApp extends appsApp {
             'user' => true,
         );
         $rs+= $this->data($id);
-        $rs = $this->value($rs,$cdata,$vars,$page,$tpl);
+        $rs = $this->value($rs,$vars,$page,$tpl);
         if ($rs === false) {
             return false;
         }
@@ -63,8 +63,6 @@ class contentApp extends appsApp {
         if($category['mode'] && stripos($rs['url'], '.php?')===false){
             iURL::page_url($rs['iurl']);
         }
-
-        $vars['tag'] && tagApp::get_array($rs,$category['name'],'tags');
 
         apps_common::init($rs,$this->app,$vars,$this->primary);
         apps_common::link();
