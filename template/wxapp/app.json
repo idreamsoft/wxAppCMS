@@ -20,7 +20,7 @@
         "navigationBarTitleText": "",
         "navigationBarTextStyle": "white",
         "backgroundColor": "#FFFFFF",
-        "enablePullDownRefresh":true
+        "enablePullDownRefresh": true
     },
     "tabBar": {
         "color": "#7A7E83",
@@ -53,6 +53,12 @@
         "connectSocket": 30000,
         "uploadFile": 30000,
         "downloadFile": 30000
+    },
+    "plugins": {
+      "tencentvideo": {
+        "version": "1.2.4",
+        "provider": "wxa75efa648b60994b"
+      }
     },
     "debug": true
 }
