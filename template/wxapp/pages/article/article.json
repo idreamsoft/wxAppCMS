@@ -1,5 +1,6 @@
 {
     "usingComponents": {
-        "collect-formid": "/iCMS/component/collect-formid"
+        "collect-formid": "/iCMS/component/collect-formid",
+        "txv-video": "plugin://tencentvideo/video"
     }
 }

@@ -158,6 +158,11 @@ function html2json(html, bindName) {
                 results.imageUrls.push(imgUrl);
             }
 
+          if (node.tag === 'iframe') {
+            // safeGetValue 只是一个取值的函数，可自行编写自己的取值函数。
+            node.vid = safeGetValue([1], node.attr.src.match(/https:\/\/v\.qq\.com.*vid=(\w*)/))
+          }
+
             // 处理font标签样式属性
             if (node.tag === 'font') {
                 var fontSize = ['x-small', 'small', 'medium', 'large', 'x-large', 'xx-large', '-webkit-xxx-large'];
@@ -301,3 +306,34 @@ module.exports = {
     emojisInit:emojisInit
 };
 
+function safeGetValue() {
+  const argsLength = arguments.length
+
+  if (argsLength !== 2 && argsLength !== 3) {
+    throw '必须为两个或者三个参数'
+  }
+
+  var defaultValue
+
+  if (argsLength === 3) {
+    var [_defaultValue, keys, item] = arguments
+    defaultValue = _defaultValue
+  } else {
+    var [keys, item] = arguments
+  }
+
+
+  if (!Array.isArray(keys)) {
+    throw '参数有误，取值的keys必须为数组'
+  }
+
+  try {
+    keys.forEach(key => {
+      item = item[key]
+    })
+  } catch (e) {
+    return defaultValue
+  }
+
+  return item
+}

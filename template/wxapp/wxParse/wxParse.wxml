@@ -36,6 +36,20 @@
 <template name="WxParseBr">
   <text>\n</text>
 </template>
+
+<template name="wxPraseIframe2TencentVideoPlugin">
+  <view style="margin: 20rpx 0">
+    <txv-video
+      width="100%"
+      height="600rpx"
+      playerid="txv1"
+      vid="{{item.vid}}"
+      autoplay="{{true}}">
+      <!--<cover-view class='txv-video-slot'>video slot</cover-view>-->
+    </txv-video>
+  </view>
+</template>
+
 <!--入口模版-->
 
 <template name="wxParse">
@@ -76,6 +90,11 @@
     <!--video类型-->
     <block wx:elif="{{item.tag == 'video'}}">
       <template is="wxParseVideo" data="{{item}}" />
+    </block>
+
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
     </block>
 
     <!--img类型-->
@@ -163,6 +182,11 @@
       <template is="wxParseVideo" data="{{item}}" />
     </block>
 
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
+    </block>
+
     <!--img类型-->
     <block wx:elif="{{item.tag == 'img'}}">
       <template is="wxParseImg" data="{{item}}" />
@@ -238,6 +262,11 @@
     <!--video类型-->
     <block wx:elif="{{item.tag == 'video'}}">
       <template is="wxParseVideo" data="{{item}}" />
+    </block>
+
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
     </block>
 
     <!--img类型-->
@@ -316,6 +345,11 @@
       <template is="wxParseVideo" data="{{item}}" />
     </block>
 
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
+    </block>
+
     <!--img类型-->
     <block wx:elif="{{item.tag == 'img'}}">
       <template is="wxParseImg" data="{{item}}" />
@@ -390,6 +424,11 @@
     <!--video类型-->
     <block wx:elif="{{item.tag == 'video'}}">
       <template is="wxParseVideo" data="{{item}}" />
+    </block>
+
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
     </block>
 
     <!--img类型-->
@@ -468,6 +507,11 @@
       <template is="wxParseVideo" data="{{item}}" />
     </block>
 
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
+    </block>
+
     <!--img类型-->
     <block wx:elif="{{item.tag == 'img'}}">
       <template is="wxParseImg" data="{{item}}" />
@@ -544,6 +588,11 @@
       <template is="wxParseVideo" data="{{item}}" />
     </block>
 
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
+    </block>
+
     <!--img类型-->
     <block wx:elif="{{item.tag == 'img'}}">
       <template is="wxParseImg" data="{{item}}" />
@@ -617,6 +666,11 @@
     <!--video类型-->
     <block wx:elif="{{item.tag == 'video'}}">
       <template is="wxParseVideo" data="{{item}}" />
+    </block>
+
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
     </block>
 
     <!--img类型-->
@@ -695,6 +749,11 @@
       <template is="wxParseVideo" data="{{item}}" />
     </block>
 
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
+    </block>
+
     <!--img类型-->
     <block wx:elif="{{item.tag == 'img'}}">
       <template is="wxParseImg" data="{{item}}" />
@@ -769,6 +828,11 @@
     <!--video类型-->
     <block wx:elif="{{item.tag == 'video'}}">
       <template is="wxParseVideo" data="{{item}}" />
+    </block>
+
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
     </block>
 
     <!--img类型-->
@@ -847,6 +911,11 @@
       <template is="wxParseVideo" data="{{item}}" />
     </block>
 
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
+    </block>
+
     <!--img类型-->
     <block wx:elif="{{item.tag == 'img'}}">
       <template is="wxParseImg" data="{{item}}" />
@@ -921,6 +990,11 @@
     <!--video类型-->
     <block wx:elif="{{item.tag == 'video'}}">
       <template is="wxParseVideo" data="{{item}}" />
+    </block>
+
+    <!--腾讯视频插件-->
+    <block wx:elif="{{item.tag == 'iframe'}}">
+      <template is="wxPraseIframe2TencentVideoPlugin" data="{{item}}" />
     </block>
 
     <!--img类型-->
